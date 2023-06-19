@@ -1,18 +1,18 @@
 #### Frontend setup 
-cd frontend/vite 
+`cd frontend/vite`
 
-npm i 
+`npm i`
 
-vite 
+`vite`
 
 #### Backend 
 
-cd backend
+`cd backend`
 
-python -m venv venv
+`python -m venv venv`
 
-source venv/bin/activate  # On macOS and Linux
+`source venv/bin/activate  # On macOS and Linux`
 
-.\venv\Scripts\activate  # On Windows
+`.\venv\Scripts\activate  # On Windows`
 
-pip install -r requirements.txt
+`pip install -r requirements.txt`
