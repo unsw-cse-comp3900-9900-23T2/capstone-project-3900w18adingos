@@ -1,5 +1,5 @@
 #### Frontend setup 
-`cd frontend/vite`
+`cd frontend`
 
 `npm i`
 
