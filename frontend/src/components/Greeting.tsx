@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const GreetingComponent = () => {
+const Greeting = () => {
     const [greeting, setGreeting] = useState('');
 
     useEffect(() => {
@@ -18,4 +18,4 @@ const GreetingComponent = () => {
     );
 };
 
-export default GreetingComponent;
+export default Greeting;
