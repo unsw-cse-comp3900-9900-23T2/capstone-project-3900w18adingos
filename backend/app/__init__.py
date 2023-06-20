@@ -1,8 +1,6 @@
 from flask import Flask, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-
-db = SQLAlchemy()
+from app.database import db
 
 from app.models.customer import Customer
 
@@ -19,7 +17,7 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
-
+        from app.main import main as main_blueprint
+        app.register_blueprint(main_blueprint)
+    
     return app
