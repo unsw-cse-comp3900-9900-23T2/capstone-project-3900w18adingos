@@ -1,9 +1,17 @@
-import GreetingComponent from "./components/Greeting";
-
+import "./components/Map.css"
+import Map from "./components/Map"
 const App = () => { 
-
     return ( 
-        <GreetingComponent/>
+        <>
+        <div className="App">
+          <header className="App-header">
+            <h1>MAAAAAp🇦🇫</h1>
+          </header>
+          <div className="map-wrapper">
+            <Map />
+          </div>
+        </div>
+      </>
     );
 }
 
