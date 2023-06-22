@@ -1,20 +1,60 @@
+.map-wrapper {
+  width: 100%;
+  height: 85vh;
+  z-index: 10;
+}
+
+h2 { 
+  font-family:sans-serif;
+  margin-top: 40px;
+  margin-bottom: 3px;
+}
 .map {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  z-index: 10;  
+}
   
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  .spinner img {
-    width: 40px;
-    height: 40px;
-    animation: spin 2s linear infinite;
-    transform-origin: center;
-  }
-  
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Removes google logo and map footer text */
+a[href^="http://maps.google.com/maps"]{display:none !important}
+a[href^="https://maps.google.com/maps"]{display:none !important}
+.gmnoprint a, .gmnoprint span, .gm-style-cc {
+    display:none;
+}
+.gmnoprint div {
+    background:none !important;
+}
+
+.spinner img {
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+  transform-origin: center;
+}
+
+.marker-content-wrapper { 
+
+}
+
+.marker-content-image-wrapper { 
+  width:  100px; 
+  height: 100px; 
+}
+
+.marker-content-image { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover;
+}
+.marker-content-description { 
+  font-size: 30px;
+}
