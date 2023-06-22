@@ -1,8 +1,7 @@
 from flask import jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
-from app.models.customer import Customer
-from app.models.manager import Manager
+from app.models.user import User
 from app.database import db
 
 def user_profile_setname_v1(token, name_first, name_last, user_type):

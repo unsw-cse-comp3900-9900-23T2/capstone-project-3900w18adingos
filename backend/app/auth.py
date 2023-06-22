@@ -1,6 +1,4 @@
 from flask import Blueprint, request, jsonify
-from app.models.customer import Customer
-from app.models.manager import Manager
 from app.auth_helper import *
 from app.user_utils import (user_profile_setname_v1,
                             customer_profile_setpic, 
