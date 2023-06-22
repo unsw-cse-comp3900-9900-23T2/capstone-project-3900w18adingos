@@ -4,10 +4,16 @@ from flask import current_app
 from app.database import db
 
 class Manager(db.Model):
+    __tablename__ = 'managers'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
+    restaurant_name = db.Column(db.String(100))
+    address = db.Column(db.String(200))
+    restaurant_pics = db.Column(db.String(500))  # this can be a string of URLs
+
+
 
     # additional fields for Manager...
 

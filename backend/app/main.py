@@ -2,6 +2,10 @@ from flask import Blueprint, request, jsonify
 from app.models.customer import Customer
 from app.models.manager import Manager
 from app import auth
+from app.user_utils import (user_profile_setname_v1,
+                            customer_profile_setpic, 
+                            manager_profile_set_restaurant_details, 
+                            manager_profile_upload_restaurant_pics)
 
 
 main = Blueprint('main', __name__)
@@ -50,6 +54,70 @@ def passwordreset_reset():
     reset_code = request.json.get('reset_code')
     new_password = request.json.get('new_password')
     return auth.auth_passwordreset_reset(reset_code, new_password)
+
+@main.route('/customer/profile/setname', methods=['PUT'])
+def set_customer_name():
+    token = request.json.get('token')
+    name_first = request.json.get('name_first')
+    name_last = request.json.get('name_last')
+    return user_profile_setname_v1(token, name_first, name_last, 'customer')
+
+@main.route('/customer/profile/setemail', methods=['PUT'])
+def set_customer_email():
+    token = request.json.get('token')
+    email = request.json.get('email')
+    return user_profile_setemail_v1(token, email, 'customer')
+
+@main.route('/customer/profile/sethandle', methods=['PUT'])
+def set_customer_handle():
+    token = request.json.get('token')
+    handle = request.json.get('handle')
+    return user_profile_sethandle_v1(token, handle, 'customer')
+
+@main.route('/customer/profile/setpic', methods=['POST'])
+def set_customer_profile_pic():
+    token = request.json.get('token')
+    pic_url = request.json.get('pic_url')
+    return customer_profile_setpic(token, pic_url)
+
+@main.route('/manager/profile/setrestaurantdetails', methods=['PUT'])
+def set_restaurant_details():
+    token = request.json.get('token')
+    restaurant_name = request.json.get('restaurant_name')
+    address = request.json.get('address')
+    return manager_profile_set_restaurant_details(token, restaurant_name, address)
+
+@main.route('/manager/profile/uploadpics', methods=['POST'])
+def upload_restaurant_pics():
+    token = request.json.get('token')
+    pics = request.json.get('pics')
+    return manager_profile_upload_restaurant_pics(token, pics)
+
+
+# @main.route('/customer/profile/setname', methods=['PUT'])
+# def set_customer_name():
+#     # implementation
+
+# @main.route('/customer/profile/setemail', methods=['PUT'])
+# def set_customer_email():
+#     # implementation
+
+# @main.route('/customer/profile/sethandle', methods=['PUT'])
+# def set_customer_handle():
+#     # implementation
+
+# @main.route('/customer/profile/setpic', methods=['POST'])
+# def set_customer_profile_pic():
+#     # implementation
+
+# @main.route('/manager/profile/setrestaurantdetails', methods=['PUT'])
+# def set_restaurant_details():
+#     # implementation
+
+# @main.route('/manager/profile/uploadpics', methods=['POST'])
+# def upload_restaurant_pics():
+#     # implementation
+
 
 
 # @main.route('/user/profile/uploadphoto', methods=['POST'])
