@@ -1,7 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask import current_app, jsonify
-from flask_mail import Message, Threa
+from flask_mail import Message
 
 from .mail import mail
 from app.database import db
