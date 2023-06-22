@@ -5,6 +5,7 @@ from flask_mail import Message
 
 from .mail import mail
 from app.database import db
+from app.models.user import User
 
 def auth_login(email, password):
     user = User.query.filter_by(email=email).first()
