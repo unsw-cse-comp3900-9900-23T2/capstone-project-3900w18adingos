@@ -8,3 +8,4 @@ class User(db.Model, UserMixin):
     email = db.Column(db.Text, unique=True)
     password_hash = db.Column(db.Text)
     profile_pic = db.Column(db.Text)
+    vouchers = db.relationship('Voucher', secondary='has_voucher')
