@@ -60,7 +60,7 @@ def user_profile_uploadphoto():
     y_start = request.json.get('y_start')
     x_end = request.json.get('x_end')
     y_end = request.json.get('y_end')
-    result = auth.user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
+    result = Customer.user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
     return jsonify(result)
 
 @main.route('/user/profile', methods=['GET'])
