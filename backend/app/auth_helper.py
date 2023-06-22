@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
-from flask import current_app, jsonify
+from flask import render_template, jsonify, url_for
 from flask_mail import Message
 
 from .mail import mail
