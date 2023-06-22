@@ -4,6 +4,11 @@ from flask_cors import CORS
 from .database import db
 from .mail import init_mail
 
+from app.models.user import User
+from app.models.has_voucher import HasVoucher
+from app.models.voucher import Voucher
+from app.models.eatery import Eatery
+
 def create_app():
 
     app = Flask(__name__)
