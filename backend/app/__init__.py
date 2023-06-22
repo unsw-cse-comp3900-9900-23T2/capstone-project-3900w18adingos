@@ -1,14 +1,8 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_cors import CORS
 
-from app.models.customer import Customer
-from app.models.manager import Manager
-
 from .database import db
-from .auth import auth_blueprint
 from .mail import init_mail
-
-
 
 def create_app():
 
