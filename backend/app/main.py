@@ -52,24 +52,24 @@ def passwordreset_reset():
     return auth.auth_passwordreset_reset(reset_code, new_password)
 
 
-@main.route('/user/profile/uploadphoto', methods=['POST'])
-def user_profile_uploadphoto():
-    token = request.json.get('token')
-    img_url = request.json.get('img_url')
-    x_start = request.json.get('x_start')
-    y_start = request.json.get('y_start')
-    x_end = request.json.get('x_end')
-    y_end = request.json.get('y_end')
-    result = Customer.user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
-    return jsonify(result)
+# @main.route('/user/profile/uploadphoto', methods=['POST'])
+# def user_profile_uploadphoto():
+#     token = request.json.get('token')
+#     img_url = request.json.get('img_url')
+#     x_start = request.json.get('x_start')
+#     y_start = request.json.get('y_start')
+#     x_end = request.json.get('x_end')
+#     y_end = request.json.get('y_end')
+#     result = Customer.user_profile_uploadphoto(token, img_url, x_start, y_start, x_end, y_end)
+#     return jsonify(result)
 
-@main.route('/user/profile', methods=['GET'])
-def get_user_profile():
-    token = request.json.get('token')
-    return user.get_user_profile(token)
+# @main.route('/user/profile', methods=['GET'])
+# def get_user_profile():
+#     token = request.json.get('token')
+#     return user.get_user_profile(token)
 
-@main.route('/user/profile', methods=['PUT'])
-def update_user_profile():
-    token = request.json.get('token')
-    name = request.json.get('name')
-    return user.update_user_profile(token, name)
+# @main.route('/user/profile', methods=['PUT'])
+# def update_user_profile():
+#     token = request.json.get('token')
+#     name = request.json.get('name')
+#     return user.update_user_profile(token, name)

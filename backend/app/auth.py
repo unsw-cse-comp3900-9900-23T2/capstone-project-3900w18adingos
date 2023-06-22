@@ -2,6 +2,10 @@ from flask import Blueprint
 from .database import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
+from flask import current_app, jsonify
+from flask_mail import Message
+from .mail import mail
+
 
 
 auth_blueprint = Blueprint('auth', __name__)
