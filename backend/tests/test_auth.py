@@ -4,7 +4,6 @@ from app import create_app, db
 from app.models.customer import Customer
 from app.models.voucher import Voucher
 from app.models.eatery import Eatery
-
 from werkzeug.security import generate_password_hash
 
 
@@ -34,7 +33,7 @@ class AuthTestCase(unittest.TestCase):
 
             test_customer = Customer(email=self.customer_data['email'], password_hash=hashed_password)
             test_customer.name = self.customer_data['name']
-            db.session.add(test_customer)
+            # db.session.add(test_customer)
 
             hashed_password = generate_password_hash(self.eatery_data['password'], method='sha256')
 
@@ -55,8 +54,8 @@ class AuthTestCase(unittest.TestCase):
 
     def test_login(self):
         # Register the user first
-        self.client.post('/auth/register', json=self.customer_data)
-
+        res = self.client.post('/auth/register', json=self.customer_data)
+        print(json.loads(res.data.decode()))
         # Login with the registered user's data
         res = self.client.post('/auth/login', json={'email': self.customer_data['email'], 'password': self.customer_data['password'], 'role': 'customer'})
         print(res.data) 
