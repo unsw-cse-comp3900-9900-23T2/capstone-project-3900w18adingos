@@ -1,16 +1,10 @@
-import "./components/Map.css"
+import "./styles/Map.css"
 import Map from "./components/Map"
+import MapHomePage from "./Pages/MapHomePage"
 const App = () => { 
     return ( 
         <>
-        <div className="App">
-          <header className="App-header">
-            <h1>MAAAAAp🇦🇫</h1>
-          </header>
-          <div className="map-wrapper">
-            <Map />
-          </div>
-        </div>
+        <MapHomePage />
       </>
     );
 }
