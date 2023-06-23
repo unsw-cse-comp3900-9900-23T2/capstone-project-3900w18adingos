@@ -3,12 +3,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask import current_app
 from app.database import db
+from flask_login import UserMixin
 
-class Customer(db.Model):
-    __tablename__ = 'customers'
+class Customer(db.Model, UserMixin):
+    __tablename__ = 'customer'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     email = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(128))
     password_hash = db.Column(db.String(128))
     handle = db.Column(db.String(50), unique=True)
     profile_pic = db.Column(db.String(500))
@@ -35,3 +37,6 @@ class Customer(db.Model):
             return None  # invalid token
         user = Customer.query.get(data['id'])
         return user
+    @property
+    def role(self):
+        return 'customer'

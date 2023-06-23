@@ -1,10 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.auth_helper import *
-from app.user_utils import (user_profile_setname_v1,
-                            customer_profile_setpic, 
-                            manager_profile_set_restaurant_details, 
-                            manager_profile_upload_restaurant_pics)
-
+from app import auth_helper
 
 auth = Blueprint('auth', __name__)
 
@@ -13,36 +8,37 @@ def login():
     email = request.json.get('email')
     password = request.json.get('password')
     role = request.json.get('role')
-    if role not in ['customer', 'restaurant']:
+    if role not in ['customer', 'eatery']:
         return jsonify({"message": "Invalid role"}), 400
-    result = auth.auth_login(email, password)
-    return jsonify(result)
+    result = auth_helper.auth_login(email, password, role)
+    return result
 
 @auth.route('/auth/register', methods=['POST'])
 def register():
     email = request.json.get('email')
     password = request.json.get('password')
-    name_first = request.json.get('name_first')
-    name_last = request.json.get('name_last')
+    name = request.json.get('name')
     role = request.json.get('role')
-    if role not in ['customer', 'restaurant']:
+    if role not in ['customer', 'eatery']:
         return jsonify({"message": "Invalid role"}), 400
-    result = auth.auth_register(email, password, name_first, name_last, role)
-    return jsonify(result)
+    result = auth_helper.auth_register(email, password, name, role)
+    return result
 
 @auth.route('/auth/logout', methods=['POST'])
 def logout():
     token = request.json.get('token')
-    result = auth.auth_logout(token)
-    return jsonify(result)
+    result = auth_helper.auth_logout(token)
+    return result
 
 @auth.route('/auth/passwordreset/request', methods=['POST'])
 def passwordreset_request():
     email = request.json.get('email')
-    return auth.auth_passwordreset_request(email)
+    result = auth_helper.auth_passwordreset_request(email)
+    return result
 
 @auth.route('/auth/passwordreset/reset', methods=['POST'])
 def passwordreset_reset():
     reset_code = request.json.get('reset_code')
     new_password = request.json.get('new_password')
-    return auth.auth_passwordreset_reset(reset_code, new_password)
+    result = auth_helper.auth_passwordreset_reset(reset_code, new_password)
+    return result
