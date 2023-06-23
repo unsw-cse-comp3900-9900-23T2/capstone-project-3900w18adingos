@@ -16,9 +16,8 @@ const SignUp: React.FC = () => {
   const { register, handleSubmit } = useForm<FormInputs>();
   const [selectedUserType, setSelectedUserType] = useState<string | null>(null);
 
-  // success or failure message
+  // success or failure to signUp/signIn message shown to client 
   const [message, setMessage] = useState("");
-
 
   const onSubmit = async (data: FormInputs) => {
     // Update this to include userType from state, not from form
