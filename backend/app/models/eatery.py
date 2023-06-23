@@ -12,9 +12,13 @@ class Eatery(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     restaurant_name = db.Column(db.String(100))
     location = db.Column(db.Text)
+    #role = db.Column(db.String(50), default='eatery')
     #restaurant_pics = db.Column(db.String(500))  # this can be a string of URLs
 
     # additional fields for Manager...
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.role = 'eatery'
 
     def hash_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -36,5 +40,5 @@ class Eatery(db.Model, UserMixin):
         user = Eatery.query.get(data['id'])
         return user
 
-    def role(self):
-        return 'eatery'
+    # def role(self):
+    #     return 'eatery'
