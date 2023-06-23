@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import "./SignUp.css"
+import "../styles/SignUp.css"
 
 interface FormInputs {
   name: string;
@@ -64,11 +64,9 @@ const SignUp: React.FC = () => {
               className={selectedUserType === 'owner' ? 'selected' : ''}>
               I'm a Resturant Owner
           </button>
-      </div>
+        </div>
 
-
-
-{selectedUserType === 'owner' && <input {...register("address")} placeholder="Restaurant Address" className="input-field" />}
+        {selectedUserType === 'owner' && <input {...register("address")} placeholder="Restaurant Address" className="input-field" />}
 
         <button type="submit" className="submit-button">Sign Up</button>
       </form>
