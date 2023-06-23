@@ -1,0 +1,35 @@
+.map-header { 
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    background-color: #FFE8C9;
+    border-radius: 5px;
+    font-family:sans-serif;
+}
+
+.search-bar { 
+    font-size: 17px;
+    margin: 0px 10px -10px 10px;
+    border-radius: 10px;
+    padding: 7px;
+    border: 0.5px solid;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+.button {
+    display: flex;
+    justify-content: end;
+    width: 50%;
+    margin-right: 25px;
+} 
+
+.text-header { 
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+}
+
+.account-page-open { 
+    height: 100vh;
+}
