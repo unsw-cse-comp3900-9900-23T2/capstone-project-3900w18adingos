@@ -3,19 +3,19 @@ from flask_cors import CORS
 
 from .database import db
 from .mail import init_mail
+from .config import config
 
 from app.models.has_voucher import HasVoucher
 from app.models.voucher import Voucher
 from app.models.eatery import Eatery
 from app.models.customer import Customer
 
-def create_app():
+def create_app(config_name='default'):
 
     app = Flask(__name__)
     CORS(app) 
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config.from_object(config[config_name])
 
     db.init_app(app)
     init_mail(app)
