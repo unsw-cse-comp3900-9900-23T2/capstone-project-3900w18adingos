@@ -8,7 +8,7 @@ const Profile: React.FC = () => {
   const navigate = useNavigate(); 
 
   const handleClose = () => {
-    navigate(-1); // Go back
+    navigate("/profile"); // Go back
   };
 
 
@@ -47,3 +47,4 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
+
