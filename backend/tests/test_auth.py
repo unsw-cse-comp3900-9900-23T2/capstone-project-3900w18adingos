@@ -1,3 +1,13 @@
+import sys
+import os
+# Get the current directory of 'test_auth.py'
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Get the parent directory (project root)
+project_root = os.path.dirname(current_dir)
+
+# Add the project root to sys.path
+sys.path.append(project_root)
 import unittest
 import json  # import json module
 from app import create_app, db

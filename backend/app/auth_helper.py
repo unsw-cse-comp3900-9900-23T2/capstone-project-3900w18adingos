@@ -3,7 +3,7 @@ from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask import render_template, jsonify, url_for, current_app
 from flask_mail import Message
 
-from .mail import mail
+# from .mail import mail
 from app.database import db
 from app.models.customer import Customer
 from app.models.eatery import Eatery
@@ -32,7 +32,6 @@ def auth_register(email, password, name, role):
     UserModel = get_user_model(role)
     if not UserModel:
         return jsonify({"message": "Invalid role"}), 400
-
     if UserModel.query.filter_by(email=email).first() is not None:
         return jsonify({"message": f"{role.title()} with that email already exists"}), 400
     
@@ -45,7 +44,7 @@ def auth_register(email, password, name, role):
     user.hash_password(password)
     db.session.add(user)
     db.session.commit()
-    return jsonify({'token': user.generate_auth_token(), 'user': name, 'role': role})
+    return jsonify({'token': user.generate_auth_token(), 'user': name, 'role': role, 'message': 'Registration successful'})
 
 def auth_logout(token, role):
     UserModel = get_user_model(role)
