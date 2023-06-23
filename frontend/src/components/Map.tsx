@@ -1,13 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
-import MapHeader from "./MapHeader"
-import "../styles/Map.css"
+import MapHeader from "./Header"
+import "./Map.css"
 
-interface MapProps {
-  searchLocation: { lat: number, lng: number };
-}
-
-const Map: React.FC<MapProps> = ({searchLocation}) => {
+const Map: React.FC = () => {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -19,13 +15,12 @@ const Map: React.FC<MapProps> = ({searchLocation}) => {
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [loadingPosition, setLoadingPosition] = useState(true);
 
-  // Set default position to user location
-  const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
+  const [location, setLocation] = useState({ lat: 0, lng: 0 });
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
-        setUserLocation({ lat: latitude, lng: longitude });
+        setLocation({ lat: latitude, lng: longitude });
         setLoadingPosition(false);
 
         // Create a marker for the user's location
@@ -48,19 +43,12 @@ const Map: React.FC<MapProps> = ({searchLocation}) => {
     }
   }, []);
 
-  // update map view on search 
-  useEffect(() => {
-    if (searchLocation && mapRef.current) {
-      mapRef.current.setCenter(searchLocation);
-    }
-  }, [searchLocation]);
-
   const initialize = () => {
     let mapColour = '#E4D3FF'
     let roadColour = "#FFFFFF"
     if (!loadingPosition && isLoaded) {
       mapRef.current = new google.maps.Map(document.getElementById('map') as HTMLElement, {
-        center: userLocation,
+        center: location,
         zoom: 17,
         disableDefaultUI: true,
         styles: [
@@ -134,7 +122,7 @@ const Map: React.FC<MapProps> = ({searchLocation}) => {
 
 
       const request: google.maps.places.PlaceSearchRequest = {
-        location: userLocation,
+        location: location,
         radius: 500,
         type: 'restaurant',
       };
@@ -200,11 +188,17 @@ const Map: React.FC<MapProps> = ({searchLocation}) => {
 
 };
 
+const handleSearch = (place: google.maps.places.PlaceResult) => {
+  if (place.geometry && place.geometry.location && mapRef.current) {
+    mapRef.current.setCenter(place.geometry.location);
+  }
+}
 
 
 
   return (
     <>
+      <MapHeader onSearch={handleSearch} location={location}/>
       <div className='map-wrapper'>
         <h2>Near you</h2>
         <div id="map" className="map">
