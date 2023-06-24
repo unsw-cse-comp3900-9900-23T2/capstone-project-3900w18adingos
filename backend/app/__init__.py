@@ -28,5 +28,8 @@ def create_app(config_name='default'):
 
         from app.auth import auth as auth_blueprint
         app.register_blueprint(auth_blueprint)
+
+        from app.review import review as review_blueprint
+        app.register_blueprint(review_blueprint)
     
     return app
