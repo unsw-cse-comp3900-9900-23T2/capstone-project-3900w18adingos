@@ -8,7 +8,7 @@ from app.database import db
 review = Blueprint('review', __name__)
 
 # get the current_user 's review
-@review.route('/get_review', methods=['POST'])
+@review.post('/get_review')
 @login_required
 def get_review():
     req_json = request.get_json()
@@ -28,7 +28,7 @@ def get_review():
     }), 200
 
 # get all public reviews given a restaurant
-@review.route('/get_all_reviews', methods=['POST'])
+@review.post('/get_all_reviews')
 @login_required
 def get_review():
     req_json = request.get_json()
@@ -43,7 +43,7 @@ def get_review():
         'reviews': reviews
     }), 200
 
-@review.route('/add_review', methods=['POST'])
+@review.post('/add_review')
 @login_required
 def add_review():
     req_json = request.get_json()
@@ -58,7 +58,7 @@ def add_review():
 
     return jsonify(success=True), 201
 
-@review.post('/delete_review', methods=['DELETE'])
+@review.delete('/delete_review')
 def delete_review(review_id):
     review = Review.query.get_or_404(review_id)
     db.session.delete(review)
