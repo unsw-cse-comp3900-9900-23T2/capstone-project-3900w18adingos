@@ -30,7 +30,7 @@ def get_review():
 # get all public reviews given a restaurant
 @review.post('/get_all_reviews')
 @login_required
-def get_review():
+def get_all_reviews():
     req_json = request.get_json()
     eatery_id = req_json['eatery_id'].strip()
     # ensure eatery id valid
