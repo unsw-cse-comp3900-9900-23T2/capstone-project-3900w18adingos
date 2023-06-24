@@ -8,17 +8,14 @@ class Eatery(db.Model, UserMixin):
     __tablename__ = 'eatery'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(128))
     password_hash = db.Column(db.String(128))
     restaurant_name = db.Column(db.String(100))
     location = db.Column(db.Text)
-    #role = db.Column(db.String(50), default='eatery')
+    reviews = db.relationship('Review', backref='eatery')
     #restaurant_pics = db.Column(db.String(500))  # this can be a string of URLs
 
-    # additional fields for Manager...
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.role = 'eatery'
+    def __repr__(self):
+        return f'<Eatery "{self.restaurant_name}">'
 
     def hash_password(self, password):
         self.password_hash = generate_password_hash(password)
