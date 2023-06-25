@@ -2,22 +2,20 @@ import React from 'react';
 import '../styles/Profile.css';
 import '@react-google-maps/api';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 
 const Profile: React.FC = () => {
-  const navigate = useNavigate(); 
-
-  const handleClose = () => {
-    navigate("/profile"); // Go back
-  };
-
 
   return (
+    <>
+    <Header>
+      <h1>Profile Page</h1>
+      <i className="glyphicon glyphicon-user" />
+    </Header>
     <div className="profile-page">
-      <header>
-        Profile Page
-        <button onClick={handleClose}>X</button> 
-      </header>
+
       <section>
         <h2>Account</h2>
         <ul>
@@ -43,6 +41,9 @@ const Profile: React.FC = () => {
         </ul>
       </section>
     </div>
+
+    <Footer/>
+    </>
   );
 };
 

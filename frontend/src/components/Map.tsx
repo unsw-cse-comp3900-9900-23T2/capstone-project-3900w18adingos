@@ -206,7 +206,6 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
   return (
     <>
       <div className='map-wrapper'>
-        <h2>Near you</h2>
         <div id="map" className="map">
           {loadingPosition && 
             <div className="spinner">
