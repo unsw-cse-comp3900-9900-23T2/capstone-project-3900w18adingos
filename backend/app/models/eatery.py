@@ -18,6 +18,9 @@ class Eatery(db.Model, UserMixin):
     longitude = db.Column(db.Float)
     reviews = db.relationship('Review', backref='eatery')
     #restaurant_pics = db.Column(db.String(500))  # this can be a string of URLs
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.role = 'eatery'
 
     def __repr__(self):
         return f'<Eatery "{self.restaurant_name}">'
