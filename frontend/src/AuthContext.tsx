@@ -38,7 +38,6 @@ export const AuthProvider: React.FC<props> = ({ children }) => {
     const register = useCallback(async (email: string, password: string, name: string, role: string) => {
         try {
           const response = await api.post('/auth/register', { email, password, name, role });
-
           const token = response.data.token;
           localStorage.setItem('token', token); // store token in local storage for persistence
           setToken(token);

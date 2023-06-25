@@ -15,7 +15,7 @@ def create_app(config_name='default'):
     app = Flask(__name__)
 
     app.config.from_object(config[config_name])
-
+    CORS(app, origins=['http://localhost:5173'])
     db.init_app(app)
     init_mail(app)
 
