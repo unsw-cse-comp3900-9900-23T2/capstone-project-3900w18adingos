@@ -1,8 +1,8 @@
 // SignIn.tsx
 import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
 import "../styles/SignUp.css"
+import { useAuth } from '../useAuth';
 
 interface FormInputs {
   email: string;
@@ -12,20 +12,17 @@ interface FormInputs {
 const SignIn: React.FC = () => {
   const { register, handleSubmit } = useForm<FormInputs>();
   const [message, setMessage] = useState("");
-
+  const { login } = useAuth();
+  
   const onSubmit = async (data: FormInputs) => {
     const { email, password } = data;
 
-    const payload = {
-      email,
-      password,
-    };
-
     try {
-      const response = await axios.post('http://localhost:5000/signin', payload);
-      setMessage(response.data.message);
+      await login(email, password);
+      setMessage("Successfully logged in.");
     } catch (error) {
       console.error(error);
+      setMessage("Failed to log in.");
     }
   };
 
