@@ -5,38 +5,31 @@ import axios from 'axios';
 import "../styles/SignUp.css"
 import { useAuth } from '../useAuth';
 
-
 interface FormInputs {
   name: string;
   email: string;
   password: string;
-  userType: string;
+  role: string;
   address: string;
 }
 
 const SignUp: React.FC = () => {
   const { register, handleSubmit } = useForm<FormInputs>();
-  const [selectedUserType, setSelectedUserType] = useState<string | null>(null);
-
+  const [role, setRole] = useState<string>("");
+  const { register: registerUser } = useAuth();
   // success or failure to signUp/signIn message shown to client 
   const [message, setMessage] = useState("");
 
+
   const onSubmit = async (data: FormInputs) => {
     // Update this to include userType from state, not from form
-    const { name, email, password, address } = data;
-    const userType = selectedUserType;
-
-    const payload = {
-      name,
-      email,
-      password,
-      userType,
-      address,
-    };
+    const { name, email, password } = data
 
     try {
-      const response = await axios.post('http://localhost:5000/signup', payload);
-      setMessage(response.data.message);
+      // const response = await axios.post('/auth/register', payload);
+      // setMessage(response.data.message);
+      await registerUser(email, password, name, role);
+      setMessage("success")
     } catch (error) {
       console.error(error);
     }
@@ -55,19 +48,19 @@ const SignUp: React.FC = () => {
         <div className="user-type-select">
           <button 
               type="button" 
-              onClick={() => setSelectedUserType('user')} 
-              className={selectedUserType === 'user' ? 'selected' : ''}>
+              onClick={() => setRole("customer")} 
+              className={role === "customer" ? 'selected' : ''}>
               I'm a Customer
           </button>
           <button 
               type="button" 
-              onClick={() => setSelectedUserType('owner')} 
-              className={selectedUserType === 'owner' ? 'selected' : ''}>
+              onClick={() => setRole("eatery")} 
+              className={role === "eatery" ? 'selected' : ''}>
               I'm a Resturant Owner
           </button>
         </div>
 
-        {selectedUserType === 'owner' && <input {...register("address")} placeholder="Restaurant Address" className="input-field" />}
+        {role === "eatery" && <input {...register("address")} placeholder="Restaurant Address" className="input-field" />}
 
         <button type="submit" className="submit-button">Sign Up</button>
       </form>

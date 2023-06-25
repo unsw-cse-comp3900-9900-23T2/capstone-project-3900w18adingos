@@ -20,6 +20,9 @@ interface props {
 // Create the Context Provider
 export const AuthProvider: React.FC<props> = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem('token') || null);
+    const api = axios.create({
+        baseURL: 'http://127.0.0.1:5000'
+      });
 
     const login = useCallback(async (email: string, password: string) => {
         try {
@@ -34,7 +37,8 @@ export const AuthProvider: React.FC<props> = ({ children }) => {
 
     const register = useCallback(async (email: string, password: string, name: string, role: string) => {
         try {
-          const response = await axios.post('/auth/register', { email, password, name, role });
+          const response = await api.post('/auth/register', { email, password, name, role });
+
           const token = response.data.token;
           localStorage.setItem('token', token); // store token in local storage for persistence
           setToken(token);
