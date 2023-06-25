@@ -27,5 +27,8 @@ def create_app(config_name='default'):
 
         from app.auth import auth as auth_blueprint
         app.register_blueprint(auth_blueprint)
+
+        from app.user import user as user_blueprint
+        app.register_blueprint(user_blueprint)
     
     return app
