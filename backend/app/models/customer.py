@@ -14,9 +14,12 @@ class Customer(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     handle = db.Column(db.String(50), unique=True)
     profile_pic = db.Column(db.String(500))
-
+   # role = db.Column(db.String(50), default='customer')
 
     # additional fields for Customer...
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.role = 'customer'
 
     def hash_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -37,6 +40,6 @@ class Customer(db.Model, UserMixin):
             return None  # invalid token
         user = Customer.query.get(data['id'])
         return user
-    @property
-    def role(self):
-        return 'customer'
+    # @property
+    # def role(self):
+    #     return 'customer'
