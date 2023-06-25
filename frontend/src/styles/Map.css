@@ -42,9 +42,9 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
   transform-origin: center;
 }
 
-.marker-content-wrapper { 
+/* .marker-content-wrapper { 
 
-}
+} */
 
 .marker-content-image-wrapper { 
   width:  100px; 

@@ -1,9 +1,8 @@
 // MapHomePage component
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import Header from "../components/Header";
 import Map from "../components/Map";
 import SearchBar from "../components/SearchBar";
-import { useNavigate, Link } from 'react-router-dom';
 
 import "@react-google-maps/api"; 
 import Footer from '../components/Footer';
@@ -23,7 +22,7 @@ const MapHomePage: React.FC = () => {
         <h1>Discover places and restaurants near you</h1>
         <SearchBar location={searchLocation} onSearch={handleSearch} /> 
       </Header>
-      
+
       <Map findLocation={searchLocation} />
       <Footer />
     </>
