@@ -31,4 +31,8 @@ def create_app(config_name='default'):
         from app.user import user as user_blueprint
         app.register_blueprint(user_blueprint)
     
+
+        from app.review import review as review_blueprint
+        app.register_blueprint(review_blueprint)
+    
     return app
