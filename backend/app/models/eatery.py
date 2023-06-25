@@ -13,7 +13,7 @@ class Eatery(db.Model, UserMixin):
     restaurant_name = db.Column(db.String(100))
     location = db.Column(db.Text)
     cuisine = db.Column(db.String(50))
-    #role = db.Column(db.String(50), default='eatery')
+    role = db.Column(db.String(50), default='eatery')
     #restaurant_pics = db.Column(db.String(500))  # this can be a string of URLs
 
     def __init__(self, **kwargs):
@@ -28,7 +28,7 @@ class Eatery(db.Model, UserMixin):
     
     def generate_auth_token(self, expiration=600):
         s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        return s.dumps({'id': self.id}, salt='auth')
+        return s.dumps({'id': self.id, 'role': self.role}, salt='auth')
 
     @staticmethod
     def verify_auth_token(token):
@@ -37,8 +37,10 @@ class Eatery(db.Model, UserMixin):
             data = s.loads(token, salt='auth')
         except (SignatureExpired, BadSignature):
             return None  # invalid token
-        user = Eatery.query.get(data['id'])
+        if data['role'] == 'eatery':
+            user = Eatery.query.get(data['id'])
+        else:
+            return None  # invalid token role
         return user
-
     # def role(self):
     #     return 'eatery'
