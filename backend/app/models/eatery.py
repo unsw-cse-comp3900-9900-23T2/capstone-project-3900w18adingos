@@ -12,10 +12,10 @@ class Eatery(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     restaurant_name = db.Column(db.String(100))
     location = db.Column(db.Text)
+    cuisine = db.Column(db.String(50))
     #role = db.Column(db.String(50), default='eatery')
     #restaurant_pics = db.Column(db.String(500))  # this can be a string of URLs
 
-    # additional fields for Manager...
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.role = 'eatery'
