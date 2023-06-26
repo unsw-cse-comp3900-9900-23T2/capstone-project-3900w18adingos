@@ -17,6 +17,7 @@ class Eatery(db.Model, UserMixin):
     restaurant_name = db.Column(db.String(100))
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
+    cuisines = db.relationship('CooksCuisine', backref='eatery')
     # reviews = db.relationship('Review', backref='eatery')
     #restaurant_pics = db.Column(db.String(500))  # this can be a string of URLs
 

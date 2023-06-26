@@ -8,7 +8,7 @@ from app.models.cuisine import Cuisine
 from app.models.cooks_cuisine import CooksCuisine
 from sqlalchemy import TypeCoerce, create_engine, func, literal, or_, type_coerce, and_
 from sqlalchemy import cast, Float
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, joinedload
 import math
 
 engine = create_engine(db.engine.url)
@@ -30,7 +30,7 @@ def eatery_search(search_term, token, qty=1):
     #     )
     # ).all()
     
-    joined = Eatery.query.join(Cuisine, Cuisine.eatery_id == Eatery.id).all()
+    joined = db.session.query(Eatery).join(Eatery.cuisines).join(Cuisine).options(joinedload(Eatery.cuisines))
     results = joined.filter(
         or_(Cuisine.cuisine_name.ilike(f"%{search_term}%"),
          Eatery.restaurant_name.ilike(f"%{search_term}%"))
@@ -49,32 +49,7 @@ def eatery_search(search_term, token, qty=1):
         return_array.append(eatery_info)
         i = i + 1
 
-    return jsonify({'results': return_array})
-
-# def distance(lat1, lon1, lat2, lon2):
-#     """
-#     Calculate the distance (in kilometers) between two points on the Earth's surface
-#     using the Haversine formula.
-#     """
-#     earth_radius = 6371  # Radius of the Earth in kilometers
-
-#     # Convert latitude and longitude to radians
-#     lat1_rad = math.radians(lat1)
-#     lon1_rad = math.radians(lon1)
-#     lat2_rad = math.radians(lat2)
-#     lon2_rad = math.radians(lon2)
-
-#     # Calculate the differences between the latitudes and longitudes
-#     delta_lat = lat2_rad - lat1_rad
-#     delta_lon = lon2_rad - lon1_rad
-
-#     # Calculate the Haversine formula
-#     a = math.sin(delta_lat / 2) ** 2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(delta_lon / 2) ** 2
-#     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-#     distance = earth_radius * c
-#     print(distance)
-
-#     return distance
+    return jsonify({'results': return_array}), 200
 
 
 def eatery_distance_search(token, search_term, user_long, user_lat, max_distance, qty=1):
@@ -83,7 +58,10 @@ def eatery_distance_search(token, search_term, user_long, user_lat, max_distance
     if not user:
         return jsonify({"message": "Invalid token"}), 400
 
-    joined = Eatery.query.join(Cuisine, Cuisine.eatery_id == Eatery.id)
+    # joined = Eatery.query.join(Cuisine, Cuisine.eatery_id == Eatery.id)
+
+    joined = db.session.query(Eatery).join(Eatery.cuisines).join(Cuisine).options(joinedload(Eatery.cuisines))
+
     # results = joined.filter(
     #     or_(Cuisine.cuisine_name.ilike(f"%{search_term}%"),
     #      Eatery.restaurant_name.ilike(f"%{search_term}%"))
@@ -112,7 +90,7 @@ def eatery_distance_search(token, search_term, user_long, user_lat, max_distance
         return_array.append(eatery_info)
         i = i + 1
     
-    return jsonify({'results': return_array})
+    return jsonify({'results': return_array}), 200
     
     
     
