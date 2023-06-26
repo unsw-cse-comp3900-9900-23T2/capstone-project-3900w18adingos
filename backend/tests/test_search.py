@@ -122,6 +122,9 @@ class SearchTestCase(unittest.TestCase):
             db.session.add(CooksCuisine(id=6,
                                         eatery_id = 6,
                                         cuisine_id = 5))
+            db.session.add(CooksCuisine(id=7,
+                                        eatery_id = 6,
+                                        cuisine_id = 4))
 
             db.session.commit()
     

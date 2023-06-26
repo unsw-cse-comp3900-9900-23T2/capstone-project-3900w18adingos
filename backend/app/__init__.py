@@ -10,6 +10,7 @@ from app.models.voucher import Voucher
 from app.models.eatery import Eatery
 from app.models.customer import Customer
 from app.models.cuisine import Cuisine
+from app.models.cooks_cuisine import CooksCuisine
 
 def create_app(config_name='default'):
 
