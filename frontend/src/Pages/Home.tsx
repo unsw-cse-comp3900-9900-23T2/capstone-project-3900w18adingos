@@ -21,10 +21,12 @@ const Home: React.FC = () => {
       <Header>  
         <h1>Discover places and restaurants near you</h1>
         <SearchBar location={searchLocation} onSearch={handleSearch} /> 
+        
       </Header>
 
       <Map findLocation={searchLocation} />
       <Footer />
+
     </>
 );
 }

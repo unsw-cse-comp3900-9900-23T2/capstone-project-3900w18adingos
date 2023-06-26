@@ -1,6 +1,11 @@
 import React, { createContext, useState, useCallback } from "react";
 import axios from "axios"
 
+interface User {
+    name: string;
+    email: string;
+}
+
 interface AuthContextType {
     token: string | null;
     isAuthenticated: () => boolean;
@@ -9,6 +14,8 @@ interface AuthContextType {
     passwordResetRequest: (email: string) => Promise<boolean>;
     passwordReset: (resetCode: string, newPassword: string) => Promise<boolean>;
     logout: () => Promise<boolean>;
+    fetchUser: () => Promise<void>;
+    user: User;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,13 +25,14 @@ interface props {
 }
 export const AuthProvider: React.FC<props> = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem('token') || null);
+    const [user, setUser] = useState({name: "", email: ""});
     const api = axios.create({
         baseURL: 'http://127.0.0.1:5000'
       });
 
     const login = useCallback(async (email: string, password: string) => {
         try {
-            const response = await axios.post('/auth/login', { email, password });
+            const response = await api.post('/auth/login', { email, password });
             const token = response.data.token;
             localStorage.setItem('token', token);
             setToken(token);
@@ -50,7 +58,7 @@ export const AuthProvider: React.FC<props> = ({ children }) => {
       
     const logout = useCallback(async () => {
         try {
-            await axios.post('/auth/logout', { token });
+            await api.post('/auth/logout', { token });
             localStorage.removeItem('token');
             setToken(null);
             return true;
@@ -62,7 +70,7 @@ export const AuthProvider: React.FC<props> = ({ children }) => {
     
     const passwordResetRequest = useCallback(async (email: string) => {
         try {
-            const response = await axios.post('/auth/passwordreset/request', { email });
+            await api.post('/auth/passwordreset/request', { email });
             return true;
         } catch (error) {
             console.error(error);
@@ -72,7 +80,7 @@ export const AuthProvider: React.FC<props> = ({ children }) => {
     
     const passwordReset = useCallback(async (resetCode: string, newPassword: string) => {
         try {
-            const response = await axios.post('/auth/passwordreset/reset', { resetCode, newPassword });
+            await api.post('/auth/passwordreset/reset', { resetCode, newPassword });
             return true;
         } catch (error) {
             console.error(error);
@@ -82,8 +90,21 @@ export const AuthProvider: React.FC<props> = ({ children }) => {
 
     const isAuthenticated = () => Boolean(token);
 
+    const fetchUser = useCallback(async () => {
+        try {
+          const response = await api.get('/auth/me', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setUser(response.data); // assuming the response data is the user object
+        } catch (error) {
+          console.error(error);
+        }
+      }, [token]);
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout, register, passwordResetRequest, passwordReset, token }}>
+        <AuthContext.Provider value={{ user, fetchUser, isAuthenticated, login, logout, register, passwordResetRequest, passwordReset, token }}>
             {children}
         </AuthContext.Provider>
     );

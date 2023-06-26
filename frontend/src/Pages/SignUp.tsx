@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import "../styles/SignUp.css";
 import { useAuth } from '../useAuth';
+import { useNavigate } from 'react-router-dom';
 
 interface FormInputs {
   name: string;
@@ -18,7 +19,7 @@ const SignUp: React.FC = () => {
   const { register: registerUser } = useAuth();
   // success or failure to signUp/signIn message shown to client 
   const [message, setMessage] = useState("");
-
+  const navigate = useNavigate();
 
   const onSubmit = async (data: FormInputs) => {
     // Update this to include userType from state, not from form
@@ -27,6 +28,7 @@ const SignUp: React.FC = () => {
       const success = await registerUser(email, password, name, role);
       if (success) { 
         setMessage("success"); 
+        navigate("/auth/home"); 
       } else { 
         setMessage("failure"); 
       }
@@ -37,7 +39,9 @@ const SignUp: React.FC = () => {
 
   return (
     <div className="signup-container">
-      <h2 className="signup-title">Create an account or log in</h2>
+      <h2 className="signup-title">Create an account or&nbsp;
+        <div onClick={() => navigate("/auth/login")} className='title-link'>log in</div>
+      </h2>
       <p className="signup-sub-title">Create a new account below or log in</p>
       <form onSubmit={handleSubmit(onSubmit)} className="signup-form">
         <input {...register("name")} placeholder="Name" className="input-field" />

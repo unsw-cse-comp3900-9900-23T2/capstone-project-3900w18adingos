@@ -13,7 +13,7 @@ body {
   }
   
   .signup-title {
-
+    display: flex;
     color: #333;
     margin-bottom: 1rem;
   }
@@ -96,3 +96,11 @@ body {
     border-color: #007BFF;
 }
 
+.title-link { 
+  cursor: pointer;
+  color: #0056b3;
+}
+
+.signup-sub-title { 
+  display: flex;
+}
