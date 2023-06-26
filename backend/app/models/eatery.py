@@ -13,11 +13,15 @@ class Eatery(db.Model, UserMixin):
     # display location to help human users find (e.g. inside quad food court)
     location = db.Column(db.Text)
     cuisine = db.Column(db.String(50))
-    #role = db.Column(db.String(50), default='eatery')
+    role = db.Column(db.String(50), default='eatery')
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     reviews = db.relationship('Review', backref='eatery')
     eatery_image = db.relationship('Image', back_populates='eatery')
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.role = 'eatery'
 
     def __repr__(self):
         return f'<Eatery "{self.restaurant_name}">'
@@ -30,7 +34,7 @@ class Eatery(db.Model, UserMixin):
     
     def generate_auth_token(self, expiration=600):
         s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        return s.dumps({'id': self.id}, salt='auth')
+        return s.dumps({'id': self.id, 'role': self.role}, salt='auth')
 
     @staticmethod
     def verify_auth_token(token):
@@ -39,8 +43,10 @@ class Eatery(db.Model, UserMixin):
             data = s.loads(token, salt='auth')
         except (SignatureExpired, BadSignature):
             return None  # invalid token
-        user = Eatery.query.get(data['id'])
+        if data['role'] == 'eatery':
+            user = Eatery.query.get(data['id'])
+        else:
+            return None  # invalid token role
         return user
-
     # def role(self):
     #     return 'eatery'
