@@ -8,6 +8,7 @@ from app import create_app, db
 from app.models.eatery import Eatery
 
 eatery_arr = [
+    # Kingsford
     Eatery(
         restaurant_name="McDonald's Kingsford",
         email='mcds@fake.com',
@@ -79,7 +80,48 @@ eatery_arr = [
         longitude=151.2271671069826,
         password_hash='pbkdf2:sha256:600000$IyU3vaY4j68DiJMm$8600ab3113b6bfddedc47a3ea44e7a61e1a86e3399875d29fbbc19f8988a0efc',
         location='2/458 Anzac Parade, Kingsford NSW 2032'
-    )
+    ),
+    # other Sydney
+    Eatery(
+        restaurant_name='Coogee Pavilion',
+        email='coogeepav@fake.com',
+        latitude=-33.91854837293536,
+        longitude=151.25867325121,
+        password_hash='pbkdf2:sha256:600000$a6QiToG6WYDOItEj$243bffaa006c368ed6de07a53a79d175cd2e6c27928c7ec9611044a1440a58d3',
+        location='Ground Floor, 169 Dolphin St, Coogee NSW 2034'
+    ),
+    Eatery(
+        restaurant_name="Ryan's Bar",
+        email='ryansbar@fake.com',
+        latitude=-33.86505856846632,
+        longitude=151.2081175261286,
+        password_hash='pbkdf2:sha256:600000$f1Q8rhorJNzYWBh4$9fd004c4e53b785fb6aa5612346a9f9f8fb1bcb3f8a6332aac664c7ad923c1a6',
+        location='264-278 George St, Sydney NSW 2000'
+    ),
+    Eatery(
+        restaurant_name='Union Hotel',
+        email='unionhotel@fake.com',
+        latitude=-33.90376265121743,
+        longitude=151.18028962673472,
+        password_hash='pbkdf2:sha256:600000$jSt4gBPWzmfzZY2M$71c48fcc48804b09de97108c6ad8cca02055e44814227d6e0692f3e9dc852e81',
+        location='576 King St, Newtown NSW 2042'
+    ),
+    Eatery(
+        restaurant_name='Dove & Olive',
+        email='doveolive@fake.com',
+        latitude=-33.8869720595346,
+        longitude=151.21005833871993,
+        password_hash='pbkdf2:sha256:600000$wHn4COyB73CnkSgW$2c6fb8dc883a6fb039a0f3d8a9092bca6ed62a2f5fe4b7973a8b5ed7735ea6a9',
+        location='156 Devonshire St, Surry Hills NSW 2010'
+    ),
+    Eatery(
+        restaurant_name='Rooty Hill RSL',
+        email='rootyhillrsl@fake.com',
+        latitude=-33.77024903871825,
+        longitude=150.83422849428325,
+        password_hash='pbkdf2:sha256:600000$NuofyOuEvpvcaBKv$4f584e4884f8ca7e382a69a92102a08f32f1882bbad1d95996f21f92bb0ff37c',
+        location='33 Railway St, Rooty Hill NSW 2766'
+    ),
 ]
 
 if __name__ == '__main__':
