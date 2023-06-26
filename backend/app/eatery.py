@@ -1,11 +1,14 @@
 from flask import Blueprint, request
 from flask_login import login_required, current_user
+import json
 import os
 
 from app.database import db
+from app.eatery_helper import get_image_bytes, generate_image_filename
+
 from app.models.eatery import Eatery
 from app.models.image import Image
-from app.eatery_helper import get_image_bytes, generate_image_filename
+from app.models.menuitem import MenuItem
 
 eatery = Blueprint('eatery', __name__)
 
@@ -14,7 +17,7 @@ eatery = Blueprint('eatery', __name__)
 def get_eatery_images():
     req_json = request.get_json()
     eatery_id = req_json['eatery_id'].strip()
-    image_objs = Eatery.query.get_or_404(eatery_id = eatery_id).first().eatery_images
+    image_objs = Eatery.query.get_or_404(eatery_id).eatery_images
     # image_objs has .id, .eatery_id, .filepath fields (def'n in models/image.py)
 
     encoded_images = []
@@ -30,6 +33,7 @@ def get_eatery_images():
         }
     ), 200
 
+# for eatery managers, add image
 @eatery.post('/add_image')
 @login_required
 def add_image():
@@ -54,7 +58,7 @@ def delete_image():
     img_id = req_json['image_id'].strip()
 
     # given image id, find image filepath from db 
-    image_obj = Image.query.first_or_404(id=img_id, eatery_id=current_user.id)
+    image_obj = Image.query.filter_by(id=img_id, eatery_id=current_user.id).first_or_404()
 
     try:
         # delete image from disk
@@ -68,3 +72,71 @@ def delete_image():
 
     return jsonify(success=True), 200
 
+@eatery.post('/get_menu_items')
+def get_eatery_menu_items():
+    req_json = request.get_json()
+    eatery_id = req_json['eatery_id'].strip()
+    menu_items = Eatery.query.get_or_404(eatery_id = eatery_id).menu_items
+
+    menu_items_arr = []
+    for menu_item in menu_items:
+        menu_items_arr.append(json.dumps(
+            {
+                'id': menu_item.id,
+                'name': menu_item.name,
+                'description': menu_item.description,
+                'price': menu_item.price
+            }
+        ))
+    return jsonify(
+        {
+            'menu_items': menu_items_arr
+        }
+    ), 200
+
+@eatery.post('/add_menu_item')
+@login_required
+def add_eatery_menu_item():
+    # TODO check logged-in user is actually an eatery
+
+    req_json = request.get_json()
+
+    eatery = Eatery.query.get_or_404(eatery_id = current_user.id)
+
+    new_menu_item = MenuItem(name=req_json['name'], description=req_json['description'], price=req_json['price'])
+    eatery.menu_items.append(new_menu_item)
+    db.session.commit()
+
+    return jsonify(success=True), 201
+
+@eatery.delete('/delete_menu_item')
+@login_required
+def delete_eatery_menu_item():
+    # TODO check logged-in user is actually an eatery
+
+    req_json = request.get_json()
+
+    eatery = Eatery.query.get_or_404(eatery_id = current_user.id)
+
+    menu_item = MenuItem.query.get_or_404(eatery_id = current_user.id)
+
+    db.session.commit()
+
+    return jsonify(success=True), 200
+
+@eatery.post('/edit_menu_item')
+@login_required
+def edit_eatery_menu_item():
+    # TODO check logged-in user is actually an eatery
+
+    req_json = request.get_json()
+
+    menu_item = MenuItem.query.get_or_404(eatery_id = current_user.id)
+    
+    menu_item.price=req_json['price']
+    menu_item.name=req_json['name']
+    menu_item.description=req_json['description']
+
+    db.session.commit()
+
+    return jsonify(success=True), 200
