@@ -38,7 +38,8 @@ class Customer(db.Model, UserMixin):
             data = s.loads(token, salt='auth')
         except (SignatureExpired, BadSignature):
             return None  # invalid token
-        user = Customer.query.get(data['id'])
+        # user = Customer.query.get(data['id'])
+        user = Customer.query.filter(Customer.id==data['id']).first()
         return user
     # @property
     # def role(self):

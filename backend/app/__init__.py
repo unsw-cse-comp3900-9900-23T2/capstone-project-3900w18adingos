@@ -9,6 +9,7 @@ from app.models.has_voucher import HasVoucher
 from app.models.voucher import Voucher
 from app.models.eatery import Eatery
 from app.models.customer import Customer
+from app.models.cuisine import Cuisine
 
 def create_app(config_name='default'):
 
@@ -28,5 +29,8 @@ def create_app(config_name='default'):
 
         from app.auth import auth as auth_blueprint
         app.register_blueprint(auth_blueprint)
+
+        from app.search import search_bp as search_blueprint
+        app.register_blueprint(search_blueprint)
     
     return app
