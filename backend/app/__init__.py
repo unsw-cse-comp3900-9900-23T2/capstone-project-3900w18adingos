@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_cors import CORS
-import os
 from .database import db
 from .mail import init_mail
 from .config import config
