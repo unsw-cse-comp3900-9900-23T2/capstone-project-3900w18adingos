@@ -26,6 +26,7 @@ const SignUp: React.FC = () => {
     const { name, email, password } = data
     try { 
       const success = await registerUser(email, password, name, role);
+      console.log(success + " ASSS")
       if (success) { 
         setMessage("success"); 
         navigate("/auth/home"); 

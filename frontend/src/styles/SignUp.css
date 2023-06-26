@@ -2,6 +2,12 @@ body {
     margin: 0;
     font-family: sans-serif;
 }
+
+.home { 
+  background-color: #FFF7EC;
+  height: 100vh;
+}
+
 .signup-container {
     display: flex;
     flex-direction: column;
@@ -58,8 +64,6 @@ body {
     border-color: #0056b3;
   }
   
-
-
 .user-type-select button.selected {
     background-color: #ccc;
 }

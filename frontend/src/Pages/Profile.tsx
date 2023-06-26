@@ -4,7 +4,7 @@ import '@react-google-maps/api';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { useAuth } from '../useAuth';
-// import { useHistory } from 'react-router-dom';  // Import useHistory
+import { useNavigate } from 'react-router-dom';  // Import useHistory
 
 
 const Profile: React.FC = () => {
@@ -12,9 +12,7 @@ const Profile: React.FC = () => {
   const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [toggleResetPasswordOptions, setToggleResetPasswordOptions] = useState(false);
-
-
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
@@ -22,21 +20,19 @@ const Profile: React.FC = () => {
   const handleLogout = async () => {
     const result = await logout();
     if (result) {
-      // Handle successful logout here, e.g., redirect to login page
+      navigate("/home")
     }
   };
   
   const handlePasswordResetRequest = async () => {
     const result = await passwordResetRequest(user.email);
     if (result) {
-      // Handle successful password reset request here, e.g., show message to user
     }
   };
   
   const handlePasswordReset = async () => {
     const result = await passwordReset(resetCode, newPassword);
     if (result) {
-      // Handle successful password reset here, e.g., show message to user
     }
   };
 
