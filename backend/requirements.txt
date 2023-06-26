@@ -4,3 +4,4 @@ Flask-SQLAlchemy
 Flask-Cors
 Flask-Mail
 Flask-Login
+Pillow
