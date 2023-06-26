@@ -1,8 +1,7 @@
 // SignUp.tsx
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import "../styles/SignUp.css"
+import "../styles/SignUp.css";
 import { useAuth } from '../useAuth';
 
 interface FormInputs {
@@ -24,14 +23,15 @@ const SignUp: React.FC = () => {
   const onSubmit = async (data: FormInputs) => {
     // Update this to include userType from state, not from form
     const { name, email, password } = data
-
-    try {
-      // const response = await axios.post('/auth/register', payload);
-      // setMessage(response.data.message);
-      await registerUser(email, password, name, role);
-      setMessage("success")
-    } catch (error) {
-      console.error(error);
+    try { 
+      const success = await registerUser(email, password, name, role);
+      if (success) { 
+        setMessage("success"); 
+      } else { 
+        setMessage("failure"); 
+      }
+    } catch { 
+      setMessage("failure"); 
     }
   };
 
@@ -69,4 +69,4 @@ const SignUp: React.FC = () => {
   );
 };
 
-export default SignUp;
+export default SignUp; 

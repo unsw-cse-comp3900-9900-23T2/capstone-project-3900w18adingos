@@ -18,11 +18,14 @@ const SignIn: React.FC = () => {
     const { email, password } = data;
 
     try {
-      await login(email, password);
-      setMessage("Successfully logged in.");
-    } catch (error) {
-      console.error(error);
-      setMessage("Failed to log in.");
+      const success = await login(email, password);
+      if (success) { 
+        setMessage("success"); 
+      } else { 
+        setMessage("failure"); 
+      }
+    } catch { 
+      setMessage("failure"); 
     }
   };
 

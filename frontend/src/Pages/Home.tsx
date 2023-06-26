@@ -1,4 +1,4 @@
-// MapHomePage component
+// Home component
 import React, {useState } from 'react';
 import Header from "../components/Header";
 import Map from "../components/Map";
@@ -7,7 +7,7 @@ import SearchBar from "../components/SearchBar";
 import "@react-google-maps/api"; 
 import Footer from '../components/Footer';
 
-const MapHomePage: React.FC = () => { 
+const Home: React.FC = () => { 
   const [searchLocation, setSearchLocation] = useState({ lat: 0, lng: 0 });
 
   const handleSearch = (place: google.maps.places.PlaceResult) => {
@@ -29,4 +29,4 @@ const MapHomePage: React.FC = () => {
 );
 }
 
-export default MapHomePage;
+export default Home;
