@@ -1,6 +1,7 @@
 from flask import jsonify, current_app
 from flask import url_for
 from flask_mail import Mail, Message
+from flask_login import current_user
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 
 from app.database import db
@@ -9,6 +10,11 @@ from app.models.eatery import Eatery
 
 mail = Mail(current_app)
 
+
+def user_is_eatery():
+    if not current_user.is_authenticated:
+        return False
+    return isinstance(current_user._get_current_object(), Eatery)
 
 def get_user_model(role):
     if role == 'customer':
