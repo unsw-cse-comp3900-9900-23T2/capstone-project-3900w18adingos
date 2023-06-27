@@ -4,7 +4,7 @@ import { Props } from '../interface';
 
 const Header: React.FC<Props> = ({children}) => {
   return (
-    <div className="map-header"> 
+    <div className="header"> 
       <div className='text-header'>
         {children}
       </div>

@@ -20,7 +20,7 @@ const Profile: React.FC = () => {
   const handleLogout = async () => {
     const result = await logout();
     if (result) {
-      navigate("/home")
+      navigate("/")
     }
   };
   
@@ -72,8 +72,6 @@ const Profile: React.FC = () => {
           
           </div>
           }
-      
-
       <button onClick={handleLogout} className="logout">Logout</button>
       </div>
     </div>

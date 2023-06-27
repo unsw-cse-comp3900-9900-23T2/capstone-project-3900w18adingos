@@ -3,13 +3,15 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 0 20px;
     font-family: Arial, sans-serif;
+    background-color: #FFF7EC;
+    height: 100%;
   }
   
   .home-header {
     background-color: #f8f9fa;
     padding: 20px 0;
+    width: 100%;
   }
   
   .home-header h1 {
@@ -59,13 +61,15 @@
   }
   
   .home-footer {
-    background-color: #f8f9fa;
-    padding: 20px 0;
+    background-color: #FFE8CA;
+    padding: 10px;
     margin-top: 40px;
+    width: 100%;
   }
   
   .home-footer p {
     font-size: 14px;
     color: #666;
+    
   }
   

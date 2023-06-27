@@ -10,19 +10,23 @@ import { EateryProvider } from "./context/EateryContext";
 
 const App = () => { 
     return ( 
-      <AuthProvider>
-        <EateryProvider>
-        <Router>
-          <Routes>
-            <Route path="/auth/register" element={<SignUp />} />
-            <Route path="/auth/login" element={<SignIn />} />
-            <Route path="/auth/home" element={<AuthHome />} />
-            <Route path="/auth/profile" element={<Profile />} />
-            <Route path="/home" element={<Home />} />
-        </Routes>
-      </Router>
-      </EateryProvider>
-    </AuthProvider>
+      <div className="app-outer">
+        <div className="app-inner">
+          <AuthProvider>
+            <EateryProvider>
+              <Router>
+                <Routes>
+                  <Route path="/auth/register" element={<SignUp />} />
+                  <Route path="/auth/login" element={<SignIn />} />
+                  <Route path="/auth/home" element={<AuthHome />} />
+                  <Route path="/auth/profile" element={<Profile />} />
+                  <Route path="/" element={<Home />} />
+                </Routes>
+              </Router>
+            </EateryProvider>
+          </AuthProvider>
+        </div>
+      </div>
     );
 }
 

@@ -1,10 +1,11 @@
-.map-header { 
+.header { 
     display: flex;
     flex-direction: column;
     padding-bottom: 30px;
     background-color: #FFE8C9;
     border-radius: 5px;
     font-family:sans-serif;
+    width: 100%;
 }
 
 .button {
