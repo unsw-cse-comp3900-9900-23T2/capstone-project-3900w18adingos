@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 import os
-
 from app.database import db
 from app.models.eatery import Eatery
 from app.models.image import Image
@@ -68,3 +67,22 @@ def delete_image():
 
     return jsonify(success=True), 200
 
+@eatery.route('/eatery', methods=['GET'])
+def get_all_eateries():
+    eateries = Eatery.query.all()
+    if not eateries:
+        return jsonify({"message": "No eateries found"}), 404
+
+    eateries_list = []
+    for eatery in eateries:
+        eateries_list.append({
+            "id": eatery.id,
+            "email": eatery.email,
+            "restaurant_name": eatery.restaurant_name,
+            "location": eatery.location,
+            "cuisine": eatery.cuisine,
+            "role": eatery.role,
+            "latitude": eatery.latitude,
+            "longitude": eatery.longitude
+        })
+    return jsonify({"eateries": eateries_list}), 200

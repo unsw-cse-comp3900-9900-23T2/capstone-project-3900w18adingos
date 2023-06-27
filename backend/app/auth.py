@@ -1,6 +1,6 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from app import auth_helper
-
+from .models.customer import Customer
 auth = Blueprint('auth', __name__)
 
 
@@ -59,3 +59,24 @@ def passwordreset_reset():
     new_password = request.json.get('new_password')
     result = auth_helper.auth_passwordreset_reset(reset_code, new_password)
     return result
+
+@auth.route('/auth/me', methods=['GET'])
+def me():
+    token = request.headers.get('Authorization')
+    if not token:
+        return jsonify({"message": "Missing token"}), 400
+
+    token = token.split(" ")[1]  # The Authorization header format is "Bearer <token>"
+    user = Customer.verify_auth_token(token)
+    if not user:
+        return jsonify({"message": "Invalid token"}), 401  # unauthorized
+
+    # return the user's data
+    return jsonify({
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "handle": user.handle,
+        "profile_pic": user.profile_pic,
+        # add any other fields you want to return here
+    }), 200

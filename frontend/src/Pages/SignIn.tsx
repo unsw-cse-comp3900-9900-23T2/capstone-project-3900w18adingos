@@ -3,33 +3,39 @@ import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
 import "../styles/SignUp.css"
 import { useAuth } from '../useAuth';
-
-interface FormInputs {
-  email: string;
-  password: string;
-}
+import { useNavigate } from 'react-router-dom';
+import { SignInFormInputs } from '../interface';
 
 const SignIn: React.FC = () => {
-  const { register, handleSubmit } = useForm<FormInputs>();
+  const { register, handleSubmit } = useForm<SignInFormInputs>();
   const [message, setMessage] = useState("");
   const { login } = useAuth();
+  const navigate = useNavigate();
+
   
-  const onSubmit = async (data: FormInputs) => {
+  const onSubmit = async (data: SignInFormInputs) => {
     const { email, password } = data;
 
     try {
-      await login(email, password);
-      setMessage("Successfully logged in.");
-    } catch (error) {
-      console.error(error);
-      setMessage("Failed to log in.");
+      const success = await login(email, password);
+      if (success) { 
+        setMessage("success"); 
+        navigate("/auth/home"); 
+      } else { 
+        setMessage("failure"); 
+      }
+    } catch { 
+      setMessage("failure"); 
     }
   };
 
   return (
     <div className="signup-container">
       <h2 className="signup-title">Welcome Back</h2>
-      <p className="signup-sub-title">Sign in to your account</p>
+      <p className="signup-sub-title">Sign in to your account or&nbsp;
+        <div onClick={() => navigate("/auth/register")} className='title-link'>Sign Up</div>
+      </p>
+
       <form onSubmit={handleSubmit(onSubmit)} className="signup-form">
         <input {...register("email")} placeholder="Email" type="email" className="input-field" />
         <input {...register("password")} placeholder="Password" type="password" className="input-field" />

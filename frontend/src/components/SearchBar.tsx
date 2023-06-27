@@ -1,55 +1,65 @@
-import React, { useEffect, useRef } from 'react';
-import "@react-google-maps/api"; 
+import React, { useEffect, useState } from 'react';
+import { Eatery, SearchBarProps } from '../interface';
+import { useEateryContext } from '../context/useEateryContext';
+import "../styles/Searchbar.css"
 
-interface SearchBarProps {
-  location: { lat: number, lng: number };
-  onSearch: (place: google.maps.places.PlaceResult) => void;
-}
-
-const SearchBar: React.FC<SearchBarProps> = ({ location, onSearch }) => {
-  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
-  const searchRef = useRef<HTMLInputElement | null>(null);
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+  const { eateries, fetchEateries } = useEateryContext();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [results, setResults] = useState<Eatery[]>([]);
 
   useEffect(() => {
-    if (searchRef.current) {
-      const center = location;
-      const defaultBounds = {
-        north: center.lat + 0.1,
-        south: center.lat - 0.1,
-        east: center.lng + 0.1,
-        west: center.lng - 0.1,
-      };
+    fetchEateries();
+  }, [fetchEateries]);
 
-      const options = {
-        bounds: defaultBounds,
-        componentRestrictions: { country: "aus" },
-        fields: ["address_components", "geometry", "icon", "name"],
-        strictBounds: false,
-        types: ["establishment"],
-      };
-
-      autocompleteRef.current = new google.maps.places.Autocomplete(searchRef.current, options);
-
-      autocompleteRef.current.addListener('place_changed', () => {
-        const place = autocompleteRef.current?.getPlace();
-        if (place) {
-          onSearch(place);
-        }
-      });
+  // Execute a search whenever the term changes
+  useEffect(() => {
+    if (searchTerm !== "") { // suggest when user types 
+      const results = eateries.filter(eatery =>
+        eatery.restaurant_name.toLowerCase().includes(searchTerm.toLowerCase())
+      ).slice(0, 2); // show 2 suggestions at a time
+      setResults(results);
+    } else { 
+      setResults([])
     }
+  }, [searchTerm, eateries]);
 
-    return () => {
-      if (searchRef.current) google.maps.event.clearInstanceListeners(searchRef.current);
-    };
-
-  }, [onSearch, location]);
+  const handleSelect = (eatery: Eatery) => {
+    onSearch(eatery);
+    setSearchTerm("");
+    setResults([]);
+  }
 
   return (
-    <input ref={searchRef} type="text" placeholder="Search location" className='search-bar'/>
+    <div className='search-wrapper'>
+      <div className='search-container'>
+      
+        <div className='search-bar-container'>
+        <span className='glyphicon glyphicon-search'></span>
+          <input
+            type="text"
+            placeholder= 'Search Restaurants'
+            className='search-bar'
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          /> 
+        </div>
+
+        {results.length > 0 && (
+          <div className="autocomplete-dropdown">
+            
+            {results.map(eatery => (
+              <div key={eatery.id} onClick={() => handleSelect(eatery)}>
+                {eatery.restaurant_name}
+              </div>
+            ))}
+
+          </div>
+        )}
+
+      </div>
+    </div>
   );
 };
 
 export default SearchBar;
-
-
-

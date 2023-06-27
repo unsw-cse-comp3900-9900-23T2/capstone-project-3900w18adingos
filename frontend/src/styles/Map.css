@@ -1,8 +1,10 @@
 .map-wrapper {
   width: 100%;
   height: 75vh;
-  z-index: 10;
-  margin-top: 25px;
+  z-index: 1;
+  position: absolute;
+  top: 170px;
+
 }
 
 h2 { 
@@ -17,9 +19,9 @@ h2 {
   width: 100%;
   height: 100%;
   border-radius: 5px;
-  z-index: 10;  
+  z-index: 10;
 }
-  
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -42,9 +44,10 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
   transform-origin: center;
 }
 
-/* .marker-content-wrapper { 
-
-} */
+.marker-content-wrapper { 
+  padding: 0px;
+  display: flex;
+}
 
 .marker-content-image-wrapper { 
   width:  100px; 
@@ -57,5 +60,21 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
   object-fit: cover;
 }
 .marker-content-description { 
-  font-size: 30px;
+  width: 100%;
+  height: 100%;
+}
+
+.app-outer {
+  display: flex;
+  height: 100vh;
+  margin: 0px;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.app-inner { 
+  width: 390px;
+  height: 844px;
+  border: 1px solid black;
 }
