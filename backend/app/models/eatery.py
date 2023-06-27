@@ -17,7 +17,7 @@ class Eatery(db.Model, UserMixin):
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     reviews = db.relationship('Review', backref='eatery')
-    eatery_image = db.relationship('Image', back_populates='eatery')
+    eatery_image = db.relationship('Image', backref='eatery')
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
