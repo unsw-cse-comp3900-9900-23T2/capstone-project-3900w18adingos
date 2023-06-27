@@ -1,0 +1,21 @@
+.footer {
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f8f9fa;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
+  
+  .footer-button {
+    text-decoration: none;
+    color: #000;
+    text-align: center;
+  }
+  
+  .footer-button span {
+    display: block;
+  }
+  

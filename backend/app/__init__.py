@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_cors import CORS
-
 from .database import db
 from .mail import init_mail
 from .config import config
@@ -11,14 +10,14 @@ from app.models.eatery import Eatery
 from app.models.customer import Customer
 from app.models.cuisine import Cuisine
 from app.models.cooks_cuisine import CooksCuisine
+from app.models.image import Image
 
 def create_app(config_name='default'):
 
     app = Flask(__name__)
-    CORS(app) 
 
     app.config.from_object(config[config_name])
-
+    CORS(app, origins=['http://localhost:5173'])
     db.init_app(app)
     init_mail(app)
 
@@ -31,7 +30,17 @@ def create_app(config_name='default'):
         from app.auth import auth as auth_blueprint
         app.register_blueprint(auth_blueprint)
 
+        from app.user import user as user_blueprint
+        app.register_blueprint(user_blueprint)
+    
+        from app.eatery import eatery as eatery_blueprint
+        app.register_blueprint(eatery_blueprint)
+
+        from app.review import review as review_blueprint
+        app.register_blueprint(review_blueprint)
+        
         from app.search import search_bp as search_blueprint
         app.register_blueprint(search_blueprint)
+
     
     return app

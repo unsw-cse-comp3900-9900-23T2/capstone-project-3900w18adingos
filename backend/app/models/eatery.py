@@ -12,19 +12,24 @@ class Eatery(db.Model, UserMixin):
     __tablename__ = 'eatery'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(128))
     password_hash = db.Column(db.String(128))
     restaurant_name = db.Column(db.String(100))
+    # display location to help human users find (e.g. inside quad food court)
+    location = db.Column(db.Text)
+#     cuisine = db.Column(db.String(50))
+    role = db.Column(db.String(50), default='eatery')
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
+    reviews = db.relationship('Review', backref='eatery')
+    eatery_image = db.relationship('Image', back_populates='eatery')
     cuisines = db.relationship('CooksCuisine', backref='eatery')
-    # reviews = db.relationship('Review', backref='eatery')
-    #restaurant_pics = db.Column(db.String(500))  # this can be a string of URLs
-
-    # additional fields for Manager...
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.role = 'eatery'
+
+    def __repr__(self):
+        return f'<Eatery "{self.restaurant_name}">'
 
     def hash_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -34,7 +39,7 @@ class Eatery(db.Model, UserMixin):
     
     def generate_auth_token(self, expiration=600):
         s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        return s.dumps({'id': self.id}, salt='auth')
+        return s.dumps({'id': self.id, 'role': self.role}, salt='auth')
 
     @staticmethod
     def verify_auth_token(token):
@@ -43,7 +48,10 @@ class Eatery(db.Model, UserMixin):
             data = s.loads(token, salt='auth')
         except (SignatureExpired, BadSignature):
             return None  # invalid token
-        user = Eatery.query.get(data['id'])
+        if data['role'] == 'eatery':
+            user = Eatery.query.get(data['id'])
+        else:
+            return None  # invalid token role
         return user
     
     @hybrid_method
@@ -90,8 +98,5 @@ class Eatery(db.Model, UserMixin):
 
         return distance <= max_distance
     
-
-
-
     # def role(self):
     #     return 'eatery'
