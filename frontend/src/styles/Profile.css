@@ -1,3 +1,13 @@
+/* Header */
+h1 { 
+  align-self: baseline;
+}
+.user-icon-wrapper { 
+  font-size: xx-large;
+  margin-bottom: -20px;
+  width: 100%;
+}
+/* Body */
 .profile-page {
   display: flex;
   flex-direction: column;
@@ -6,38 +16,54 @@
   height: 80vh;
   }
 
-.user-icon-wrapper { 
-  font-size: xx-large;
-  margin-bottom: -20px;
-  width: 100%;
-}
-
-h1 { 
-  align-self: baseline;
-}
-
 .profile-content { 
   border: solid 1px;
   width: 100%;
   margin-top: 40px;
+  padding-top: 20px;
   background-color: white;
   border-radius: 20px;
   padding-left: 40px;
   height: 70vh;
   display: flex;
   flex-direction: column;
-
 }
 
-ul { 
-  list-style-type: none;
-  padding: 0;
+.toggle-reset-password-container { 
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+.email,
+.name { 
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-h3  {
-  font-weight: 600;
+
+.logout { 
+  width: 90%;
+  margin-top: 10px;
 }
 
-li { 
-  padding: 5px;
+.reset-password,
+.reset-code { 
+  display: flex;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.reset-password-text,
+.reset-code-text { 
+  width: 70%;
+}
+
+.reset-password-button,
+.reset-code-button { 
+  width: 30%;
+  background-color: #E07893;
+  border: 1px solid #E07893;
 }

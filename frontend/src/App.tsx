@@ -1,26 +1,32 @@
 import "./styles/Map.css"
-import SignUp from "./Pages/SignUp";
-import MapHomePage from "./Pages/MapHomePage"
-import Profile from "./Pages/Profile"
-import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom'
-import { AuthProvider } from "./AuthContext";
-
-import PrivateRoutes from "./routes/PrivateRoutes";
-import SignIn from "./Pages/SignIn";
+import SignUp from "./pages/SignUp";
+import AuthHome from "./pages/AuthHome"
+import Profile from "./pages/Profile"
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import { AuthProvider } from "./context/AuthContext";
+import SignIn from "./pages/SignIn";
+import Home from "./pages/Home";
+import { EateryProvider } from "./context/EateryContext";
 
 const App = () => { 
     return ( 
-      <AuthProvider>
-        <Router>
-          <Routes>
-            <Route path="/auth/register" element={<SignUp />} />
-            <Route path="/auth/login" element={<SignIn />} />
-            <Route path="/auth/home" element={<MapHomePage />} />
-            <Route path="/auth/profile" element={<Profile />} />
-        </Routes>
-      </Router>
-    </AuthProvider>
-
+      <div className="app-outer">
+        <div className="app-inner">
+          <AuthProvider>
+            <EateryProvider>
+              <Router>
+                <Routes>
+                  <Route path="/auth/register" element={<SignUp />} />
+                  <Route path="/auth/login" element={<SignIn />} />
+                  <Route path="/auth/home" element={<AuthHome />} />
+                  <Route path="/auth/profile" element={<Profile />} />
+                  <Route path="/" element={<Home />} />
+                </Routes>
+              </Router>
+            </EateryProvider>
+          </AuthProvider>
+        </div>
+      </div>
     );
 }
 
