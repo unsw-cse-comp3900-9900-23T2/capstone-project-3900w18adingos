@@ -44,6 +44,7 @@ def eatery_search(search_term, token, qty=1):
         eatery_info = {}
         eatery_info['name'] = result.restaurant_name
         eatery_info['longitude'] = result.longitude
+        eatery_info['location'] = result.location
         eatery_info['latitude'] = result.latitude
         return_array.append(eatery_info)
         i = i + 1
@@ -86,6 +87,7 @@ def eatery_distance_search(token, search_term, user_long, user_lat, max_distance
         eatery_info['name'] = eatery.restaurant_name
         eatery_info['longitude'] = eatery.longitude
         eatery_info['latitude'] = eatery.latitude
+        eatery_info['location'] = eatery.location
         return_array.append(eatery_info)
         i = i + 1
     

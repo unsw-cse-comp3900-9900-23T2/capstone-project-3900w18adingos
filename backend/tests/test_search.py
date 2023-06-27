@@ -42,10 +42,6 @@ class SearchTestCase(unittest.TestCase):
             db.create_all()
             #Customer.query.delete()
             #Eatery.query.delete()
-            hashed_password = generate_password_hash(self.customer_data['password'], method='sha256')
-
-            test_customer = Customer(email=self.customer_data['email'], password_hash=hashed_password)
-            test_customer.name = self.customer_data['name']
             # db.session.add(test_customer)
 
             hashed_password = generate_password_hash(self.eatery_data['password'], method='sha256')
@@ -60,36 +56,42 @@ class SearchTestCase(unittest.TestCase):
                                  email=self.eatery_data['email'],
                                  password_hash=hashed_password,
                                  restaurant_name=self.eatery_data['restaurant_name'],
+                                 location="13 Some Street Kensington 2033 NSW",
                                  latitude=-33.761710,
                                  longitude=150.837636))
             db.session.add(Eatery(id = 2,
                                  email='mcdonalds@gmail.com',
                                  password_hash=hashed_password,
                                  restaurant_name="McDonald's",
+                                 location="12 Barker Street Kensington 2033 NSW",
                                  latitude=-33.575212,
                                  longitude=151.239309))
             db.session.add(Eatery(id = 3,
                                  email='joe@gmail.com',
                                  password_hash=hashed_password,
                                  restaurant_name="Joe's Pizza",
+                                 location="13 Henry Street Kensington 2033 NSW",
                                  latitude=-33.690210,
                                  longitude=151.054477))
             db.session.add(Eatery(id = 4,
                                  email='thai@gmail.com',
                                  password_hash=hashed_password,
                                  restaurant_name="Thai Place",
+                                 location="13 John Street Kensington 2033 NSW",
                                  latitude=-33.739130,
                                  longitude=151.057051))
             db.session.add(Eatery(id = 5,
                                  email='ambatukam@gmail.com',
                                  password_hash=hashed_password,
-                                 restaurant_name="Ambatukam's",
+                                 restaurant_name="Ambatukam's Indian",
+                                 location="13 George Street Bondi 2033 NSW",
                                  latitude=-33.789106,
                                  longitude=151.065186))
             db.session.add(Eatery(id = 6,
                                  email='indian@gmail.com',
                                  password_hash=hashed_password,
                                  restaurant_name="HurryCurry indian",
+                                 location="34 Monash Street Kingsford 2034 NSW",
                                  latitude=-33.760197,
                                  longitude=150.819598))
             
@@ -140,10 +142,9 @@ class SearchTestCase(unittest.TestCase):
         res = self.client.post('/search', json=body)
         data = json.loads(res.data.decode())
         expected = ["HurryCurry indian", 'Thai Place']
+        print('name ', data)
         for result in data['results']:
             self.assertIn(result['name'], expected)
-        print('name ', data)
-        # hurry curry and thai expected
 
     def test_distance_search(self):
         res = self.client.post('/auth/register', json=self.customer_data)
@@ -159,8 +160,8 @@ class SearchTestCase(unittest.TestCase):
         }
         res = self.client.post('/searchDistance', json=body)
         data = json.loads(res.data.decode())
-        self.assertEqual(data['results'][0]['name'], "HurryCurry indian")
         print('location', data)
+        self.assertEqual(data['results'][0]['name'], "HurryCurry indian")
 
     def tearDown(self):
         with self.app.app_context():
