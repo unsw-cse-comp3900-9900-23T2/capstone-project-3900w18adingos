@@ -16,12 +16,12 @@ class Eatery(db.Model, UserMixin):
     restaurant_name = db.Column(db.String(100))
     # display location to help human users find (e.g. inside quad food court)
     location = db.Column(db.Text)
-#     cuisine = db.Column(db.String(50))
+    # cuisine = db.Column(db.String(50))
     role = db.Column(db.String(50), default='eatery')
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     reviews = db.relationship('Review', backref='eatery')
-    eatery_image = db.relationship('Image', back_populates='eatery')
+    eatery_image = db.relationship('Image', backref='eatery')
     cuisines = db.relationship('CooksCuisine', backref='eatery')
     
     def __init__(self, **kwargs):
