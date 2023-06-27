@@ -1,10 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import "@react-google-maps/api"; 
-
-interface SearchBarProps {
-  location: { lat: number, lng: number };
-  onSearch: (place: google.maps.places.PlaceResult) => void;
-}
+import { SearchBarProps } from '../interface';
 
 const SearchBar: React.FC<SearchBarProps> = ({ location, onSearch }) => {
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);

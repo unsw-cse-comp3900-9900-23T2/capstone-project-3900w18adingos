@@ -4,20 +4,16 @@ import { useForm } from 'react-hook-form';
 import "../styles/SignUp.css"
 import { useAuth } from '../useAuth';
 import { useNavigate } from 'react-router-dom';
-
-interface FormInputs {
-  email: string;
-  password: string;
-}
+import { SignInFormInputs } from '../interface';
 
 const SignIn: React.FC = () => {
-  const { register, handleSubmit } = useForm<FormInputs>();
+  const { register, handleSubmit } = useForm<SignInFormInputs>();
   const [message, setMessage] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
 
   
-  const onSubmit = async (data: FormInputs) => {
+  const onSubmit = async (data: SignInFormInputs) => {
     const { email, password } = data;
 
     try {

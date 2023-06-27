@@ -3,13 +3,15 @@ import SignUp from "./pages/SignUp";
 import AuthHome from "./pages/AuthHome"
 import Profile from "./pages/Profile"
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import { AuthProvider } from "./AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import SignIn from "./pages/SignIn";
 import Home from "./pages/Home";
+import { EateryProvider } from "./context/EateryContext";
 
 const App = () => { 
     return ( 
       <AuthProvider>
+        <EateryProvider>
         <Router>
           <Routes>
             <Route path="/auth/register" element={<SignUp />} />
@@ -19,6 +21,7 @@ const App = () => {
             <Route path="/home" element={<Home />} />
         </Routes>
       </Router>
+      </EateryProvider>
     </AuthProvider>
     );
 }

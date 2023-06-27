@@ -1,29 +1,10 @@
 import React, { createContext, useState, useCallback } from "react";
 import axios from "axios"
-
-interface User {
-    name: string;
-    email: string;
-}
-
-interface AuthContextType {
-    token: string | null;
-    isAuthenticated: () => boolean;
-    login: (email: string, password: string) => Promise<boolean>;
-    register: (email: string, password: string, name: string, role: string) => Promise<boolean>;
-    passwordResetRequest: (email: string) => Promise<boolean>;
-    passwordReset: (resetCode: string, newPassword: string) => Promise<boolean>;
-    logout: () => Promise<boolean>;
-    fetchUser: () => Promise<void>;
-    user: User;
-}
+import { AuthContextType, Props } from "../interface";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-interface props { 
-    children: any
-}
-export const AuthProvider: React.FC<props> = ({ children }) => {
+export const AuthProvider: React.FC<Props> = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem('token') || null);
     const [user, setUser] = useState({name: "", email: ""});
     const api = axios.create({
@@ -32,10 +13,7 @@ export const AuthProvider: React.FC<props> = ({ children }) => {
 
     const login = useCallback(async (email: string, password: string) => {
         try {
-            const response = await api.post('/auth/login', { email, password });
-            const token = response.data.token;
-            localStorage.setItem('token', token);
-            setToken(token);
+            await api.post('/auth/login', { email, password });
             return true;
         } catch (error) {
             console.error(error);
@@ -45,10 +23,10 @@ export const AuthProvider: React.FC<props> = ({ children }) => {
 
     const register = useCallback(async (email: string, password: string, name: string, role: string) => {
         try {
-          const response = await api.post('/auth/register', { email, password, name, role });
-          const token = response.data.token;
-          localStorage.setItem('token', token);
-          setToken(token);
+          await api.post('/auth/register', { email, password, name, role });
+        //   const token = response.data.token;
+        //   localStorage.setItem('token', token);
+        //   setToken(token);
           return true;
         } catch (error) {
           console.error(error);

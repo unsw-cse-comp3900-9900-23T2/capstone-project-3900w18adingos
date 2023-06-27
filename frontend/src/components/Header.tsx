@@ -1,9 +1,6 @@
 import React from 'react';
 import "../styles/Header.css"
-
-interface Props {
-  children?: React.ReactNode;
-}
+import { Props } from '../interface';
 
 const Header: React.FC<Props> = ({children}) => {
   return (
