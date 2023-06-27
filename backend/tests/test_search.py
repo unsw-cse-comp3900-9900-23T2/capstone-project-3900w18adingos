@@ -133,28 +133,33 @@ class SearchTestCase(unittest.TestCase):
         data = json.loads(res.data.decode())
         token = data['token']
         body = {
-            'search_term': 'indian',
+            'search_term': 'thai',
             'token': token,
             'qty': 3
         }
         res = self.client.post('/search', json=body)
         data = json.loads(res.data.decode())
+        expected = ["HurryCurry indian", 'Thai Place']
+        for result in data['results']:
+            self.assertIn(result['name'], expected)
         print('name ', data)
+        # hurry curry and thai expected
 
     def test_distance_search(self):
         res = self.client.post('/auth/register', json=self.customer_data)
         data = json.loads(res.data.decode())
         token = data['token']
         body = {
-            'search_term': '',
+            'search_term': 'indian',
             'token': token,
-            'qty': 50,
+            'qty': 3,
             'user_lat':-33.753489,
             'user_long': 150.829398,
-            'max_distance': 25
+            'max_distance': 5
         }
         res = self.client.post('/searchDistance', json=body)
         data = json.loads(res.data.decode())
+        self.assertEqual(data['results'][0]['name'], "HurryCurry indian")
         print('location', data)
 
     def tearDown(self):
