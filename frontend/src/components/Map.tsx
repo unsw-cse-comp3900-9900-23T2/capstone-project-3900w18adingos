@@ -22,20 +22,21 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        setUserLocation({ lat: latitude, lng: longitude });
+        setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
         setLoadingPosition(false);
+
+        // For demo
+        const lat = -33.9217416169076
+        const lng = 151.22720259038303
+        setUserLocation({lat: lat, lng: lng})
 
         // Create a marker for the user's location
         const userLocationIcon = {
           url: "/src/icons/player-icon.png",
           scaledSize: new google.maps.Size(30, 30),
         };
-
-
-        // Now create a new marker
         new google.maps.Marker({
-            position: { lat: latitude, lng: longitude },
+            position: userLocation,
             map: mapRef.current,
             title: 'Your location',
             icon: userLocationIcon
@@ -55,11 +56,12 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
   // update map view on search 
   useEffect(() => {
     if (findLocation && mapRef.current) {
-      mapRef.current.setCenter(findLocation);
+      mapRef.current.setCenter(new google.maps.LatLng(findLocation.latitude, findLocation.longitude));
     }
   }, [findLocation]);
 
   const initialize = () => {
+    
     if (!loadingPosition && isLoaded) {
       mapRef.current = new google.maps.Map(document.getElementById('map') as HTMLElement, {
         center: userLocation,
@@ -67,7 +69,8 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
         disableDefaultUI: true,
         styles: getMapStyle()
       });
-      
+
+      infoWindowRef.current = new google.maps.InfoWindow();
       eateries.forEach(eatery => {
         createMarker(eatery);
       });
@@ -83,7 +86,15 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
       position: { lat: eatery.latitude, lng: eatery.longitude },
     });
 
-    const contentString = `<div>${eatery.restaurant_name}</div>`;
+
+    const contentString = 
+    `<div class="marker-content-wrapper"> 
+      <div class="marker-content-description">
+      <h3>${eatery.restaurant_name}</h3>
+      <p>Cusine</p>
+      <p>Rating</p>
+      </div>
+    </div>`;
 
     // Open the InfoWindow on click
     google.maps.event.addListener(marker, 'click', function () {

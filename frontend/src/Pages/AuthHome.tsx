@@ -6,13 +6,14 @@ import SearchBar from "../components/SearchBar";
 
 import "@react-google-maps/api"; 
 import Footer from '../components/Footer';
+import { Eatery } from '../interface';
 
 const AuthHome: React.FC = () => { 
-  const [searchLocation, setSearchLocation] = useState({ lat: 0, lng: 0 });
+  const [searchLocation, setSearchLocation] = useState<Eatery | null>(null);
 
-  const handleSearch = (place: google.maps.places.PlaceResult) => {
-    if (place.geometry && place.geometry.location) {
-      setSearchLocation({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() });
+  const handleSearch = (place: Eatery) => {
+    if (place) {
+      setSearchLocation(place);
     }
   }
 
@@ -20,13 +21,10 @@ const AuthHome: React.FC = () => {
     <>
       <Header>  
         <h1>Discover places and restaurants near you</h1>
-        {/* <SearchBar location={searchLocation} onSearch={handleSearch} />  */}
-        
       </Header>
-
+        <SearchBar location={searchLocation} onSearch={handleSearch} /> 
       <Map findLocation={searchLocation} />
       <Footer />
-
     </>
 );
 }

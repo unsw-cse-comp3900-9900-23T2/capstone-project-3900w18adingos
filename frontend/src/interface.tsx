@@ -41,13 +41,13 @@ export interface Props {
 }
 
 export interface MapProps {
-    findLocation: { lat: number, lng: number };
+    findLocation: Eatery | null;
 }
 
 export interface SearchBarProps {
-    location: { lat: number, lng: number };
-    onSearch: (place: google.maps.places.PlaceResult) => void;
-  }
+    location: Eatery | null;
+    onSearch: (place: Eatery) => void;
+}
 
 export interface RegisterFormInputs {
     name: string;
@@ -55,9 +55,9 @@ export interface RegisterFormInputs {
     password: string;
     role: string;
     address: string;
-  }
+}
 
-  export interface SignInFormInputs {
+export interface SignInFormInputs {
     email: string;
     password: string;
-  }
+}

@@ -5,7 +5,7 @@ import { AuthContextType, Props } from "../interface";
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<Props> = ({ children }) => {
-    const [token, setToken] = useState(localStorage.getItem('token') || null);
+    const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState({name: "", email: ""});
     const api = axios.create({
         baseURL: 'http://127.0.0.1:5000'
@@ -13,7 +13,9 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
     const login = useCallback(async (email: string, password: string) => {
         try {
-            await api.post('/auth/login', { email, password });
+            const response = await api.post('/auth/login', { email, password });
+            const {token} = response.data;
+            setToken(token);
             return true;
         } catch (error) {
             console.error(error);
@@ -23,21 +25,22 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
     const register = useCallback(async (email: string, password: string, name: string, role: string) => {
         try {
-          await api.post('/auth/register', { email, password, name, role });
-        //   const token = response.data.token;
-        //   localStorage.setItem('token', token);
-        //   setToken(token);
+          const response = await api.post('/auth/register', { email, password, name, role });
+          const {token} = response.data;
+          console.log(response)
+          setToken(token);
           return true;
         } catch (error) {
           console.error(error);
           return false;
         }
       }, []);
+
+      
       
     const logout = useCallback(async () => {
         try {
             await api.post('/auth/logout', { token });
-            localStorage.removeItem('token');
             setToken(null);
             return true;
         } catch (error) {
