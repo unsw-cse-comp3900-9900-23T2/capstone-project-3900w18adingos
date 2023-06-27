@@ -10,6 +10,8 @@ from app.models.eatery import Eatery
 from app.models.customer import Customer
 from app.models.review import Review
 from app.models.image import Image
+from app.models.cuisine import Cuisine
+from app.models.cooks_cuisine import CooksCuisine
 
 def create_app(config_name='default'):
 
@@ -37,5 +39,8 @@ def create_app(config_name='default'):
 
         from app.review import review as review_blueprint
         app.register_blueprint(review_blueprint)
+
+        from app.search import search_bp as search_blueprint
+        app.register_blueprint(search_blueprint)
     
     return app
