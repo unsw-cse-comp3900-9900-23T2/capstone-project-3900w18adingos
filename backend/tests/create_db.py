@@ -1,13 +1,21 @@
 import sys
 import os
 
+
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from app import create_app, db
 from app.models.eatery import Eatery
+from app.models.cuisine import Cuisine
+from app.models.cooks_cuisine import CooksCuisine
+from werkzeug.security import generate_password_hash
+
+hashed_password = generate_password_hash('123', method='sha256')
 
 eatery_arr = [
+
     # Kingsford
     Eatery(
         restaurant_name="McDonald's Kingsford",
@@ -122,6 +130,87 @@ eatery_arr = [
         password_hash='pbkdf2:sha256:600000$NuofyOuEvpvcaBKv$4f584e4884f8ca7e382a69a92102a08f32f1882bbad1d95996f21f92bb0ff37c',
         location='33 Railway St, Rooty Hill NSW 2766'
     ),
+    Eatery(
+        email='testeatery@example.com',
+        password_hash=hashed_password,
+        restaurant_name='Test Eatery',
+        location="13 Some Street Kensington 2033 NSW",
+        latitude=-33.896549,
+        longitude=151.179962
+    ),
+    Eatery(
+        email='mcdonalds@gmail.com',
+        password_hash=hashed_password,
+        restaurant_name="McDonald's",
+        location="12 Barker Street Kensington 2033 NSW",
+        latitude=-33.890025,
+        longitude=151.194498
+    ),
+    Eatery(
+        email='joe@gmail.com',
+        password_hash=hashed_password,
+        restaurant_name="Joe's Pizza",
+        location="13 Henry Street Kensington 2033 NSW",
+        latitude=-33.690210,
+        longitude=151.190208
+    ),
+    Eatery(
+        email='thai@gmail.com',
+        password_hash=hashed_password,
+        restaurant_name="Thai Place",
+        location="13 John Street Kensington 2033 NSW",
+        latitude=-33.828644,
+        longitude=151.245937
+    ),
+    Eatery(
+        email='ambatukam@gmail.com',
+        password_hash=hashed_password,
+        restaurant_name="Ambatukam's Indian",
+        location="13 George Street Bondi 2033 NSW",
+        latitude=-33.819831,
+        longitude=151.231432
+    ),
+    Eatery(
+        email='indian@gmail.com',
+        password_hash=hashed_password,
+        restaurant_name="HurryCurry indian",
+        location="34 Monash Street Kingsford 2034 NSW",
+        latitude=-33.902479,
+        longitude=151.171137
+    ),
+]
+
+cuisine_arr=[
+    Cuisine(cuisine_name="Chinese"),
+    Cuisine(cuisine_name="American"),
+    Cuisine(cuisine_name="Italian"),
+    Cuisine(cuisine_name="Thai"),
+    Cuisine(cuisine_name="Indian")
+]
+
+cooks_cuisine_arr=[
+    CooksCuisine(
+                eatery_id = 15,
+                cuisine_id = 1),
+    CooksCuisine(
+                eatery_id = 16,
+                cuisine_id = 2),
+    CooksCuisine(
+                eatery_id = 17,
+                cuisine_id = 3),
+    CooksCuisine(
+                eatery_id = 18,
+                cuisine_id = 4),
+    CooksCuisine(
+                eatery_id = 19,
+                cuisine_id = 5),
+    CooksCuisine(
+                eatery_id = 20,
+                cuisine_id = 5),
+    CooksCuisine(
+                eatery_id = 20,
+                cuisine_id = 4)
+            
 ]
 
 if __name__ == '__main__':
@@ -129,4 +218,10 @@ if __name__ == '__main__':
     with app.app_context():
         for eatery in eatery_arr:
             db.session.add(eatery)
+            db.session.commit()
+        for cuisine in cuisine_arr:
+            db.session.add(cuisine)
+            db.session.commit()
+        for cooks_cuisine in cooks_cuisine_arr:
+            db.session.add(cooks_cuisine)
             db.session.commit()
