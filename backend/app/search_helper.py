@@ -1,6 +1,5 @@
 import sqlite3
 from flask import jsonify
-import pandas as pd
 from app.database import db
 from app.models.customer import Customer
 from app.models.eatery import Eatery
