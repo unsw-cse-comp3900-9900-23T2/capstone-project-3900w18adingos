@@ -52,48 +52,48 @@ class SearchTestCase(unittest.TestCase):
             # db.session.add(test_eatery)
 
             # db.session.commit()
-            db.session.add(Eatery(id = 1,
+            db.session.add(Eatery(id = 10,
                                  email=self.eatery_data['email'],
                                  password_hash=hashed_password,
                                  restaurant_name=self.eatery_data['restaurant_name'],
                                  location="13 Some Street Kensington 2033 NSW",
-                                 latitude=-33.761710,
-                                 longitude=150.837636))
-            db.session.add(Eatery(id = 2,
+                                 latitude=-33.896549,
+                                 longitude=151.179962))
+            db.session.add(Eatery(id = 11,
                                  email='mcdonalds@gmail.com',
                                  password_hash=hashed_password,
                                  restaurant_name="McDonald's",
                                  location="12 Barker Street Kensington 2033 NSW",
-                                 latitude=-33.575212,
-                                 longitude=151.239309))
-            db.session.add(Eatery(id = 3,
+                                 latitude=-33.890025,
+                                 longitude=151.194498))
+            db.session.add(Eatery(id = 12,
                                  email='joe@gmail.com',
                                  password_hash=hashed_password,
                                  restaurant_name="Joe's Pizza",
                                  location="13 Henry Street Kensington 2033 NSW",
                                  latitude=-33.690210,
-                                 longitude=151.054477))
-            db.session.add(Eatery(id = 4,
+                                 longitude=151.190208))
+            db.session.add(Eatery(id = 13,
                                  email='thai@gmail.com',
                                  password_hash=hashed_password,
                                  restaurant_name="Thai Place",
                                  location="13 John Street Kensington 2033 NSW",
-                                 latitude=-33.739130,
-                                 longitude=151.057051))
-            db.session.add(Eatery(id = 5,
+                                 latitude=-33.828644,
+                                 longitude=151.245937))
+            db.session.add(Eatery(id = 14,
                                  email='ambatukam@gmail.com',
                                  password_hash=hashed_password,
                                  restaurant_name="Ambatukam's Indian",
                                  location="13 George Street Bondi 2033 NSW",
-                                 latitude=-33.789106,
-                                 longitude=151.065186))
-            db.session.add(Eatery(id = 6,
+                                 latitude=-33.819831,
+                                 longitude=151.231432))
+            db.session.add(Eatery(id = 15,
                                  email='indian@gmail.com',
                                  password_hash=hashed_password,
                                  restaurant_name="HurryCurry indian",
                                  location="34 Monash Street Kingsford 2034 NSW",
-                                 latitude=-33.760197,
-                                 longitude=150.819598))
+                                 latitude=-33.902479,
+                                 longitude=151.171137))
             
             db.session.add(Cuisine(id=1,
                                    cuisine_name="Chinese"))
@@ -107,25 +107,25 @@ class SearchTestCase(unittest.TestCase):
                                    cuisine_name="Indian"))
             
             db.session.add(CooksCuisine(id=1,
-                                        eatery_id = 1,
+                                        eatery_id = 10,
                                         cuisine_id = 1))
             db.session.add(CooksCuisine(id=2,
-                                        eatery_id = 2,
+                                        eatery_id = 11,
                                         cuisine_id = 2))
             db.session.add(CooksCuisine(id=3,
-                                        eatery_id = 3,
+                                        eatery_id = 12,
                                         cuisine_id = 3))
             db.session.add(CooksCuisine(id=4,
-                                        eatery_id = 4,
+                                        eatery_id = 13,
                                         cuisine_id = 4))
             db.session.add(CooksCuisine(id=5,
-                                        eatery_id = 5,
+                                        eatery_id = 14,
                                         cuisine_id = 5))
             db.session.add(CooksCuisine(id=6,
-                                        eatery_id = 6,
+                                        eatery_id = 15,
                                         cuisine_id = 5))
             db.session.add(CooksCuisine(id=7,
-                                        eatery_id = 6,
+                                        eatery_id = 15,
                                         cuisine_id = 4))
 
             db.session.commit()
@@ -151,17 +151,19 @@ class SearchTestCase(unittest.TestCase):
         data = json.loads(res.data.decode())
         token = data['token']
         body = {
-            'search_term': 'indian',
+            'search_term': '',
             'token': token,
-            'qty': 3,
-            'user_lat':-33.753489,
-            'user_long': 150.829398,
+            'qty': 8,
+            'user_lat':-33.864928,
+            'user_long': 151.217594,
             'max_distance': 5
         }
         res = self.client.post('/searchDistance', json=body)
         data = json.loads(res.data.decode())
         print('location', data)
-        self.assertEqual(data['results'][0]['name'], "HurryCurry indian")
+        expected = ['Test Eatery', "McDonald's", 'Thai Place']
+        for result in data['results']:
+            self.assertIn(result['name'], expected)
 
     def tearDown(self):
         with self.app.app_context():
