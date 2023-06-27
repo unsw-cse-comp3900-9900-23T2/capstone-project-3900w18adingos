@@ -50,3 +50,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ location, onSearch }) => {
 };
 
 export default SearchBar;
+
+
+

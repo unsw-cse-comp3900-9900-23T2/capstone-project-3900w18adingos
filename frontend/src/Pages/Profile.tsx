@@ -1,21 +1,24 @@
 import React from 'react';
 import '../styles/Profile.css';
 import '@react-google-maps/api';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 
-interface ProfileProps {
-    openProfile: boolean;
-    closeProfile: () => void; // Add this
-  }
 
-const Profile: React.FC<ProfileProps> = ({ openProfile, closeProfile }) => {
+const Profile: React.FC = () => {
+
   return (
-    <div className={`profile-page ${openProfile ? 'open' : ''}`}>
-      <header>
-        Profile Page
-        <button onClick={closeProfile}>X</button> 
-      </header>
+    <>
+    <Header>
+      <h1 >Profile Page</h1>
+      <div className='user-icon-wrapper'>
+        <i className="glyphicon glyphicon-user" />
+      </div>
+    </Header>
+    <div className="profile-page">
+      <div className='profile-content'>
       <section>
-        <h2>Account</h2>
+        <h3>Account</h3>
         <ul>
           <li>Personal Information</li>
           <li>Edit Profile</li>
@@ -24,7 +27,7 @@ const Profile: React.FC<ProfileProps> = ({ openProfile, closeProfile }) => {
         </ul>
       </section>
       <section>
-        <h2>General</h2>
+        <h3>General</h3>
         <ul>
           <li>Help</li>
           <li>Touch ID and Password</li>
@@ -32,14 +35,19 @@ const Profile: React.FC<ProfileProps> = ({ openProfile, closeProfile }) => {
         </ul>
       </section>
       <section>
-        <h2>Help and Support</h2>
+        <h3>Help and Support</h3>
         <ul>
           <li>Help</li>
           <li>About Us</li>
         </ul>
       </section>
+      </div>
     </div>
+
+    <Footer/>
+    </>
   );
 };
 
 export default Profile;
+

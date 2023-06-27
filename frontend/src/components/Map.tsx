@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
-import MapHeader from "./MapHeader"
+
 import "../styles/Map.css"
 
 interface MapProps {
-  searchLocation: { lat: number, lng: number };
+  findLocation: { lat: number, lng: number };
 }
 
-const Map: React.FC<MapProps> = ({searchLocation}) => {
+const Map: React.FC<MapProps> = ({findLocation}) => {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -50,10 +50,10 @@ const Map: React.FC<MapProps> = ({searchLocation}) => {
 
   // update map view on search 
   useEffect(() => {
-    if (searchLocation && mapRef.current) {
-      mapRef.current.setCenter(searchLocation);
+    if (findLocation && mapRef.current) {
+      mapRef.current.setCenter(findLocation);
     }
-  }, [searchLocation]);
+  }, [findLocation]);
 
   const initialize = () => {
     let mapColour = '#E4D3FF'
@@ -206,7 +206,6 @@ const Map: React.FC<MapProps> = ({searchLocation}) => {
   return (
     <>
       <div className='map-wrapper'>
-        <h2>Near you</h2>
         <div id="map" className="map">
           {loadingPosition && 
             <div className="spinner">
