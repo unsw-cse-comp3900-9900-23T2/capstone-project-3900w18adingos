@@ -1,3 +1,4 @@
+import datetime
 import sys
 import os
 
@@ -10,6 +11,10 @@ from app import create_app, db
 from app.models.eatery import Eatery
 from app.models.cuisine import Cuisine
 from app.models.cooks_cuisine import CooksCuisine
+from app.models.review import Review
+from app.models.customer import Customer
+from app.models.voucher import Voucher
+from app.models.has_voucher import HasVoucher
 from werkzeug.security import generate_password_hash
 
 hashed_password = generate_password_hash('123', method='sha256')
@@ -210,7 +215,210 @@ cooks_cuisine_arr=[
     CooksCuisine(
                 eatery_id = 20,
                 cuisine_id = 4)
-            
+]
+
+customers_arr=[
+    Customer(
+            name="John", 
+            email="email1@email.com",
+            password_hash=hashed_password,
+            handle="John1"),
+    Customer(
+            name="John2", 
+            email="email2@email.com",
+            password_hash=hashed_password,
+            handle="John2"),
+    Customer(
+            name="John3", 
+            email="email3@email.com",
+            password_hash=hashed_password,
+            handle="John3"),
+    Customer(
+            name="John4", 
+            email="email4@email.com",
+            password_hash=hashed_password,
+            handle="John4")
+]
+
+reviews_arr=[
+    Review(rating=4,
+           review_text='yeah its alright',
+           customer_id=1,
+           eatery_id=1),
+    Review(rating=5,
+           review_text='ye na not bad',
+           customer_id=1,
+           eatery_id=2),
+    Review(rating=1,
+           review_text='bad',
+           customer_id=2,
+           eatery_id=3),
+    Review(rating=7,
+           review_text='good good',
+           customer_id=3,
+           eatery_id=4),
+    Review(rating=8,
+           review_text='good',
+           customer_id=4,
+           eatery_id=5),
+    Review(rating=9,
+           review_text='bloody scrumptious',
+           customer_id=4,
+           eatery_id=6),
+    Review(rating=10,
+           review_text='very good',
+           customer_id=4,
+           eatery_id=7),
+    Review(rating=5,
+           review_text='alright bland food',
+           customer_id=2,
+           eatery_id=8),
+    Review(rating=5,
+           review_text='alright bland food',
+           customer_id=2,
+           eatery_id=9),
+    Review(rating=5,
+           review_text='alright bland food',
+           customer_id=2,
+           eatery_id=10),
+    Review(rating=5,
+           review_text='good food',
+           customer_id=1,
+           eatery_id=11),
+    Review(rating=5,
+           review_text='bad food',
+           customer_id=1,
+           eatery_id=12),
+    Review(rating=5,
+           review_text='bad food',
+           customer_id=1,
+           eatery_id=13),
+    Review(rating=8,
+           review_text='scrumdiddlydocious',
+           customer_id=1,
+           eatery_id=14),
+    Review(rating=8,
+           review_text='i mean its alright',
+           customer_id=3,
+           eatery_id=15),
+    Review(rating=8,
+           review_text='i mean its alright',
+           customer_id=3,
+           eatery_id=16),
+    Review(rating=8,
+           review_text='i mean its alright',
+           customer_id=3,
+           eatery_id=17),
+    Review(rating=9,
+           review_text='alright',
+           customer_id=4,
+           eatery_id=18),
+    Review(rating=1,
+           review_text='bloody awful',
+           customer_id=4,
+           eatery_id=19),
+    Review(rating=1,
+           review_text='awful',
+           customer_id=4,
+           eatery_id=20),
+]
+
+voucher_arr=[
+    Voucher(
+            description="50 percent off",
+            eatery=1,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="20 percent off",
+            eatery=2,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="30 percent off",
+            eatery=3,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="10 percent off",
+            eatery=4,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="60 percent off",
+            eatery=5,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="70 percent off",
+            eatery=6,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="80 percent off",
+            eatery=7,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="70 percent off",
+            eatery=8,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="90 percent off",
+            eatery=9,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="45 percent off",
+            eatery=10,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="55 percent off",
+            eatery=11,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="65 percent off",
+            eatery=12,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="75 percent off",
+            eatery=13,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="85 percent off",
+            eatery=14,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="25 percent off",
+            eatery=15,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="5 percent off",
+            eatery=16,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="65 percent off",
+            eatery=17,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="24 percent off",
+            eatery=18,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="27 percent off",
+            eatery=19,
+            expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="37 percent off",
+            eatery=20,
+            expiry=datetime.datetime(2024,12,12)),
+]
+
+has_voucher_arr=[
+    HasVoucher(
+            user_id=1,
+            voucher_id=1),
+    HasVoucher(
+            user_id=2,
+            voucher_id=2),
+    HasVoucher(
+            user_id=3,
+            voucher_id=3),
+    HasVoucher(
+            user_id=4,
+            voucher_id=4),
 ]
 
 if __name__ == '__main__':
@@ -224,4 +432,16 @@ if __name__ == '__main__':
             db.session.commit()
         for cooks_cuisine in cooks_cuisine_arr:
             db.session.add(cooks_cuisine)
+            db.session.commit()
+        for review in reviews_arr:
+            db.session.add(review)
+            db.session.commit()
+        for customer in customers_arr:
+            db.session.add(customer)
+            db.session.commit()
+        for voucher in voucher_arr:
+            db.session.add(voucher)
+            db.session.commit()
+        for has_voucher in has_voucher_arr:
+            db.session.add(has_voucher)
             db.session.commit()
