@@ -2,7 +2,7 @@ from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask import current_app
-from app.database import db
+from app.extensions import db
 from flask_login import UserMixin
 from sqlalchemy.ext.hybrid import hybrid_method
 import math
@@ -30,7 +30,10 @@ class Eatery(db.Model, UserMixin):
 
     def __repr__(self):
         return f'<Eatery "{self.restaurant_name}">'
-
+    
+    def get_id(self):
+        return (self.id)
+    
     def hash_password(self, password):
         self.password_hash = generate_password_hash(password)
     

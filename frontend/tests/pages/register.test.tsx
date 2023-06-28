@@ -3,8 +3,9 @@ import React from "react";
 import { setupServer } from 'msw/node';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react'
 import SignUp from '../../src/pages/SignUp'
-import { AuthProvider } from '../../src/AuthContext';
+import { AuthProvider } from '../../src/context/AuthContext';
 import { expect } from 'chai';
+import { BrowserRouter as Router} from 'react-router-dom'
 
 
 // Here, replace '/auth/register' with your actual API endpoint
@@ -21,7 +22,9 @@ afterAll(() => server.close());
 test('SignUp works', async () => {
   const { getByPlaceholderText, getByText } = render(
     <AuthProvider>
-      <SignUp />
+      <Router>
+        <SignUp />
+      </Router>
     </AuthProvider>
   );
 

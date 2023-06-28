@@ -10,8 +10,8 @@ import { EateryProvider } from "./context/EateryContext";
 
 const App = () => { 
     return ( 
-      <div className="app-outer">
-        <div className="app-inner">
+      // <div className="app-outer">
+      //   <div className="app-inner">
           <AuthProvider>
             <EateryProvider>
               <Router>
@@ -25,8 +25,8 @@ const App = () => {
               </Router>
             </EateryProvider>
           </AuthProvider>
-        </div>
-      </div>
+      //   </div>
+      // </div>
     );
 }
 

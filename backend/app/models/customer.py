@@ -2,8 +2,12 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask import current_app
-from app.database import db
+from app.extensions import db, login_manager
 from flask_login import UserMixin
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Customer.query.get(user_id)
 
 class Customer(db.Model, UserMixin):
     __tablename__ = 'customer'
@@ -19,6 +23,9 @@ class Customer(db.Model, UserMixin):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.role = 'customer'
+
+    def get_id(self):
+           return (self.id)
 
     def hash_password(self, password):
         self.password_hash = generate_password_hash(password)

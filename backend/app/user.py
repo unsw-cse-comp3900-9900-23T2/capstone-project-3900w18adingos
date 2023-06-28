@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_login import current_user
 from app.models.customer import Customer
 from app.models.eatery import Eatery
-from app.database import db
+from app.extensions import db
 from app.auth_helper import user_is_eatery
 
 

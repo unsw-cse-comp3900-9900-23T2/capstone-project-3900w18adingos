@@ -26,5 +26,3 @@ def search_by_distance():
         return search_helper.eatery_distance_search(token, search_term, user_long, user_lat, max_distance, qty)
     else:
         return search_helper.eatery_distance_search(token, search_term, user_long, user_lat, max_distance)
-
-

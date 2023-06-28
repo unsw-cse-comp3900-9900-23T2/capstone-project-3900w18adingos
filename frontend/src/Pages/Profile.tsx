@@ -3,7 +3,7 @@ import '../styles/Profile.css';
 import '@react-google-maps/api';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import { useAuth } from '../useAuth';
+import { useAuth } from '../context/useAuth';
 import { useNavigate } from 'react-router-dom';  // Import useHistory
 
 

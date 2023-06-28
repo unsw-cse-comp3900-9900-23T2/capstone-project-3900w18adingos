@@ -1,6 +1,7 @@
-from flask import Blueprint, request, jsonify, g
+from flask import Blueprint, request, jsonify
+from flask_login import login_user, logout_user, login_required, current_user
 from app import auth_helper
-from .models.customer import Customer
+from app.models.customer import Customer
 auth = Blueprint('auth', __name__)
 
 

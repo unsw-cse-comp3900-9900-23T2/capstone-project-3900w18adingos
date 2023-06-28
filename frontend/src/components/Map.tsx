@@ -4,6 +4,7 @@ import "../styles/Map.css"
 import { useEateryContext } from '../context/useEateryContext';
 import { Eatery, MapProps } from '../interface';
 import { getMapStyle } from '../styles/MapStyle';
+import { useAuth } from '../context/useAuth';
 
 const Map: React.FC<MapProps> = ({findLocation}) => {
   const { isLoaded } = useJsApiLoader({
@@ -16,6 +17,7 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [loadingPosition, setLoadingPosition] = useState(true);
   const { eateries, fetchEateries } = useEateryContext();
+  const {getAllReviews} = useEateryContext();
   
   // Set default position to user location
   const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
@@ -53,6 +55,7 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
   }, [fetchEateries]);
 
 
+
   // update map view on search 
   useEffect(() => {
     if (findLocation && mapRef.current) {
@@ -80,29 +83,29 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
 
   useEffect(initialize, [loadingPosition, isLoaded, eateries]);
 
-  const createMarker = (eatery: Eatery) => {
-    const marker = new google.maps.Marker({
-      map: mapRef.current,
-      position: { lat: eatery.latitude, lng: eatery.longitude },
-    });
-
-
-    const contentString = 
-    `<div class="marker-content-wrapper"> 
-      <div class="marker-content-description">
-      <h3>${eatery.restaurant_name}</h3>
-      <p>Cusine</p>
-      <p>Rating</p>
-      </div>
-    </div>`;
-
-    // Open the InfoWindow on click
-    google.maps.event.addListener(marker, 'click', function () {
-      if (infoWindowRef.current) {
-        infoWindowRef.current.setContent(contentString);
-        infoWindowRef.current.open(mapRef.current, marker);
-      }
-    });
+  const createMarker = async (eatery: Eatery) => {
+      const marker = new google.maps.Marker({
+        map: mapRef.current,
+        position: { lat: eatery.latitude, lng: eatery.longitude },
+      });
+      const reviews = await getAllReviews(eatery.id);
+      console.log(reviews)
+      const contentString = 
+      `<div class="marker-content-wrapper"> 
+        <div class="marker-content-description">
+        <h3>${eatery.restaurant_name}</h3>
+        <p>Cusine</p>
+        <p>Rating: ${reviews}</p>
+        </div>
+      </div>`;
+  
+      // Open the InfoWindow on click
+      google.maps.event.addListener(marker, 'click', function () {
+        if (infoWindowRef.current) {
+          infoWindowRef.current.setContent(contentString);
+          infoWindowRef.current.open(mapRef.current, marker);
+        }
+      });
   };
 
   return (

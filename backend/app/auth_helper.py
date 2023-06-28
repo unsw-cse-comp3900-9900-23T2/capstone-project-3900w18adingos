@@ -1,10 +1,10 @@
 from flask import jsonify, current_app
 from flask import url_for
 from flask_mail import Mail, Message
-from flask_login import current_user
+from flask_login import login_user, logout_user, login_required, current_user
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 
-from app.database import db
+from app.extensions import db
 from app.models.customer import Customer
 from app.models.eatery import Eatery
 
@@ -26,12 +26,15 @@ def get_user_model(role):
 
 
 def auth_logout(token):
+    # why use static methods here??
     token_ = Customer.verify_auth_token(token)
     if not token_:
         token_ = Eatery.verify_auth_token(token)
-
+    
     if not token_:
         return jsonify({"message": "Invalid token"}), 400
+
+    logout_user()
     return jsonify({'message': 'Logged out successfully'}), 200
 
 
@@ -43,6 +46,8 @@ def auth_login(email, password, role):
     user = UserModel.query.filter_by(email=email).first()
     if not user or not user.verify_password(password):
         return jsonify({"message": "Invalid credentials"}), 400
+        
+    login_user(user, remember=True)
 
     return jsonify(
         {'token': user.generate_auth_token(), 'user': user.name if role == 'customer' else user.restaurant_name,

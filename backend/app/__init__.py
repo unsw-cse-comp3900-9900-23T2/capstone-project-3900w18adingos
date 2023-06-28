@@ -1,26 +1,30 @@
 from flask import Flask
 from flask_cors import CORS
-from .database import db
+
+from .extensions import db, login_manager
 from .mail import init_mail
 from .config import config
-
-from app.models.has_voucher import HasVoucher
-from app.models.voucher import Voucher
-from app.models.eatery import Eatery
-from app.models.customer import Customer
-from app.models.review import Review
-from app.models.image import Image
-from app.models.cuisine import Cuisine
-from app.models.cooks_cuisine import CooksCuisine
 
 def create_app(config_name='default'):
 
     app = Flask(__name__)
 
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
+
     app.config.from_object(config[config_name])
+    
     CORS(app, origins=['http://localhost:5173'])
     db.init_app(app)
-    init_mail(app)
+
+    from app.models.has_voucher import HasVoucher
+    from app.models.voucher import Voucher
+    from app.models.eatery import Eatery
+    from app.models.customer import Customer
+    from app.models.review import Review
+    from app.models.image import Image
+    from app.models.cuisine import Cuisine
+    from app.models.cooks_cuisine import CooksCuisine
 
     with app.app_context():
         db.create_all()

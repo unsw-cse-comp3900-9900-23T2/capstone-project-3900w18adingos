@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 import os
-from app.database import db
+
+from app.extensions import db
 from app.models.eatery import Eatery
 from app.models.image import Image
 from app.eatery_helper import get_image_bytes, generate_image_filename
@@ -80,7 +81,7 @@ def get_all_eateries():
             "email": eatery.email,
             "restaurant_name": eatery.restaurant_name,
             "location": eatery.location,
-            "cuisine": eatery.cuisine,
+            # "cuisine": eatery.cuisine,
             "role": eatery.role,
             "latitude": eatery.latitude,
             "longitude": eatery.longitude

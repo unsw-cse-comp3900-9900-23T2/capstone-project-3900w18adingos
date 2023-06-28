@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 
 from app.models.eatery import Eatery
 from app.models.review import Review
-from app.database import db
+from app.extensions import db
 
 review = Blueprint('review', __name__)
 
@@ -32,15 +32,23 @@ def get_review():
 @login_required
 def get_all_reviews():
     req_json = request.get_json()
-    eatery_id = req_json['eatery_id'].strip()
+    eatery_id = req_json['eatery_id']
     # ensure eatery id valid
     eatery = Eatery.query.first_or_404(eatery_id)
     reviews = eatery.reviews
     if not reviews:
         return '', 204
 
+    reviews_list = []
+    for review in reviews: 
+        reviews_list.append({ 
+            "rating": review.rating, 
+            "review_text": review.review_text, 
+            "id": review.id
+        })
+        
     return jsonify({
-        'reviews': reviews
+        'reviews': reviews_list
     }), 200
 
 @review.post('/add_review')
