@@ -1,20 +1,15 @@
-# models/customer.py
-from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask import current_app
 from app.extensions import db, login_manager
-from flask_login import UserMixin
+from .user import User
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Customer.query.get(user_id)
+    return User.query.get(user_id)  # this is now user
 
-class Customer(db.Model, UserMixin):
+class Customer(User):  # inherit from User
     __tablename__ = 'customer'
-    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
-    email = db.Column(db.String(120), unique=True)
-    password_hash = db.Column(db.String(128))
     handle = db.Column(db.String(50), unique=True)
     profile_pic = db.Column(db.String(500))
     role = db.Column(db.String(50), default='customer')
@@ -24,15 +19,6 @@ class Customer(db.Model, UserMixin):
         super().__init__(**kwargs)
         self.role = 'customer'
 
-    def get_id(self):
-           return (self.id)
-
-    def hash_password(self, password):
-        self.password_hash = generate_password_hash(password)
-    
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
-    
     def generate_auth_token(self, expiration=600):
         s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         return s.dumps({'id': self.id, 'role': self.role}, salt='auth')

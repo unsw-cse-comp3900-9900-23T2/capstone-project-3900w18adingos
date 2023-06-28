@@ -1,17 +1,17 @@
 from sqlalchemy import func
-from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask import current_app
-from app.extensions import db
-from flask_login import UserMixin
+from app.extensions import db, login_manager
 from sqlalchemy.ext.hybrid import hybrid_method
+from .user import User
 import math
 
-class Eatery(db.Model, UserMixin):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
+class Eatery(User):
     __tablename__ = 'eatery'
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True)
-    password_hash = db.Column(db.String(128))
     restaurant_name = db.Column(db.String(100))
     # display location to help human users find (e.g. inside quad food court)
     location = db.Column(db.Text)
@@ -28,16 +28,7 @@ class Eatery(db.Model, UserMixin):
 
     def __repr__(self):
         return f'<Eatery "{self.restaurant_name}">'
-    
-    def get_id(self):
-        return (self.id)
-    
-    def hash_password(self, password):
-        self.password_hash = generate_password_hash(password)
-    
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
-    
+
     def generate_auth_token(self, expiration=600):
         s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         return s.dumps({'id': self.id, 'role': self.role}, salt='auth')
@@ -59,7 +50,6 @@ class Eatery(db.Model, UserMixin):
     def distance(self, user_lat, user_long, max_distance):
         earth_radius = 6371  # Radius of the Earth in kilometers
 
-        print(self.latitude)
         # Convert latitude and longitude to radians
         lat1_rad = math.radians(self.latitude)
         lon1_rad = math.radians(self.longitude)
@@ -80,8 +70,7 @@ class Eatery(db.Model, UserMixin):
     @distance.expression
     def distance(cls, user_lat, user_long, max_distance):
         earth_radius = 6371  # Radius of the Earth in kilometers
-        
-        print(cls.latitude)
+
         # Convert latitude and longitude to radians
         lat1_rad = func.radians(cls.latitude)
         lon1_rad = func.radians(cls.longitude)
@@ -98,6 +87,3 @@ class Eatery(db.Model, UserMixin):
         distance = earth_radius * c
 
         return distance <= max_distance
-    
-    # def role(self):
-    #     return 'eatery'
