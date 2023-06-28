@@ -71,6 +71,9 @@ def auth_register(email, password, name, role):
     user.hash_password(password)
     db.session.add(user)
     db.session.commit()
+    
+    login_user(user, remember=True)
+    
     return jsonify({'token': user.generate_auth_token(), 'user': name, 'role': role})
 
 
