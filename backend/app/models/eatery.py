@@ -6,7 +6,6 @@ from app.extensions import db
 from flask_login import UserMixin
 from sqlalchemy.ext.hybrid import hybrid_method
 import math
-from sqlalchemy.orm import column_property
 
 class Eatery(db.Model, UserMixin):
     __tablename__ = 'eatery'
@@ -16,7 +15,6 @@ class Eatery(db.Model, UserMixin):
     restaurant_name = db.Column(db.String(100))
     # display location to help human users find (e.g. inside quad food court)
     location = db.Column(db.Text)
-    # cuisine = db.Column(db.String(50))
     role = db.Column(db.String(50), default='eatery')
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
