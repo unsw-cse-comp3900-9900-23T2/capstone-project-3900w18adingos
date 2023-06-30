@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 import SignIn from "./pages/SignIn";
 import Home from "./pages/Home";
 import { EateryProvider } from "./context/EateryContext";
+import RestaurantList from "./pages/RestaurantList";
 
 const App = () => { 
     return ( 
@@ -20,6 +21,7 @@ const App = () => {
                   <Route path="/auth/login" element={<SignIn />} />
                   <Route path="/auth/home" element={<AuthHome />} />
                   <Route path="/auth/profile" element={<Profile />} />
+                  <Route path="/auth/list" element={<RestaurantList />} />
                   <Route path="/" element={<Home />} />
                 </Routes>
               </Router>
