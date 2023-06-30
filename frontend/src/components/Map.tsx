@@ -84,7 +84,6 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
 
   useEffect(initialize, [loadingPosition, isLoaded, eateries]);
 
-  const infoWindow = new google.maps.InfoWindow();
   const createMarker = async (eatery: Eatery) => {
       // console.log(eatery.id)
       const marker = new google.maps.Marker({
@@ -93,7 +92,7 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
       });
     
       let totalRating = 0;
-      let averageRating;
+      let averageRating = 0;
       const reviews = await getAllReviews(eatery.id);  
       if (reviews) { 
         totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
@@ -106,24 +105,46 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
         <div class="marker-content-description">
           <h3 id="firstHeading" class="firstHeading">${eatery.restaurant_name}</h3>
           <p>Cusine</p>
-          <p>Rating: ${averageRating}</p>
+          <div class="star-rating">
+            <p>${getStarRating(averageRating)}</p>
+          </div>
         </div>
       </div>`;
     
       // Open the InfoWindow on click
       google.maps.event.addListener(marker, 'click', function () {
-        // Update the content and open the global InfoWindow
-        infoWindow.setContent(contentString);
-        infoWindow.open(mapRef.current, marker);
-    
-        // Adding a click listener for the whole InfoWindow
-        // Using addListenerOnce to make sure we don't bind the same listener multiple times
-        google.maps.event.addListenerOnce(infoWindow, 'domready', function () {
-          document.getElementById('content')?.addEventListener('click', () => {
-            navigate("/auth/profile")
+        if (infoWindowRef.current) { 
+          
+          infoWindowRef.current.setContent(contentString);
+          infoWindowRef.current.open(mapRef.current, marker);
+          
+          // Adding a click listener for the whole InfoWindow
+          // Using addListenerOnce to make sure we don't bind the same listener multiple times
+          google.maps.event.addListenerOnce(infoWindowRef.current, 'domready', function () {
+            document.getElementById('content')?.addEventListener('click', () => {
+              navigate("/auth/profile")
+            });
           });
-        });
+        }
       });
+    };
+
+    const getStarRating = (averageRating: number) => {
+      let stars = '';
+      const fullStars = Math.floor(averageRating);
+      const halfStar = (averageRating % 1) >= 0.5 ? true : false;
+    
+      // Append full stars
+      for(let i = 0; i < fullStars; i++) {
+        stars += '<i class="glyphicon glyphicon-star"></i>'; 
+      }
+      
+      // Append half star if needed
+      if (halfStar) {
+        stars += '<i class="glyphicon glyphicon-star half"></i>';
+      }
+      
+      return stars;
     };
   
 
