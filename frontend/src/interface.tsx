@@ -76,3 +76,9 @@ export interface SignInFormInputs {
     email: string;
     password: string;
 }
+
+export interface Review { 
+    rating: number,
+    review_text: string,
+    id: string,
+}
