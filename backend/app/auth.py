@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import current_user, logout_user
 from app import auth_helper
 from app.models.customer import Customer
-auth = Blueprint('auth', __name__)
 
+auth = Blueprint('auth', __name__)
 
 def check_role(role):
     if role not in ['customer', 'eatery']:
@@ -41,6 +41,13 @@ def logout():
     token = request.json.get('token')
     result = auth_helper.auth_logout(token)
     return result
+    
+@auth.route('/auth/logout')
+def logout_get():
+    if current_user and current_user.is_authenticated:
+        logout_user()
+
+    return jsonify(success=True), 200
 
 
 @auth.route('/auth/passwordreset/request', methods=['POST'])
@@ -61,7 +68,7 @@ def passwordreset_reset():
     result = auth_helper.auth_passwordreset_reset(reset_code, new_password)
     return result
 
-@auth.route('/auth/me', methods=['GET'])
+@auth.route('/auth/me/token', methods=['GET'])
 def me():
     token = request.headers.get('Authorization')
     if not token:
@@ -80,4 +87,15 @@ def me():
         "handle": user.handle,
         "profile_pic": user.profile_pic,
         # add any other fields you want to return here
+    }), 200
+    
+@auth.route('/auth/whoami', methods=['GET'])
+def whoami():
+    if not current_user or not current_user.is_authenticated:
+        return jsonify({"message": "Not logged in"}), 401
+
+    # return the user's data
+    return jsonify({
+        "id": current_user.id,
+        "email": current_user.email,
     }), 200
