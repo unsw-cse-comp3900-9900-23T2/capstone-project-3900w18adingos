@@ -1,5 +1,4 @@
-from flask import jsonify, current_app
-from flask import url_for
+from flask import jsonify, current_app, url_for, session
 from flask_mail import Mail, Message
 from flask_login import login_user, logout_user, login_required, current_user
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
@@ -9,7 +8,6 @@ from app.models.customer import Customer
 from app.models.eatery import Eatery
 
 mail = Mail(current_app)
-
 
 def user_is_eatery():
     if not current_user.is_authenticated:
@@ -35,6 +33,7 @@ def auth_logout(token):
         return jsonify({"message": "Invalid token"}), 400
 
     logout_user()
+    
     return jsonify({'message': 'Logged out successfully'}), 200
 
 
@@ -46,12 +45,16 @@ def auth_login(email, password, role):
     user = UserModel.query.filter_by(email=email).first()
     if not user or not user.verify_password(password):
         return jsonify({"message": "Invalid credentials"}), 400
-        
+    
     login_user(user, remember=True)
 
     return jsonify(
-        {'token': user.generate_auth_token(), 'user': user.name if role == 'customer' else user.restaurant_name,
-         'role': role})
+        {
+            'token': user.generate_auth_token(), 
+            'user': user.name if role == 'customer' else user.restaurant_name,
+            'role': role
+        }
+    )
 
 
 def auth_register(email, password, name, role):

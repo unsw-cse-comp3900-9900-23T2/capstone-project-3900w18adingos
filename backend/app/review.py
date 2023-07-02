@@ -29,11 +29,11 @@ def get_review():
 
 # get all public reviews given a restaurant
 @review.post('/get_all_reviews')
-# @login_required
+@login_required
 def get_all_reviews():
     req_json = request.get_json()
     eatery_id = req_json['eatery_id']
-    reviews = Review.query.filter_by(id=eatery_id)
+    reviews = Review.query.filter_by(eatery_id=eatery_id)
     
     if not reviews:
         return '', 204
