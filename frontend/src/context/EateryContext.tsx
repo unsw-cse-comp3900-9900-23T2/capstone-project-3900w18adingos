@@ -2,13 +2,14 @@
 
 import axios, { AxiosResponse } from "axios";
 import React, { createContext, useState, useCallback} from "react";
-import { useAuth } from "./useAuth";
+import { useAuth } from "../hooks/useAuth";
 import { Eatery, EateryContextProps, Images, Props, Review } from "../interface";
 
 export const EateryContext = createContext<EateryContextProps | undefined>(undefined);
 
 export const EateryProvider: React.FC<Props> = ({ children }) => {
     const [eateries, setEateries] = useState<Array<Eatery>>([]);
+    const [eatery, setEatery] = useState<Eatery | null>(null);
     const [review, setReview] = useState<Review | null>(null);
     const [allReviews, setallReviews] = useState<Array<Review>>([]);
     const [eateryImages, setEateryImages] = useState<Images | null>(null);
@@ -30,6 +31,19 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
           console.error(error);
         }
     }, [token]);
+
+    const fetchEatery = useCallback(async (id: string) => {
+      try {
+        const response = await api.get(`/eatery/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setEatery(response.data.eatery)
+      } catch (error) {
+        console.error(error);
+      }
+  }, [token]);
 
     const fetchEateryImages = useCallback(async (eateryId: string) => {
         try {
@@ -65,10 +79,8 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        if (response) { 
           setallReviews(response.data.reviews)
           return response.data.reviews;
-        }
       } catch (error) {
         console.error(error);
       }
@@ -109,6 +121,8 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
         fetchEateryImages, 
         fetchEateries, 
         eateries, 
+        fetchEatery,
+        eatery,
         eateryImages, 
         token,
         review, 

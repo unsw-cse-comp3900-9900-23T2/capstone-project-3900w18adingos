@@ -27,6 +27,8 @@ export interface EateryContextProps {
     getAllReviews: (eateryId: string) => Promise<Array<Review> | void>;
     addReview: (eateryId: string, rating: string, reviewText: string) => Promise<boolean | void>;
     deleteReview: (reviewId: string) => Promise<boolean | void>;
+    fetchEatery: (id: string) => Promise<void>;
+    eatery: Eatery | null;
     eateries: Array<Eatery>;
     eateryImages: Images | null;
     review: Review | null; 
@@ -82,3 +84,13 @@ export interface Review {
     review_text: string,
     id: string,
 }
+
+// utils/location
+export type SetUserLocation = React.Dispatch<React.SetStateAction<{ lat: number; lng: number }>>;
+export interface UserPosition {
+  lat: number;
+  lng: number;
+}
+export type MapRef = React.MutableRefObject<google.maps.Map | null>;
+export type SetLoadingPosition = React.Dispatch<React.SetStateAction<boolean>>;
+export type SetUpLocation = (setUserLocation: SetUserLocation, setLoadingPosition: SetLoadingPosition, mapRef: MapRef) => void;

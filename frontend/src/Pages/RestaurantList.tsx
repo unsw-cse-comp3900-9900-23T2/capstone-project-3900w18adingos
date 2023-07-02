@@ -1,5 +1,5 @@
-import Header from "../components/Header";
-import { useEateryContext } from "../context/useEateryContext";
+import Header from "../components/Header/Header";
+import { useEateryContext } from "../hooks/useEateryContext";
 import { useEffect, useState} from 'react';
 import "../styles/RestaurantList.css"
 import { Review } from "../interface";

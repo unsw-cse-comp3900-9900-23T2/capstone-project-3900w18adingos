@@ -87,3 +87,21 @@ def get_all_eateries():
             "longitude": eatery.longitude
         })
     return jsonify({"eateries": eateries_list}), 200
+
+@eatery.route('/eatery/<int:id>', methods=['GET'])
+def get_eatery_by_id(id):
+    eatery = Eatery.query.get(id)
+    if not eatery:
+        return jsonify({"message": "No eatery found"}), 404
+
+    eatery_data = {
+        "id": eatery.id,
+        "email": eatery.email,
+        "restaurant_name": eatery.restaurant_name,
+        "location": eatery.location,
+        # "cuisine": eatery.cuisine,
+        "role": eatery.role,
+        "latitude": eatery.latitude,
+        "longitude": eatery.longitude
+    }
+    return jsonify({"eatery": eatery_data}), 200

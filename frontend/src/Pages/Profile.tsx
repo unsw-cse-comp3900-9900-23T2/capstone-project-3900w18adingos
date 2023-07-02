@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import '../styles/Profile.css';
 import '@react-google-maps/api';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import { useAuth } from '../context/useAuth';
+import Footer from '../components/Footer/Footer';
+import Header from '../components/Header/Header';
+import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';  // Import useHistory
 
 

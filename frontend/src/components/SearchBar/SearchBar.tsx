@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Eatery, SearchBarProps } from '../interface';
-import { useEateryContext } from '../context/useEateryContext';
-import "../styles/Searchbar.css"
+import { Eatery, SearchBarProps } from '../../interface';
+
+import "./Searchbar.css"
+import { useEateryContext } from '../../hooks/useEateryContext';
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const { eateries, fetchEateries } = useEateryContext();
