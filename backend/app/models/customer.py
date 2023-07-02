@@ -1,51 +1,12 @@
-# models/customer.py
-from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
-from flask import current_app
-from app.extensions import db, login_manager
-from flask_login import UserMixin
+from app.extensions import db
+from app.models.user import User
 
-@login_manager.user_loader
-def load_user(user_id):
-    return Customer.query.get(user_id)
-
-class Customer(db.Model, UserMixin):
+class Customer(User):
     __tablename__ = 'customer'
-    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
-    email = db.Column(db.String(120), unique=True)
-    password_hash = db.Column(db.String(128))
     handle = db.Column(db.String(50), unique=True)
     profile_pic = db.Column(db.String(500))
-    role = db.Column(db.String(50), default='customer')
 
-    # additional fields for Customer...
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.role = 'customer'
-
-    def get_id(self):
-           return (self.id)
-
-    def hash_password(self, password):
-        self.password_hash = generate_password_hash(password)
-    
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
-    
-    def generate_auth_token(self, expiration=600):
-        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        return s.dumps({'id': self.id, 'role': self.role}, salt='auth')
-
-    @staticmethod
-    def verify_auth_token(token):
-        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token, salt='auth')
-        except (SignatureExpired, BadSignature):
-            return None  # invalid token
-        if data['role'] == 'customer':
-            user = Customer.query.get(data['id'])
-        else:
-            return None  # invalid token role
-        return user
