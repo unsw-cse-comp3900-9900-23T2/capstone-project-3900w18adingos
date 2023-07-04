@@ -1,4 +1,4 @@
-from app.database import db
+from app.extensions import db
 
 class HasVoucher(db.Model):
     __tablename__ = 'has_voucher'

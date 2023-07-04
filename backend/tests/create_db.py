@@ -11,6 +11,7 @@ from app import create_app, db
 from app.models.eatery import Eatery
 from app.models.cuisine import Cuisine
 from app.models.cooks_cuisine import CooksCuisine
+from app.models.image import Image
 from app.models.review import Review
 from app.models.customer import Customer
 from app.models.voucher import Voucher

@@ -1,7 +1,7 @@
 from flask import jsonify
 from app.models.customer import Customer
 from app.models.eatery import Eatery
-from app.database import db
+from app.extensions import db
 from app.auth_helper import get_user_model
 
 def set_profile_pic(token, pic_url, role):

@@ -36,8 +36,6 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         }
       }, []);
 
-      
-      
     const logout = useCallback(async () => {
         try {
             await api.post('/auth/logout', { token });
@@ -84,8 +82,17 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         }
       }, [token]);
 
+      const getAllReviews = useCallback(async (eateryId: string) => {
+        try {
+          const response = await api.post('/get_all_reviews', { eatery_id: eateryId });
+          return response.data.reviews
+        } catch (error) {
+          console.error(error);
+        }
+      }, [token]);
+
     return (
-        <AuthContext.Provider value={{ user, fetchUser, isAuthenticated, login, logout, register, passwordResetRequest, passwordReset, token }}>
+        <AuthContext.Provider value={{ getAllReviews, user, fetchUser, isAuthenticated, login, logout, register, passwordResetRequest, passwordReset, token }}>
             {children}
         </AuthContext.Provider>
     );

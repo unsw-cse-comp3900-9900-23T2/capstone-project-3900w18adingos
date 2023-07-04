@@ -1,6 +1,6 @@
 import sqlite3
 from flask import jsonify
-from app.database import db
+from app.extensions import db
 from app.models.customer import Customer
 from app.models.eatery import Eatery
 from app.models.cuisine import Cuisine

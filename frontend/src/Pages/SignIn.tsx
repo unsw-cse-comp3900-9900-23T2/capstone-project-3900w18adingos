@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
 import "../styles/SignUp.css"
-import { useAuth } from '../useAuth';
+import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { SignInFormInputs } from '../interface';
 

@@ -1,11 +1,11 @@
 // AuthHome component
 import React, {useState } from 'react';
-import Header from "../components/Header";
-import Map from "../components/Map";
-import SearchBar from "../components/SearchBar";
+import Header from "../components/Header/Header";
+import Map from "../components/Map/Map";
+import SearchBar from "../components/SearchBar/SearchBar";
 
 import "@react-google-maps/api"; 
-import Footer from '../components/Footer';
+import Footer from '../components/Footer/Footer';
 import { Eatery } from '../interface';
 
 const AuthHome: React.FC = () => { 

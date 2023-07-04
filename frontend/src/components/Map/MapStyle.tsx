@@ -1,5 +1,4 @@
 
-
 export const getMapStyle = () => {
     let mapColour = '#E4D3FF'
     let roadColour = "#FFFFFF" 

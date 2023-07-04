@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import '../styles/Footer.css';
+import './Footer.css';
 
 const Footer: React.FC = () => {
   return (
@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
         <i className="glyphicon glyphicon-home" />
         <span>Map</span>
       </Link>
-      <Link to="/list" className="footer-button">
+      <Link to="/auth/list" className="footer-button">
         <i className="glyphicon glyphicon-list" />
         <span>List</span>
       </Link>
