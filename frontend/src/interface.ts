@@ -44,9 +44,9 @@ export interface AuthContextType {
     token: string | null;
     getAllReviews: (eateryId: string) => Promise<Array<Review> | void>;
     isAuthenticated: () => boolean;
-    login: (email: string, password: string) => Promise<boolean>;
+    login: (email: string, password: string, role: string) => Promise<boolean>;
     register: (email: string, password: string, name: string, role: string) => Promise<boolean>;
-    passwordResetRequest: (email: string) => Promise<boolean>;
+    passwordResetRequest: (email: string, role: string) => Promise<boolean>;
     passwordReset: (resetCode: string, newPassword: string) => Promise<boolean>;
     logout: () => Promise<boolean>;
     fetchUser: () => Promise<void>;
@@ -77,6 +77,7 @@ export interface RegisterFormInputs {
 export interface SignInFormInputs {
     email: string;
     password: string;
+    role: string;
 }
 
 export interface Review { 

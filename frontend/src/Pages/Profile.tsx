@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';  // Import useHistory
 
 
 const Profile: React.FC = () => {
-  const { user, logout, passwordResetRequest, passwordReset, fetchUser } = useAuth();  // Get auth functions from context
+  const { user, logout, passwordResetRequest, passwordReset, fetchUser } = useAuth();
   const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [toggleResetPasswordOptions, setToggleResetPasswordOptions] = useState(false);

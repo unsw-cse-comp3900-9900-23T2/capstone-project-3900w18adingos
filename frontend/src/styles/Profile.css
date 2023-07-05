@@ -29,11 +29,7 @@ h1 {
   flex-direction: column;
 }
 
-.toggle-reset-password-container { 
-  display: flex;
-  flex-direction: column;
-  width: 90%;
-}
+
 .email,
 .name { 
   display: flex;
@@ -47,23 +43,4 @@ h1 {
 .logout { 
   width: 90%;
   margin-top: 10px;
-}
-
-.reset-password,
-.reset-code { 
-  display: flex;
-  margin-top: 10px;
-  border-radius: 10px;
-}
-
-.reset-password-text,
-.reset-code-text { 
-  width: 70%;
-}
-
-.reset-password-button,
-.reset-code-button { 
-  width: 30%;
-  background-color: #E07893;
-  border: 1px solid #E07893;
 }

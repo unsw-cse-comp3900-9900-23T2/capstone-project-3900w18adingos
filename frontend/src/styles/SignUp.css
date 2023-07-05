@@ -108,3 +108,43 @@ body {
 .signup-sub-title { 
   display: flex;
 }
+
+.forgot-password {
+  display: flex; 
+  width: 100%; 
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.reset-password { 
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.toggle-reset-password-container { 
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.reset-button { 
+  cursor: pointer;
+  background-color:#E07893;
+  color: #fff;
+  border-color: #E07893;
+  width: 90%;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid ;
+  margin-bottom: 10px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.forgot-password-text { 
+  color: #007BFF
+}
