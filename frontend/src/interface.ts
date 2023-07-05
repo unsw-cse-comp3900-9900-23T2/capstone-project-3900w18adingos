@@ -94,3 +94,8 @@ export interface UserPosition {
 export type MapRef = React.MutableRefObject<google.maps.Map | null>;
 export type SetLoadingPosition = React.Dispatch<React.SetStateAction<boolean>>;
 export type SetUpLocation = (setUserLocation: SetUserLocation, setLoadingPosition: SetLoadingPosition, mapRef: MapRef) => void;
+
+export interface ClusterProps {
+    count: number;
+    position: google.maps.LatLng | google.maps.LatLngLiteral;
+  }

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
 import "./Map.css"
 import { useEateryContext } from '../../hooks/useEateryContext';
-import { MapProps } from '../../interface';
+import { ClusterProps, MapProps } from '../../interface';
 import { getMapStyle } from './MapStyle';
 import { createMarker } from '../Marker/Marker';
 import { setUpLocation } from '../../utils/locations';
@@ -56,7 +56,25 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
         return marker;
       }));
       
-      new MarkerClusterer({map, markers});
+      // const renderer = {
+      //   render: ({ count, position }: ClusterProps) =>
+      //     new google.maps.Marker({
+      //       position,
+      //       icon: {
+      //         url: 'https://path-to-your-icon/icon.png',  // URL of the icon
+      //         scaledSize: new google.maps.Size(40, 40),  // Size of the icon
+      //       },
+      //       label: {
+      //         text: String(count),
+      //         color: 'white',
+      //         fontSize: '10px',
+      //       },
+      //       // adjust zIndex to be above other markers
+      //       zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
+      //     }),
+      // };
+
+      new MarkerClusterer({map, markers})
     }
   };
 
