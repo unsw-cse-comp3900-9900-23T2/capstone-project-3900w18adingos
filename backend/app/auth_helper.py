@@ -24,38 +24,45 @@ def get_user_model(role):
 
 
 def auth_logout(token):
-    # why use static methods here??
-    token_ = Customer.verify_auth_token(token)
-    if not token_:
-        token_ = Eatery.verify_auth_token(token)
-    
-    if not token_:
-        return jsonify({"message": "Invalid token"}), 400
+    user_id_or_error = Customer.decode_auth_token(token)
+    if isinstance(user_id_or_error, str):  # an error message was returned
+        user_id_or_error = Eatery.decode_auth_token(token)
+    if isinstance(user_id_or_error, str):  # an error message was returned
+        return jsonify({"message": user_id_or_error}), 400
 
     logout_user()
-    
     return jsonify({'message': 'Logged out successfully'}), 200
 
 
 def auth_login(email, password, role):
+    if not email or not password or not role:
+        print('Missing email, password, or role')
+        return jsonify({"message": "Missing email, password, or role"}), 400
+
     UserModel = get_user_model(role)
     if not UserModel:
+        print(f'Invalid role: {role}')
         return jsonify({"message": "Invalid role"}), 400
 
     user = UserModel.query.filter_by(email=email).first()
-    if not user or not user.verify_password(password):
+    if not user:
+        print(f'No user found with email: {email}')
         return jsonify({"message": "Invalid credentials"}), 400
-    
+
+    if not user.verify_password(password):
+        print('Invalid password')
+        return jsonify({"message": "Invalid credentials"}), 400
+
     login_user(user, remember=True)
+    session['user_type'] = role
 
     return jsonify(
         {
-            'token': user.generate_auth_token(), 
+            'token': user.encode_auth_token(user.id).decode(), 
             'user': user.name if role == 'customer' else user.restaurant_name,
             'role': role
         }
     )
-
 
 def auth_register(email, password, name, role):
     UserModel = get_user_model(role)
@@ -65,20 +72,19 @@ def auth_register(email, password, name, role):
     if UserModel.query.filter_by(email=email).first() is not None:
         return jsonify({"message": f"{role.title()} with that email already exists"}), 400
 
-    user = UserModel(email=email)
     if role == 'customer':
-        user.name = name
+        user = UserModel(email=email, name=name, password=password)
     elif role == 'eatery':
-        user.restaurant_name = name
+        user = UserModel(email=email, restaurant_name=name, password=password)
 
     user.hash_password(password)
     db.session.add(user)
     db.session.commit()
-    
-    login_user(user, remember=True)
-    
-    return jsonify({'token': user.generate_auth_token(), 'user': name, 'role': role})
 
+    login_user(user, remember=True)
+    session['user_type'] = role  # add this line
+
+    return jsonify({'token': user.encode_auth_token(user.id), 'user': name, 'role': role})
 
 def auth_passwordreset_reset(token, password):
     s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
@@ -102,12 +108,10 @@ def auth_passwordreset_reset(token, password):
     db.session.commit()
     return jsonify({'message': 'Password reset successfully'})
 
-
 def send_reset_email(email, reset_url):
     msg = Message('Password Reset Request', sender='', recipients=[email])
     msg.body = f"Reset your password by clicking on the following link: {reset_url}"
     mail.send(msg)
-
 
 def auth_passwordreset_request(email, role):
     UserModel = get_user_model(role)
