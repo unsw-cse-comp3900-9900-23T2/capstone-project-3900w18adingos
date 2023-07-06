@@ -43,7 +43,8 @@ def get_all_reviews():
         reviews_list.append({ 
             "rating": review.rating, 
             "review_text": review.review_text, 
-            "id": review.id
+            "id": review.id,
+            "customer_id": review.customer_id
         })
     return jsonify({
         'reviews': reviews_list

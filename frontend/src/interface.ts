@@ -17,6 +17,8 @@ export interface Images {
 export interface Review {
     rating: number;
     review_text: string;
+    id: string;
+    customer_id: string;
 }
 
 export interface EateryContextProps {
@@ -35,9 +37,12 @@ export interface EateryContextProps {
     allReviews: Array<Review>;
 }
 
-interface User {
+export interface User {
+    id: string;
     name: string;
     email: string;
+    handle: string;
+    profile_pic: string;
 }
 
 export interface AuthContextType {
@@ -50,7 +55,8 @@ export interface AuthContextType {
     passwordReset: (resetCode: string, newPassword: string) => Promise<boolean>;
     logout: () => Promise<boolean>;
     fetchUser: () => Promise<void>;
-    user: User;
+    user: User | null;
+    getUserById:(id: string) => Promise<User |void>;
 }
 
 export interface Props {

@@ -1,12 +1,12 @@
 import React, { createContext, useState, useCallback } from "react";
 import axios from "axios"
-import { AuthContextType, Props } from "../interface";
+import { AuthContextType, Props, User } from "../interface";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<Props> = ({ children }) => {
     const [token, setToken] = useState<string | null>(null);
-    const [user, setUser] = useState({name: "", email: ""});
+    const [user, setUser] = useState<User | null>(null);
     const api = axios.create({
         baseURL: 'http://127.0.0.1:5000'
       });
@@ -76,7 +76,10 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
               Authorization: `Bearer ${token}`,
             },
           });
-          setUser(response.data); // assuming the response data is the user object
+          if (response.data) { 
+            setUser(response.data); // assuming the response data is the user object
+
+          }
         } catch (error) {
           console.error(error);
         }
@@ -91,8 +94,17 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         }
       }, [token]);
 
+      const getUserById = useCallback(async (id: string) => {
+        try {
+          const response = await api.get(`/user/${id}`)
+          return response.data;
+        } catch (error) {
+          console.error(error);
+        }
+    }, [token]);
+
     return (
-        <AuthContext.Provider value={{ getAllReviews, user, fetchUser, isAuthenticated, login, logout, register, passwordResetRequest, passwordReset, token }}>
+        <AuthContext.Provider value={{ getUserById, getAllReviews, user, fetchUser, isAuthenticated, login, logout, register, passwordResetRequest, passwordReset, token }}>
             {children}
         </AuthContext.Provider>
     );
