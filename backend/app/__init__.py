@@ -21,6 +21,8 @@ def create_app(config_name='default'):
             return Eatery.query.get(int(user_id))
 
     app.config.from_object(config[config_name])
+
+    init_mail(app)
     
     CORS(app, resources={r"/*": {"origins": "*"}})
     db.init_app(app)

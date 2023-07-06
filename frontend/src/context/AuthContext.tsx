@@ -11,9 +11,9 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         baseURL: 'http://127.0.0.1:5000'
       });
 
-    const login = useCallback(async (email: string, password: string) => {
+    const login = useCallback(async (email: string, password: string, role: string) => {
         try {
-            const response = await api.post('/auth/login', { email, password });
+            const response = await api.post('/auth/login', { email, password, role });
             const {token} = response.data;
             setToken(token);
             return true;
@@ -47,9 +47,9 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         }
     }, [token]);
     
-    const passwordResetRequest = useCallback(async (email: string) => {
+    const passwordResetRequest = useCallback(async (email: string, role: string) => {
         try {
-            await api.post('/auth/passwordreset/request', { email });
+            await api.post('/auth/passwordreset/request', { email, role });
             return true;
         } catch (error) {
             console.error(error);
