@@ -9,6 +9,7 @@ from sqlalchemy import TypeCoerce, create_engine, func, literal, or_, type_coerc
 from sqlalchemy import cast, Float
 from sqlalchemy.orm import sessionmaker, joinedload
 import math
+import array
 
 engine = create_engine(db.engine.url)
 Session = sessionmaker(bind=engine)
@@ -29,7 +30,8 @@ def eatery_search(search_term, token, qty=1):
     #     )
     # ).all()
     
-    joined = db.session.query(Eatery).join(Eatery.cuisines).join(Cuisine).options(joinedload(Eatery.cuisines))
+    joined = db.session.query(Eatery, Cuisine.cuisine_name).join(Eatery.cuisines).join(Cuisine).options(joinedload(Eatery.cuisines))
+    # joined = db.session.query(Eatery, func.group_concat(Cuisine.cuisine_name)).join(Eatery.cuisines).join(Cuisine).options(joinedload(Eatery.cuisines))
     results = joined.filter(
         or_(Cuisine.cuisine_name.ilike(f"%{search_term}%"),
          Eatery.restaurant_name.ilike(f"%{search_term}%"))
@@ -38,7 +40,7 @@ def eatery_search(search_term, token, qty=1):
 
     return_array = []
     i = 0
-    for result in results:
+    for result,cuisines in results:
         if i == qty:
             break
         eatery_info = {}
@@ -46,7 +48,13 @@ def eatery_search(search_term, token, qty=1):
         eatery_info['longitude'] = result.longitude
         eatery_info['location'] = result.location
         eatery_info['latitude'] = result.latitude
-        
+        # if isinstance(cuisines, array.array):
+
+        #     for cuisine in cuisines:
+        #         eatery_info['cuisines'].append(cuisine)
+        # else:
+        #     eatery_info['cuisine'] = cuisines
+        print(f'{result.restaurant_name} cooks= ', cuisines)
         return_array.append(eatery_info)
         i = i + 1
 
@@ -61,7 +69,7 @@ def eatery_distance_search(token, search_term, user_long, user_lat, max_distance
 
     # joined = Eatery.query.join(Cuisine, Cuisine.eatery_id == Eatery.id)
 
-    joined = db.session.query(Eatery).join(Eatery.cuisines).join(Cuisine).options(joinedload(Eatery.cuisines))
+    joined = db.session.query(Eatery, Cuisine.cuisine_name).join(Eatery.cuisines).join(Cuisine).options(joinedload(Eatery.cuisines))
 
     # results = joined.filter(
     #     or_(Cuisine.cuisine_name.ilike(f"%{search_term}%"),
@@ -81,7 +89,7 @@ def eatery_distance_search(token, search_term, user_long, user_lat, max_distance
 
     return_array = []
     i = 0
-    for eatery in results:
+    for eatery,cuisines in results:
         if i == qty:
             break
         eatery_info = {}
@@ -89,6 +97,11 @@ def eatery_distance_search(token, search_term, user_long, user_lat, max_distance
         eatery_info['longitude'] = eatery.longitude
         eatery_info['latitude'] = eatery.latitude
         eatery_info['location'] = eatery.location
+        if isinstance(cuisines, array.array):
+            for cuisine in cuisines:
+                eatery_info['cuisines'].append(cuisine)
+        else:
+            eatery_info['cuisine'] = cuisines
         return_array.append(eatery_info)
         i = i + 1
     

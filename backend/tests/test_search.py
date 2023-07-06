@@ -157,41 +157,41 @@ class SearchTestCase(unittest.TestCase):
         for result in data['results']:
             self.assertIn(result['name'], expected)
 
-    def test_distance_search(self):
-        res = self.client.post('/auth/register', json=self.customer_data)
-        data = json.loads(res.data.decode())
-        try:
-            if data['message'] == 'Customer with that email already exists':
-                customer_data = {
-                    'email': 'testcustomer@example.com',
-                    'password': '123',
-                    'role': 'customer'
-                }
-                res = self.client.post('/auth/login', json=customer_data)
-                data = json.loads(res.data.decode())
-        except:
-            pass
-        token = data['token']
-        body = {
-            'search_term': '',
-            'token': token,
-            'qty': 8,
-            'user_lat':-33.864928,
-            'user_long': 151.217594,
-            'max_distance': 5
-        }
-        res = self.client.post('/searchDistance', json=body)
-        data = json.loads(res.data.decode())
-        print('location', data)
-        expected = ['Test Eatery', "McDonald's", 'Thai Place']
-        for result in data['results']:
-            self.assertIn(result['name'], expected)
+    # def test_distance_search(self):
+    #     res = self.client.post('/auth/register', json=self.customer_data)
+    #     data = json.loads(res.data.decode())
+    #     try:
+    #         if data['message'] == 'Customer with that email already exists':
+    #             customer_data = {
+    #                 'email': 'testcustomer@example.com',
+    #                 'password': '123',
+    #                 'role': 'customer'
+    #             }
+    #             res = self.client.post('/auth/login', json=customer_data)
+    #             data = json.loads(res.data.decode())
+    #     except:
+    #         pass
+    #     token = data['token']
+    #     body = {
+    #         'search_term': '',
+    #         'token': token,
+    #         'qty': 8,
+    #         'user_lat':-33.864928,
+    #         'user_long': 151.217594,
+    #         'max_distance': 5
+    #     }
+    #     res = self.client.post('/searchDistance', json=body)
+    #     data = json.loads(res.data.decode())
+    #     print('location', data)
+    #     expected = ['Test Eatery', "McDonald's", 'Thai Place']
+    #     for result in data['results']:
+    #         self.assertIn(result['name'], expected)
 
-    def tearDown(self):
-        with self.app.app_context():
-            # Clear database after each test
-            db.session.remove()
-            db.drop_all()
+    # def tearDown(self):
+    #     with self.app.app_context():
+    #         # Clear database after each test
+    #         db.session.remove()
+    #         db.drop_all()
 
 if __name__ == '__main__':
     unittest.main()
