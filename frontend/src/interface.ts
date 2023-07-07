@@ -83,7 +83,7 @@ export interface RegisterFormInputs {
 export interface SignInFormInputs {
     email: string;
     password: string;
-    role: string;
+    role: 'customer' | 'eatery';
 }
 
 export interface Review { 

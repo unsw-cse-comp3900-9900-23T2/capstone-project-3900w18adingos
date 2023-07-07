@@ -7,39 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import { SignInFormInputs } from '../interface';
 
 const SignIn: React.FC = () => {
-  const { register, handleSubmit } = useForm<SignInFormInputs>();
-  
-  const [toggleResetPasswordOptions, setToggleResetPasswordOptions] = useState(false);
-  const { user, passwordResetRequest, passwordReset } = useAuth();
-  const [resetCode, setResetCode] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-
+  const { register, handleSubmit, setValue, getValues } = useForm<SignInFormInputs>();
+  const [role, setRole] = useState<"customer" | "eatery">("customer");
   const [message, setMessage] = useState("");
-  const [role, setRole] = useState<string>("");
-
   const { login } = useAuth();
   const navigate = useNavigate();
-
-  const handlePasswordResetRequest = async (data: SignInFormInputs) => {
-    const {email} = data;
-    if (!email) { 
-      setMessage("please enter email in first input box"); 
-    } else if (!role) { 
-      setMessage("please select a role - Customer or Resturant Owner?"); 
-    } else { 
-      console.log(email + " " + role)
-      const result = await passwordResetRequest(email, role);
-    }
-  };
-  
-  const handlePasswordReset = async () => {
-    const result = await passwordReset(resetCode, newPassword);
-    if (result) {
-    }
-  };
   
   const onSubmit = async (data: SignInFormInputs) => {
-    const { email, password } = data;
+    const { email, password, role } = data;
     try {
       const success = await login(email, password, role);
       if (success) { 
@@ -56,9 +31,9 @@ const SignIn: React.FC = () => {
   return (
     <div className="signup-container">
       <h2 className="signup-title">Welcome Back</h2>
-      <p className="signup-sub-title">Sign in to your account or&nbsp;
+      <span className="signup-sub-title">Sign in to your account or&nbsp;
         <div onClick={() => navigate("/auth/register")} className='title-link'>Sign Up</div>
-      </p>
+      </span>
 
       <form onSubmit={handleSubmit(onSubmit)} className="signup-form">
         <input {...register("email")} placeholder="Email" type="email" className="input-field" />
@@ -67,33 +42,27 @@ const SignIn: React.FC = () => {
         <div className="user-type-select">
           <button 
               type="button" 
-              onClick={() => setRole("customer")} 
+              onClick={() => { 
+                setRole("customer")
+                setValue("role", role)
+              }}
               className={role === "customer" ? 'selected' : ''}>
               I'm a Customer
           </button>
           <button 
               type="button" 
-              onClick={() => setRole("eatery")} 
+              onClick={() => {
+                setRole("eatery")
+                setValue("role", "eatery")
+              }} 
               className={role === "eatery" ? 'selected' : ''}>
               I'm a Resturant Owner
           </button>
         </div>
-
-        {!toggleResetPasswordOptions && 
-          <button type="submit" className="submit-button">Sign In</button>
-        }
         
-        {toggleResetPasswordOptions &&
-          <div className="toggle-reset-password-container">
-              <input type="text" onChange={(e) => setResetCode(e.target.value)} className='input-field' placeholder="Enter Reset Code" />
-              <button onClick={handleSubmit(handlePasswordResetRequest)} className='reset-button'>Send Code</button>
+        <button type="submit" className="submit-button">Sign In</button>
 
-              <input type="password" onChange={(e) => setNewPassword(e.target.value)} className='input-field' placeholder="New Password" />
-              <button onClick={handlePasswordReset}className='reset-button' >Reset Password</button>
-            </div>
-          }
-
-        <div className='forgot-password' onClick={() => {setToggleResetPasswordOptions(!toggleResetPasswordOptions)}}>
+        <div className='forgot-password' onClick={() => navigate("/auth/forgot-password")}>
           <p className='forgot-password-text'>forgot password</p>
         </div>
       </form>

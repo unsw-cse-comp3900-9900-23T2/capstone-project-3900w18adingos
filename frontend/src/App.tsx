@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import { EateryProvider } from "./context/EateryContext";
 import RestaurantList from "./pages/RestaurantList";
 import EateryProfile from "./pages/EateryProfile";
+import ResetPassword from "./pages/ForgotPassword";
 
 const App = () => { 
     return ( 
@@ -18,13 +19,17 @@ const App = () => {
             <EateryProvider>
               <Router>
                 <Routes>
+
+                  {/* Entry pages */}
                   <Route path="/auth/register" element={<SignUp />} />
                   <Route path="/auth/login" element={<SignIn />} />
+                  <Route path="/auth/forgot-password" element={<ResetPassword />} />
+                  <Route path="/" element={<Home />} />
+
                   <Route path="/auth/home" element={<AuthHome />} />
                   <Route path="/auth/profile" element={<Profile />} />
                   <Route path="/auth/list" element={<RestaurantList />} />
                   <Route path="/eatery/:id" element={<EateryProfile />} />
-                  <Route path="/" element={<Home />} />
                 </Routes>
               </Router>
             </EateryProvider>

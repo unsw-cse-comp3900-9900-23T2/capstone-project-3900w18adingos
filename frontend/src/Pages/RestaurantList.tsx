@@ -20,7 +20,7 @@ const RestaurantList = () => {
     fetchEateries();
   }, [fetchEateries]);
 
-  useEffect(() => {
+  useEffect(() =>   {
     if (eateries.length) {
       const fetchAllReviews = async () => {
         const allReviews: dict = {};
