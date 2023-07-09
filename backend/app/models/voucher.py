@@ -6,3 +6,5 @@ class Voucher(db.Model):
     description = db.Column(db.Text)
     eatery = db.Column(db.Integer, db.ForeignKey('eatery.id'))
     expiry = db.Column(db.DateTime)
+    amount = db.Column(db.Float) # New field for amount or percentage of discount
+    conditions = db.Column(db.Text) # New field for conditions of use
