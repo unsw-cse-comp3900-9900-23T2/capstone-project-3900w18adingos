@@ -1,13 +1,16 @@
 from flask import Blueprint, request, jsonify
 from flask_login import current_user, logout_user
 from app import auth_helper
+from app.auth_helper import validate_google_auth_token_and_send_back_token
 from app.models.customer import Customer
 
 auth = Blueprint('auth', __name__)
+
 def check_role(role):
     if role not in ['customer', 'eatery']:
         return False
     return True
+
 
 @auth.route('/auth/login', methods=['POST'])
 def login():
@@ -21,18 +24,18 @@ def login():
     result = auth_helper.auth_login(email, password, role)
     return result
 
+
 @auth.route('/auth/register', methods=['POST'])
 def register():
     email = request.json.get('email')
     password = request.json.get('password')
     name = request.json.get('name')
     role = request.json.get('role')
-
     if role not in ['customer', 'eatery']:
         return jsonify({"message": "Invalid role"}), 400
-
     result = auth_helper.auth_register(email, password, name, role)
     return result
+
 
 @auth.route('/auth/logout', methods=['POST'])
 def logout():
@@ -47,6 +50,7 @@ def logout_get():
 
     return jsonify(success=True), 200
 
+
 @auth.route('/auth/passwordreset/request', methods=['POST'])
 def passwordreset_request():
     email = request.json.get('email')
@@ -57,27 +61,36 @@ def passwordreset_request():
     result = auth_helper.auth_passwordreset_request(email, role)
     return result
 
+
+@auth.route('/auth/forgotpassword/request', methods=['POST'])
+def forgotpasswordreset_request():
+    email = request.json.get('email')
+    role = request.json.get('role')
+    if role not in ['customer', 'eatery']:
+        return jsonify({"message": "Invalid role"}), 400
+    result = auth_helper.auth_passwordreset_request(email, role)
+    return result
+
 @auth.route('/auth/passwordreset/reset/', methods=['POST'])
 def passwordreset_reset():
-    reset_code = request.json.get('reset_code')
-    new_password = request.json.get('new_password')
+    reset_code = request.json.get('resetCode')
+    new_password = request.json.get('newPassword')
     result = auth_helper.auth_passwordreset_reset(reset_code, new_password)
     return result
 
-@auth.route('/auth/me/token', methods=['GET'])
+
+@auth.route('/auth/me', methods=['GET'])
 def me():
     token = request.headers.get('Authorization')
     if not token:
         return jsonify({"message": "Missing token"}), 400
 
     token = token.split(" ")[1]  # The Authorization header format is "Bearer <token>"
-    user_id_or_error = Customer.decode_auth_token(token)
-    if isinstance(user_id_or_error, str):  # an error message was returned
-        return jsonify({"message": user_id_or_error}), 401  # unauthorized
+    data = Customer.decode_auth_token(token)
+    if not data:
+        return jsonify({"message": "Invalid token"}), 401  # unauthorized
 
-    user = Customer.query.get(user_id_or_error)
-    if not user:
-        return jsonify({"message": "User not found"}), 401
+    user = Customer.query.get(data)
 
     # return the user's data
     return jsonify({
@@ -85,7 +98,7 @@ def me():
         "name": user.name,
         "email": user.email,
         "handle": user.handle,
-        "profile_pic": user.profile_pic,
+        # "profile_pic": user.profile_pic,
         # add any other fields you want to return here
     }), 200
     
@@ -99,3 +112,9 @@ def whoami():
         "id": current_user.id,
         "email": current_user.email,
     }), 200
+
+
+@auth.route('/auth/validate-google-token', methods=['POST'])
+def validate_google_token():
+    code = request.json.get('code')
+    return validate_google_auth_token_and_send_back_token(code)
