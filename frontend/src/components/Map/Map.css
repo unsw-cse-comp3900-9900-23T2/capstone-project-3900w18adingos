@@ -1,16 +1,15 @@
-.map-wrapper {
-  width: 100%;
-  height: 75vh;
-  z-index: 1;
-  position: absolute;
-  top: 170px;
+html, body {margin: 0; height: 100%; overflow: hidden}
 
+.map-wrapper {
+  width: inherit;
+  height: 72%;
+  z-index: 1;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 h2 { 
   font-family:sans-serif;
-  margin-top: 40px;
-  margin-bottom: 3px;
 }
 .map {
   display: flex;
@@ -18,7 +17,8 @@ h2 {
   justify-content: center;
   width: 100%;
   height: 100%;
-  border-radius: 5px;
+  border-radius: 20px;
+  border: solid 3px #E4D3FF;
   z-index: 10;
 }
 
@@ -51,11 +51,26 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
   margin: 0px;
   justify-content: center;
   align-items: center;
-  
+  overflow: hidden;
 }
 
 .app-inner { 
   width: 390px;
   height: 844px;
-  border: 1px solid black;
+  border: solid 1px black;
+  box-sizing: content-box;
+  position: relative;
+}
+
+.auth-home { 
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  overflow: hidden;
+  height: 100%;
+  margin: 0;
+}
+
+.near-you {
+  padding: 5px 0px 5px 20px;
 }

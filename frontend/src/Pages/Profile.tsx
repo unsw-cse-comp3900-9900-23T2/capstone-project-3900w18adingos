@@ -8,9 +8,7 @@ import { useNavigate } from 'react-router-dom';  // Import useHistory
 
 
 const Profile: React.FC = () => {
-  const { user, logout, passwordResetRequest, passwordReset, fetchUser } = useAuth();
-  const [resetCode, setResetCode] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const { user, logout, fetchUser } = useAuth();
   const [toggleResetPasswordOptions, setToggleResetPasswordOptions] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -24,59 +22,30 @@ const Profile: React.FC = () => {
     }
   };
   
-  const handlePasswordResetRequest = async () => {
-    const result = await passwordResetRequest(user.email);
-    if (result) {
-    }
-  };
   
-  const handlePasswordReset = async () => {
-    const result = await passwordReset(resetCode, newPassword);
-    if (result) {
-    }
-  };
 
   return (
     <>
-    <Header>
-      <h1 >Profile Page</h1>
-      <div className='user-icon-wrapper'>
-        <i className="glyphicon glyphicon-user" />
-      </div>
-    </Header>
-    <div className="profile-page">
-      <div className='profile-content'>
+      <Header>
+        <h1 >Profile Page</h1>
+      </Header>
+        <div className='user-icon-wrapper'>
+          <i className="glyphicon glyphicon-user" />
+        </div>
         
+      <div className="profile-page">
         <div className="name">
           <p>{user?.name} </p>
           <i className="glyphicon glyphicon-edit" />
         </div>
-
         <div className="email" onClick={() => {setToggleResetPasswordOptions(!toggleResetPasswordOptions)}}>
           <p>{user?.email} </p>
           <i className="glyphicon glyphicon-edit" />
         </div>
-
-        {toggleResetPasswordOptions &&  // this is the conditional rendering
-          <div className="toggle-reset-password-container">
-            
-            <div className="reset-code">
-              <input type="text" onChange={(e) => setResetCode(e.target.value)} className='reset-code-text' placeholder="Reset Code" />
-              <button onClick={handlePasswordResetRequest} className='reset-code-button'>Send<br/> Code</button>
-            </div>
-
-            <div className="reset-password">
-              <input type="password" onChange={(e) => setNewPassword(e.target.value)} className='reset-password-text' placeholder="New Password" />
-              <button onClick={handlePasswordReset}className='reset-password-button' >Reset Password</button>
-            </div>
-          
-          </div>
-          }
-      <button onClick={handleLogout} className="logout">Logout</button>
+        <button onClick={handleLogout} className="logout">Logout</button>
       </div>
-    </div>
 
-    <Footer/>
+      <Footer/>
     </>
   );
 };

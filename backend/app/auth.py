@@ -84,8 +84,6 @@ def me():
         "id": user.id,
         "name": user.name,
         "email": user.email,
-        "handle": user.handle,
-        "profile_pic": user.profile_pic,
         # add any other fields you want to return here
     }), 200
     

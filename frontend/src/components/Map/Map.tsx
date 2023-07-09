@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
 import "./Map.css"
 import { useEateryContext } from '../../hooks/useEateryContext';
-import { ClusterProps, MapProps } from '../../interface';
+import { MapProps } from '../../interface';
 import { getMapStyle } from './MapStyle';
 import { createMarker } from '../Marker/Marker';
 import { setUpLocation } from '../../utils/locations';

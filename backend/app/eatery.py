@@ -6,7 +6,6 @@ from app.extensions import db
 from app.models.eatery import Eatery
 from app.models.image import Image
 from app.eatery_helper import get_image_bytes, generate_image_filename
-
 eatery = Blueprint('eatery', __name__)
 
 # get all images of this eatery
@@ -102,6 +101,8 @@ def get_eatery_by_id(id):
         # "cuisine": eatery.cuisine,
         "role": eatery.role,
         "latitude": eatery.latitude,
-        "longitude": eatery.longitude
+        "longitude": eatery.longitude,
+        # "reviews": jsonify(Eatery.reviews),
+        # "cuisine": eatery.cuisines
     }
     return jsonify({"eatery": eatery_data}), 200

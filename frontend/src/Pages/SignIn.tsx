@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { SignInFormInputs } from '../interface';
 
 const SignIn: React.FC = () => {
-  const { register, handleSubmit, setValue, getValues } = useForm<SignInFormInputs>();
+  const { register, handleSubmit, setValue } = useForm<SignInFormInputs>();
   const [role, setRole] = useState<"customer" | "eatery">("customer");
   const [message, setMessage] = useState("");
   const { login } = useAuth();

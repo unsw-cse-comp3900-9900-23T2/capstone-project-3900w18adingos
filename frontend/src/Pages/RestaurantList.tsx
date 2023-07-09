@@ -39,7 +39,7 @@ const RestaurantList = () => {
   return ( 
     <>
     <Header>
-      <h2 className="list-header">Lunch Near you</h2>
+      <h3>Lunch near you</h3>
     </Header>
     <div className="list-container">
       {eateries.map((eatery) => (

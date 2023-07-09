@@ -77,8 +77,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
             },
           });
           if (response.data) { 
-            setUser(response.data); // assuming the response data is the user object
-
+            setUser(response.data);
           }
         } catch (error) {
           console.error(error);

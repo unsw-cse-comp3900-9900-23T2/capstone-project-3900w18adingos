@@ -39,30 +39,29 @@ const ResetPassword: React.FC = () => {
       <form onSubmit={handleSubmit(handlePasswordResetRequest)} className="signup-form">
         <input {...register("email")} placeholder="Email" type="email" className='input-field'/>
         <div className="user-type-select">
-            <button 
-                type="button" 
-                onClick={() => { 
-                  setRole("customer")
-                  setValue("role", role)
-                }}
-                className={role === "customer" ? 'selected' : ''}>
-                I'm a Customer
-            </button>
-            <button 
-                type="button" 
-                onClick={() => {
-                  setRole("eatery")
-                  setValue("role", "eatery")
-                }} 
-                className={role === "eatery" ? 'selected' : ''}>
-
-                I'm a Resturant Owner
-            </button>
-          </div>
+          <button 
+            type="button" 
+            className={role === "customer" ? 'selected' : ''}
+            onClick={() => { 
+              setRole("customer")
+              setValue("role", role)
+            }}> I'm a Customer
+          </button>
+          <button 
+            type="button" 
+            className={role === "eatery" ? 'selected' : ''}
+            onClick={() => {
+              setRole("eatery")
+              setValue("role", "eatery")
+            }}> I'm a Resturant Owner
+          </button>
+        </div>
         <input type="text" onChange={(e) => setResetCode(e.target.value)} placeholder="Enter Reset Code" className='input-field'/>
         <button type="submit" className='submit-button'style={{"background":"#E07893", "border": "none"}}>Send Code</button>
+        
         <input type="password" onChange={(e) => setNewPassword(e.target.value)} placeholder="New Password" className='input-field'/>
         <button onClick={handlePasswordReset} className='submit-button' style={{"background":"#E07893", "border": "none"}}>Reset Password</button>
+        
         <div onClick={() => navigate("/auth/register")} className='title-link'>Sign In</div>
         {message}
      </form>
