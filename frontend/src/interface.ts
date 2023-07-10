@@ -17,6 +17,8 @@ export interface Images {
 export interface Review {
     rating: number;
     review_text: string;
+    id: string;
+    customer_id: string;
 }
 
 export interface EateryContextProps {
@@ -35,22 +37,26 @@ export interface EateryContextProps {
     allReviews: Array<Review>;
 }
 
-interface User {
+export interface User {
+    id: string;
     name: string;
     email: string;
+    handle: string;
+    profile_pic: string;
 }
 
 export interface AuthContextType {
     token: string | null;
     getAllReviews: (eateryId: string) => Promise<Array<Review> | void>;
     isAuthenticated: () => boolean;
-    login: (email: string, password: string) => Promise<boolean>;
+    login: (email: string, password: string, role: string) => Promise<boolean>;
     register: (email: string, password: string, name: string, role: string) => Promise<boolean>;
-    passwordResetRequest: (email: string) => Promise<boolean>;
+    passwordResetRequest: (email: string, role: string) => Promise<boolean>;
     passwordReset: (resetCode: string, newPassword: string) => Promise<boolean>;
     logout: () => Promise<boolean>;
     fetchUser: () => Promise<void>;
-    user: User;
+    user: User | null;
+    getUserById:(id: string) => Promise<User |void>;
 }
 
 export interface Props {
@@ -77,6 +83,7 @@ export interface RegisterFormInputs {
 export interface SignInFormInputs {
     email: string;
     password: string;
+    role: 'customer' | 'eatery';
 }
 
 export interface Review { 
@@ -94,3 +101,8 @@ export interface UserPosition {
 export type MapRef = React.MutableRefObject<google.maps.Map | null>;
 export type SetLoadingPosition = React.Dispatch<React.SetStateAction<boolean>>;
 export type SetUpLocation = (setUserLocation: SetUserLocation, setLoadingPosition: SetLoadingPosition, mapRef: MapRef) => void;
+
+export interface ClusterProps {
+    count: number;
+    position: google.maps.LatLng | google.maps.LatLngLiteral;
+  }

@@ -64,7 +64,7 @@ def passwordreset_reset():
     result = auth_helper.auth_passwordreset_reset(reset_code, new_password)
     return result
 
-@auth.route('/auth/me/token', methods=['GET'])
+@auth.route('/auth/me', methods=['GET'])
 def me():
     token = request.headers.get('Authorization')
     if not token:
@@ -84,8 +84,6 @@ def me():
         "id": user.id,
         "name": user.name,
         "email": user.email,
-        "handle": user.handle,
-        "profile_pic": user.profile_pic,
         # add any other fields you want to return here
     }), 200
     
@@ -98,4 +96,18 @@ def whoami():
     return jsonify({
         "id": current_user.id,
         "email": current_user.email,
+    }), 200
+    
+@auth.route('/user/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = Customer.query.get(user_id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    # return the user's data
+    return jsonify({
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        # add any other fields you want to return here
     }), 200

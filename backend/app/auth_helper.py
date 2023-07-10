@@ -58,7 +58,7 @@ def auth_login(email, password, role):
 
     return jsonify(
         {
-            'token': user.encode_auth_token(user.id).decode(), 
+            'token': user.encode_auth_token(user.id), 
             'user': user.name if role == 'customer' else user.restaurant_name,
             'role': role
         }
@@ -109,9 +109,12 @@ def auth_passwordreset_reset(token, password):
     return jsonify({'message': 'Password reset successfully'})
 
 def send_reset_email(email, reset_url):
-    msg = Message('Password Reset Request', sender='', recipients=[email])
+    msg = Message('Password Reset Request', sender='jan.tulip1992@gmail.com', recipients=[email])
     msg.body = f"Reset your password by clicking on the following link: {reset_url}"
-    mail.send(msg)
+    try:
+        mail.send(msg)
+    except Exception as e:
+        print(f'Failed to send email: {e}')
 
 def auth_passwordreset_request(email, role):
     UserModel = get_user_model(role)

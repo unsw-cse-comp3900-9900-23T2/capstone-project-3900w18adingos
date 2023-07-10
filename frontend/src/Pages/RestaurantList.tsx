@@ -3,20 +3,24 @@ import { useEateryContext } from "../hooks/useEateryContext";
 import { useEffect, useState} from 'react';
 import "../styles/RestaurantList.css"
 import { Review } from "../interface";
+import StarRatings from "react-star-ratings";
+import Footer from "../components/Footer/Footer";
+import { useNavigate } from "react-router-dom";
 
 interface dict { 
   [key: string]: Review[]
 }
 
 const RestaurantList = () => { 
-  const { eateries, fetchEateries, getAllReviews, allReviews } = useEateryContext();
+  const { eateries, fetchEateries, getAllReviews } = useEateryContext();
   const [reviews, setReviews] = useState<dict | null>(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchEateries();
   }, [fetchEateries]);
 
-  useEffect(() => {
+  useEffect(() =>   {
     if (eateries.length) {
       const fetchAllReviews = async () => {
         const allReviews: dict = {};
@@ -32,31 +36,37 @@ const RestaurantList = () => {
     }
   }, [eateries, getAllReviews]);
 
-
-
   return ( 
-      <>
-      <Header>
-        <h3>Lunch Near you</h3>
-      </Header>
-      <div className="list-container">
-        {eateries.map(eatery => (
-          <div key={eatery.id} className="list-item">
-            <h2>{eatery.restaurant_name}</h2>
-            <p>{eatery.cuisine}</p>
-            <p>Email: {eatery.email}</p>
-            {/* <img src={eatery.image} alt={eatery.name}/> */}
-            <p>Address: {eatery.location}</p>
-            <div className="reviews">
-              <h3>Reviews:</h3>
-              {reviews && reviews[eatery.id] && reviews[eatery.id].map((review, index) => (
-                <p key={index}>{review.rating}</p>
-              ))}
-            </div>
+    <>
+    <Header>
+      <h3>Lunch near you</h3>
+    </Header>
+    <div className="list-container">
+      {eateries.map((eatery) => (
+        <div key={eatery.id} 
+          className="list-item"
+          onClick={() => {navigate(`/eatery/${eatery.id}`)}}
+          style={{cursor: "pointer"}}
+        >
+          <div className="title-rating-container">
+          <h3>{eatery.restaurant_name}</h3>
+          <div className="rating">
+          {reviews &&
+            reviews[eatery.id] &&
+            (reviews[eatery.id].reduce((prev, current) => prev + current.rating, 0) / reviews[eatery.id].length / 2)
+            }
+            
           </div>
-        ))}
-      </div>
-      </>
+          </div>
+          <p>{eatery.cuisine}</p>
+          <p>Email: {eatery.email}</p>
+          {/* <img src={eatery.image} alt={eatery.name}/> */}
+          <p>Address: {eatery.location}</p>
+        </div>
+      ))}
+    </div>
+    <Footer />
+  </>
   );
 }
 
