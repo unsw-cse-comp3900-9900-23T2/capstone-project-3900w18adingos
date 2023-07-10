@@ -1,14 +1,16 @@
 
-import SignUp from "./pages/SignUp";
-import AuthHome from "./pages/AuthHome"
-import Profile from "./pages/Profile"
+import SignUp from "./Pages/SignUp";
+import AuthHome from "./Pages/AuthHome"
+import Profile from "./Pages/Profile"
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import { AuthProvider } from "./context/AuthContext";
-import SignIn from "./pages/SignIn";
-import Home from "./pages/Home";
+import SignIn from "./Pages/SignIn";
+import Home from "./Pages/Home";
 import { EateryProvider } from "./context/EateryContext";
-import RestaurantList from "./pages/RestaurantList";
-import EateryProfile from "./pages/EateryProfile";
+import RestaurantList from "./Pages/RestaurantList";
+import EateryProfile from "./Pages/EateryProfile";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
 
 const App = () => { 
     return ( 
@@ -20,6 +22,8 @@ const App = () => {
                 <Routes>
                   <Route path="/auth/register" element={<SignUp />} />
                   <Route path="/auth/login" element={<SignIn />} />
+                  <Route path="/auth/forgot-passwod" element={<ForgotPassword />} />
+                  <Route path="/auth/reset-passwod/:code" element={<ResetPassword />} />
                   <Route path="/auth/home" element={<AuthHome />} />
                   <Route path="/auth/profile" element={<Profile />} />
                   <Route path="/auth/list" element={<RestaurantList />} />
