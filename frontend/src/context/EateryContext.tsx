@@ -1,6 +1,6 @@
 // EateryContext.tsx
 
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import React, { createContext, useState, useCallback} from "react";
 
 import { Eatery, EateryContextProps, Images, Props, Review } from "../interface";

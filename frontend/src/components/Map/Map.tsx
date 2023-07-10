@@ -55,24 +55,6 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
         const marker = await createMarker({eatery, map, infoWindow, navigate, getAllReviews});
         return marker;
       }));
-      
-      // const renderer = {
-      //   render: ({ count, position }: ClusterProps) =>
-      //     new google.maps.Marker({
-      //       position,
-      //       icon: {
-      //         url: 'https://path-to-your-icon/icon.png',  // URL of the icon
-      //         scaledSize: new google.maps.Size(40, 40),  // Size of the icon
-      //       },
-      //       label: {
-      //         text: String(count),
-      //         color: 'white',
-      //         fontSize: '10px',
-      //       },
-      //       // adjust zIndex to be above other markers
-      //       zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
-      //     }),
-      // };
 
       new MarkerClusterer({map, markers})
     }

@@ -10,7 +10,10 @@
     padding: 5px;
     height: 100%;
   }
-  
+  .header {
+    flex-direction: column;
+    height: 10%;
+  }
   .home-header {
     background-color: #f8f9fa;
     padding: 20px 0;

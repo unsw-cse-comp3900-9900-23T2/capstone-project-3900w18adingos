@@ -93,6 +93,16 @@ def get_eatery_by_id(id):
     if not eatery:
         return jsonify({"message": "No eatery found"}), 404
 
+    reviews_list = []
+    for review in eatery.reviews:
+        reviews_list.append ({
+            "rating": review.rating,
+            "review_text": review.review_text,
+            "customer_id": review.customer_id,
+            "eatery_id": review.eatery_id,
+            
+        })
+    
     eatery_data = {
         "id": eatery.id,
         "email": eatery.email,
@@ -102,7 +112,8 @@ def get_eatery_by_id(id):
         "role": eatery.role,
         "latitude": eatery.latitude,
         "longitude": eatery.longitude,
-        # "reviews": jsonify(Eatery.reviews),
+        "reviews": reviews_list,
+
         # "cuisine": eatery.cuisines
     }
     return jsonify({"eatery": eatery_data}), 200

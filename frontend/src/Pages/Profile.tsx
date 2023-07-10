@@ -38,7 +38,7 @@ const Profile: React.FC = () => {
           <p>{user?.name} </p>
           <i className="glyphicon glyphicon-edit" />
         </div>
-        <div className="email" onClick={() => {setToggleResetPasswordOptions(!toggleResetPasswordOptions)}}>
+        <div className="email">
           <p>{user?.email} </p>
           <i className="glyphicon glyphicon-edit" />
         </div>
