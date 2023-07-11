@@ -10,22 +10,42 @@
   align-items: flex-start;
   background-color: white;
   height: 75%;
-  padding-left: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 5px;
 }
-
 
 .email,
 .name { 
   display: flex;
   justify-content: space-between;
-  width: 90%;
   cursor: pointer;
   font-weight: bold;
+  width: 100%;
 }
-
 
 .logout { 
   width: 90%;
   margin-top: 10px;
 }
 
+.toggle-reset-password-container { 
+  display: flex;
+  flex-direction: column;
+  width: 100%; 
+}
+
+.reset-code { 
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.reset-password { 
+  width: 100%;
+  margin-bottom: 5px;
+
+}
+
+.reset-code-text { 
+  width: 100%;
+}

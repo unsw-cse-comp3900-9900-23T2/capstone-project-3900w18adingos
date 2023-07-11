@@ -22,8 +22,8 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      setName(user?.name)
-      setEmail(user?.email)
+      setName(user.name)
+      setEmail(user.email)
     }
   }, [user]);
 
@@ -47,8 +47,15 @@ const Profile: React.FC = () => {
   };
 
   const handleUpdateProfile = async () => {
-    if (user) { 
-      const result = await updateProfile(user.name, user.email);
+    if (name && email) { 
+      const updatedUser = await updateProfile(name, email);
+      if (updatedUser) {
+        if(user) { 
+          user.name = updatedUser.name;
+          user.email = updatedUser.email;
+          console.log("ASS")
+        }
+      }
     }
   };
 
@@ -57,17 +64,13 @@ const Profile: React.FC = () => {
     <>
       <Header>
         <h1 >Profile Page</h1>
-        <div className='user-icon-wrapper'>
+        <div className='user-icon-wrapper'> 
           <i className="glyphicon glyphicon-user" />
         </div>
       </Header>
       <div className="profile-page">
-        <div className='profile-content'>
 
-          <div className="name" onClick={() => {
-            debugger
-            setToggleNameOptions(!toggleNameOptions)
-          }}>
+          <div className="name" onClick={() => {setToggleNameOptions(!toggleNameOptions)}}>
             <p>{user?.name} </p>
             <i className="glyphicon glyphicon-edit" />
           </div>
@@ -75,17 +78,9 @@ const Profile: React.FC = () => {
 
           {toggleNameOptions &&
             <div className="toggle-reset-password-container">
-
-              <div className="reset-code">
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className='reset-code-text' placeholder="Enter Name" />
-              </div>
-
-              <div className="reset-password">
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='reset-code-text' placeholder="Enter Email" />
-              </div>
-              <div style={{ marginTop: '5px' }}>
-                <button onClick={handleUpdateProfile} className='reset-password-button' >Update Profile </button>
-              </div>
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} className='input-field' placeholder="Enter Name" />
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='input-field' placeholder="Enter Email" />
+              <button onClick={handleUpdateProfile} className='submit-button' >Update Profile </button>
             </div>
           }
 
@@ -94,24 +89,29 @@ const Profile: React.FC = () => {
             <i className="glyphicon glyphicon-edit" />
           </div>
 
-          {toggleResetPasswordOptions &&  // this is the conditional rendering
+          {toggleResetPasswordOptions &&
             <div className="toggle-reset-password-container">
 
               <div className="reset-code">
-                <input type="text" onChange={(e) => setResetCode(e.target.value)} className='reset-code-text' placeholder="Reset Code" />
-                <button onClick={handlePasswordResetRequest} className='reset-code-button'>Send<br /> Code</button>
+                <input type="text" onChange={(e) => setResetCode(e.target.value)} className='input-field' placeholder="Reset Code" />
+                <button onClick={handlePasswordResetRequest} className='submit-button'>Send Code</button>
               </div>
 
               <div className="reset-password">
-                <input type="password" onChange={(e) => setNewPassword(e.target.value)} className='reset-password-text' placeholder="New Password" />
-                <button onClick={handlePasswordReset} className='reset-password-button' >Reset Password</button>
+                <input type="password" onChange={(e) => setNewPassword(e.target.value)} className='input-field' placeholder="New Password" />
+                <button onClick={handlePasswordReset} className='submit-button' >Reset Password</button>
               </div>
 
             </div>
           }
 
-          <button onClick={handleLogout} className="logout">Logout</button>
-        </div>
+          <button 
+            onClick={handleLogout} 
+            className="submit-button" 
+            style={{"background": "#E07893", "border":"none"}}>
+              Logout
+          </button>
+          
       </div>
 
       <Footer />

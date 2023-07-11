@@ -81,8 +81,8 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const updateProfile = useCallback(async (name: string, email: string) => {
     try {
-      await api.post('/customer/edit-profile/', { email, name, token });
-      return true;
+      const response = await api.post('/customer/edit-profile/', { email, name, token });
+      return response.data;
     } catch (error) {
       console.error(error);
       return false;
@@ -104,7 +104,6 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
   const isAuthenticated = () => Boolean(token);
 
   const fetchUser = useCallback(async () => {
-    debugger
     try {
       const response = await api.get('/auth/me', {
         headers: {

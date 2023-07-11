@@ -15,6 +15,7 @@ body {
     justify-content: center;
     height: 100%;
     width: 100%;
+    padding: 0px 10px 0px 10px;
     background-color: #FFE8C9;
   }
   
@@ -35,7 +36,7 @@ body {
   .input-field,
   .submit-button,
   select {
-    width: 90%;
+    width: 100%;
     padding: 10px;
     border-radius: 20px;
     border: 1px solid #ccc;
@@ -72,7 +73,7 @@ body {
 .user-type-select {
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 100%;
     margin-bottom: 10px;
 }
 

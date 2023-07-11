@@ -10,13 +10,13 @@ const ForgotPassword: React.FC = () => {
   const { register, handleSubmit } = useForm<RegisterFormInputs>();
   const { passwordResetRequest: passwordResetRequest } = useAuth();
   const [message, setMessage] = useState("");
-  const [role, setRole] = useState<string>("");  // add role state
+  const [role, setRole] = useState<string>("");
   const navigate = useNavigate();
 
   const onSubmit = async (data: RegisterFormInputs) => {
-    const { email, } = data;
+    const { email } = data;
     try {
-      const success = await passwordResetRequest(email, role);  // include role in function call
+      const success = await passwordResetRequest(email, role);
       if (success) {
         setMessage("success");
         navigate("/auth/home");
