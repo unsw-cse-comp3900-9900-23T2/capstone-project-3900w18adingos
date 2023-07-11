@@ -7,14 +7,15 @@ import { useNavigate } from 'react-router-dom';
 import { SignInFormInputs } from '../interface';
 
 const SignIn: React.FC = () => {
-  const { register, handleSubmit, setValue } = useForm<SignInFormInputs>();
-  const [role, setRole] = useState<"customer" | "eatery">("customer");
+  const { register, handleSubmit } = useForm<SignInFormInputs>();
+  const [role, setRole] = useState<string>("");
   const [message, setMessage] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
+
   
   const onSubmit = async (data: SignInFormInputs) => {
-    const { email, password, role } = data;
+    const { email, password } = data;
     try {
       const success = await login(email, password, role);
       if (success) { 
@@ -38,7 +39,7 @@ const SignIn: React.FC = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="signup-form">
         <input {...register("email")} placeholder="Email" type="email" className="input-field" />
         <input {...register("password")} placeholder="Password" type="password" className="input-field" />
-        
+
         <div className="user-type-select">
           <button 
               type="button" 
@@ -59,6 +60,7 @@ const SignIn: React.FC = () => {
               I'm a Resturant Owner
           </button>
         </div>
+
         
         <button type="submit" className="submit-button">Sign In</button>
 
