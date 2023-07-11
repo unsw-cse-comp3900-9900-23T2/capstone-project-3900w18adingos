@@ -18,14 +18,15 @@ const AuthHome: React.FC = () => {
   }
 
   return ( 
-    <>
+    <div className='auth-home'>
       <Header>  
-        <h1>Discover places and restaurants near you</h1>
+        <h3>Discover places and restaurants</h3>
       </Header>
         <SearchBar location={searchLocation} onSearch={handleSearch} /> 
+        <h3 className='near-you'>Near You</h3>
       <Map findLocation={searchLocation} />
       <Footer />
-    </>
+    </div>
 );
 }
 

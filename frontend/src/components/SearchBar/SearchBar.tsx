@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Eatery, SearchBarProps } from '../../interface';
-
 import "./Searchbar.css"
 import { useEateryContext } from '../../hooks/useEateryContext';
 

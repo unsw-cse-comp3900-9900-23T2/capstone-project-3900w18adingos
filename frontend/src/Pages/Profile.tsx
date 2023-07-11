@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';  // Import useHistory
 
 
 const Profile: React.FC = () => {
-  const { user, logout, passwordResetRequest, passwordReset, fetchUser, updateProfile } = useAuth();  // Get auth functions from context
+  const { user, logout, fetchUser } = useAuth();
   const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [name, setName] = useState(user?.name);
@@ -46,6 +46,7 @@ const Profile: React.FC = () => {
     if (result) {
     }
   };
+
 
   const handleUpdateProfile = async () => {
     const result = await updateProfile(name, email);

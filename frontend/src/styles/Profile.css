@@ -1,32 +1,16 @@
-/* Header */
-h1 { 
-  align-self: baseline;
-}
 .user-icon-wrapper { 
   font-size: xx-large;
-  margin-bottom: -20px;
-  width: 100%;
+  position: relative;  
+  top: -25px;
+  padding-left: 30px;
 }
-/* Body */
 .profile-page {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background-color: #FFF7EC;
-  height: 80vh;
-  }
-
-.profile-content { 
-  border: solid 1px;
-  width: 100%;
-  margin-top: 40px;
-  padding-top: 20px;
   background-color: white;
-  border-radius: 20px;
-  padding-left: 40px;
-  height: 70vh;
-  display: flex;
-  flex-direction: column;
+  height: 75%;
+  padding-left: 30px;
 }
 
 
@@ -44,3 +28,4 @@ h1 {
   width: 90%;
   margin-top: 10px;
 }
+

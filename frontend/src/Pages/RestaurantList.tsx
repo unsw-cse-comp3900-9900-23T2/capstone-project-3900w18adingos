@@ -20,7 +20,7 @@ const RestaurantList = () => {
     fetchEateries();
   }, [fetchEateries]);
 
-  useEffect(() => {
+  useEffect(() =>   {
     if (eateries.length) {
       const fetchAllReviews = async () => {
         const allReviews: dict = {};
@@ -39,7 +39,7 @@ const RestaurantList = () => {
   return ( 
     <>
     <Header>
-      <h3>Lunch Near you</h3>
+      <h3>Lunch near you</h3>
     </Header>
     <div className="list-container">
       {eateries.map((eatery) => (
@@ -48,26 +48,20 @@ const RestaurantList = () => {
           onClick={() => {navigate(`/eatery/${eatery.id}`)}}
           style={{cursor: "pointer"}}
         >
-          <h2>{eatery.restaurant_name}</h2>
+          <div className="title-rating-container">
+          <h3>{eatery.restaurant_name}</h3>
+          <div className="rating">
+          {reviews &&
+            reviews[eatery.id] &&
+            (reviews[eatery.id].reduce((prev, current) => prev + current.rating, 0) / reviews[eatery.id].length / 2)
+            }
+            
+          </div>
+          </div>
           <p>{eatery.cuisine}</p>
           <p>Email: {eatery.email}</p>
           {/* <img src={eatery.image} alt={eatery.name}/> */}
           <p>Address: {eatery.location}</p>
-          <div className="reviews">
-            <h3>Reviews:</h3>
-            {reviews &&
-              reviews[eatery.id] &&
-              reviews[eatery.id].map((review, index) => (
-                <StarRatings
-                  key={index}
-                  rating={review.rating}
-                  starRatedColor="blue"
-                  numberOfStars={5}
-                  starDimension="20px"
-                  starSpacing="2px"
-                />
-              ))}
-          </div>
         </div>
       ))}
     </div>
@@ -75,6 +69,5 @@ const RestaurantList = () => {
   </>
   );
 }
-
 
 export default RestaurantList

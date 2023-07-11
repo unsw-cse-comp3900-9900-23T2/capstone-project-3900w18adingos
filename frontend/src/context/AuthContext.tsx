@@ -1,16 +1,16 @@
 import React, { createContext, useState, useCallback } from "react";
 import axios from "axios"
-import { AuthContextType, Props } from "../interface";
+import { AuthContextType, Props, User } from "../interface";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<Props> = ({ children }) => {
-  const checkToken = localStorage.getItem('token')
-  const [token, setToken] = useState<string | null>(checkToken ? checkToken : null);
-  const [user, setUser] = useState({ name: "", email: "" });
-  const api = axios.create({
-    baseURL: 'http://127.0.0.1:5000'
-  });
+
+    const checkToken = localStorage.getItem('token')
+    const [token, setToken] = useState<string | null>(checkToken ? checkToken : null);
+    const [user, setUser] = useState<User | null>(null);
+    const api = axios.create({
+        baseURL: 'http://127.0.0.1:5000'
 
   const login = useCallback(async (email: string, password: string, role: string) => {
     try {
@@ -125,11 +125,103 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     }
   }, [token]);
 
-  return (
-    <AuthContext.Provider value={{ getAllReviews, user, updateProfile, fetchUser, isAuthenticated, login, logout, register, passwordResetRequest, passwordReset, googleLogin, token }}>
-      {children}
-    </AuthContext.Provider>
-  );
+
+    const login = useCallback(async (email: string, password: string, role: string) => {
+        try {
+            const response = await api.post('/auth/login', { email, password, role });
+            const {token} = response.data;
+            setToken(token);
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    }, []);
+
+    const register = useCallback(async (email: string, password: string, name: string, role: string) => {
+        try {
+          const response = await api.post('/auth/register', { email, password, name, role });
+          const {token} = response.data;
+          console.log(response)
+          setToken(token);
+          return true;
+        } catch (error) {
+          console.error(error);
+          return false;
+        }
+      }, []);
+
+    const logout = useCallback(async () => {
+        try {
+            await api.post('/auth/logout', { token });
+            setToken(null);
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    }, [token]);
+    
+    const passwordResetRequest = useCallback(async (email: string, role: string) => {
+        try {
+            await api.post('/auth/passwordreset/request', { email, role });
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    }, []);
+    
+    const passwordReset = useCallback(async (resetCode: string, newPassword: string) => {
+        try {
+            await api.post('/auth/passwordreset/reset', { resetCode, newPassword });
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    }, []);
+
+    const isAuthenticated = () => Boolean(token);
+
+    const fetchUser = useCallback(async () => {
+        try {
+          const response = await api.get('/auth/me', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (response.data) { 
+            setUser(response.data);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }, [token]);
+
+      const getAllReviews = useCallback(async (eateryId: string) => {
+        try {
+          const response = await api.post('/get_all_reviews', { eatery_id: eateryId });
+          return response.data.reviews
+        } catch (error) {
+          console.error(error);
+        }
+      }, [token]);
+
+      const getUserById = useCallback(async (id: string) => {
+        try {
+          const response = await api.get(`/user/${id}`)
+          return response.data;
+        } catch (error) {
+          console.error(error);
+        }
+    }, [token]);
+
+    return (
+        <AuthContext.Provider value={{ getUserById, getAllReviews, user, fetchUser, isAuthenticated, login, logout, register, passwordResetRequest, passwordReset, token }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
 export default AuthProvider;
