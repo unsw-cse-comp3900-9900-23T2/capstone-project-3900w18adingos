@@ -1,16 +1,16 @@
 
-import SignUp from "./Pages/SignUp";
-import AuthHome from "./Pages/AuthHome"
-import Profile from "./Pages/Profile"
+import SignUp from "./pages/SignUp";
+import AuthHome from "./pages/AuthHome"
+import Profile from "./pages/Profile"
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import { AuthProvider } from "./context/AuthContext";
-import SignIn from "./Pages/SignIn";
-import Home from "./Pages/Home";
+import SignIn from "./pages/SignIn";
+import Home from "./pages/Home";
 import { EateryProvider } from "./context/EateryContext";
 
 import RestaurantList from "./pages/RestaurantList";
 import EateryProfile from "./pages/EateryProfile";
-import ResetPassword from "./pages/ForgotPassword";
+import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 
 
@@ -27,11 +27,10 @@ const App = () => {
                   <Route path="/auth/register" element={<SignUp />} />
                   <Route path="/auth/login" element={<SignIn />} />
 
-                  <Route path="/auth/forgot-password" element={<ResetPassword />} />
                   <Route path="/" element={<Home />} />
 
 
-                  <Route path="/auth/forgot-passwod" element={<ForgotPassword />} />
+                  <Route path="/auth/forgot-password" element={<ForgotPassword />} />
                   <Route path="/auth/reset-passwod/:code" element={<ResetPassword />} />
 
                   <Route path="/auth/home" element={<AuthHome />} />

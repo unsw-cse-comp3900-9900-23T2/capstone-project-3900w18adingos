@@ -1,11 +1,9 @@
-// SignUp.tsx
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import "../styles/SignUp.css";
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ResetPassword } from '../interface';
-
 
 const ResetPassword: React.FC = () => {
   const { register, handleSubmit } = useForm<ResetPassword>();

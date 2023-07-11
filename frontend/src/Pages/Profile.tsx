@@ -6,9 +6,8 @@ import Header from '../components/Header/Header';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';  // Import useHistory
 
-
 const Profile: React.FC = () => {
-  const { user, logout, fetchUser } = useAuth();
+  const { user, logout, passwordResetRequest, passwordReset, fetchUser, updateProfile } = useAuth();  // Get auth functions from context
   const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [name, setName] = useState(user?.name);
@@ -36,8 +35,8 @@ const Profile: React.FC = () => {
   };
 
   const handlePasswordResetRequest = async () => {
-    const result = await passwordResetRequest(user.email);
-    if (result) {
+    if (user) { 
+      const result = await passwordResetRequest(user.email, user.role);
     }
   };
 
@@ -47,10 +46,9 @@ const Profile: React.FC = () => {
     }
   };
 
-
   const handleUpdateProfile = async () => {
-    const result = await updateProfile(name, email);
-    if (result) {
+    if (user) { 
+      const result = await updateProfile(user.name, user.email);
     }
   };
 
@@ -112,10 +110,6 @@ const Profile: React.FC = () => {
             </div>
           }
 
-
-
-
-
           <button onClick={handleLogout} className="logout">Logout</button>
         </div>
       </div>
@@ -126,4 +120,3 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
-

@@ -45,7 +45,6 @@ const SignIn: React.FC = () => {
               type="button" 
               onClick={() => { 
                 setRole("customer")
-                setValue("role", role)
               }}
               className={role === "customer" ? 'selected' : ''}>
               I'm a Customer
@@ -54,7 +53,6 @@ const SignIn: React.FC = () => {
               type="button" 
               onClick={() => {
                 setRole("eatery")
-                setValue("role", "eatery")
               }} 
               className={role === "eatery" ? 'selected' : ''}>
               I'm a Resturant Owner

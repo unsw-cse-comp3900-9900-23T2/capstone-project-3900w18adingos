@@ -43,6 +43,7 @@ export interface User {
     email: string;
     handle: string;
     profile_pic: string;
+    role: string;
 }
 
 export interface AuthContextType {
@@ -58,6 +59,7 @@ export interface AuthContextType {
     fetchUser: () => Promise<void>;
     user: User | null;
     getUserById:(id: string) => Promise<User |void>;
+    updateProfile: (name: string, email: string) => Promise<boolean>;
 }
 
 export interface Props {

@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useEateryContext } from "../hooks/useEateryContext";
 import { useEffect, useState } from "react";
 import "../styles/EateryProfile.css"
-import { getStarRating } from "../utils/rating";
 import { useAuth } from "../hooks/useAuth";
 
 const EateryProfile: React.FC = () => { 
@@ -35,7 +34,6 @@ const EateryProfile: React.FC = () => {
   let averageRating = (totalRating / allReviews.length) / 2;
   averageRating = Math.round(averageRating * 10) / 10;
 
-  
   return (
     <>
     <div className="profile-wrapper">
@@ -72,7 +70,7 @@ const EateryProfile: React.FC = () => {
       {currentTab === 'REVIEWS' && (
         <div className="display-reviews">
           {allReviews.map((review, index) => (
-            <div key={index} className="single-review">
+            <div key={index} className="list-item">
               <div>Rating: {review.rating}</div>
               <div>Review: {review.review_text}</div>
               <div>User: {users[review.customer_id]?.name}</div>

@@ -80,8 +80,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-          setallReviews(response.data.reviews)
-          return response.data.reviews;
+        setallReviews(response.data.reviews)
       } catch (error) {
         console.error(error);
       }
