@@ -12,6 +12,8 @@ class Customer(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     #registered_on = db.Column(db.DateTime, nullable=False)
     role = db.Column(db.String(50), default='customer')
+    handle = db.Column(db.String(120), unique=True)
+    # profile_pic = db.Column(db.String(120), default='default.jpg')
 
     def __init__(self, name, email, password):
         self.name = name

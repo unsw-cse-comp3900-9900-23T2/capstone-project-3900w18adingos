@@ -1,3 +1,4 @@
+
 // ResetPassword.tsx
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -30,6 +31,35 @@ const ResetPassword: React.FC = () => {
     if(result) {
       navigate('/auth/signin'); // assuming this is your signin route
     } else {
+
+// ForgotPassword.tsx
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import "../styles/SignUp.css";
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import { RegisterFormInputs } from '../interface';
+
+const ForgotPassword: React.FC = () => {
+  const { register, handleSubmit } = useForm<RegisterFormInputs>();
+  const { passwordResetRequest: passwordResetRequest } = useAuth();
+  const [message, setMessage] = useState("");
+  const [role, setRole] = useState<string>("");  // add role state
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: RegisterFormInputs) => {
+    const { email, } = data;
+    try {
+      const success = await passwordResetRequest(email, role);  // include role in function call
+      if (success) {
+        setMessage("success");
+        navigate("/auth/home");
+      } else {
+        setMessage("failure");
+      }
+    } catch {
+      setMessage("failure");
+
     }
   };
 
@@ -65,8 +95,6 @@ const ResetPassword: React.FC = () => {
         <div onClick={() => navigate("/auth/register")} className='title-link'>Sign In</div>
         {message}
      </form>
-    </div>
   );
 };
-
 export default ResetPassword;
