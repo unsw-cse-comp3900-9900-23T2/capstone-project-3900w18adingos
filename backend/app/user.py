@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_login import current_user
+from flask_login import current_user, login_required
 from app.models.customer import Customer
 from app.models.eatery import Eatery
 from app.extensions import db
@@ -8,6 +8,7 @@ from app.auth_helper import user_is_eatery
 
 user = Blueprint('user', __name__)
 
+@login_required
 @user.route('/customer/profile/', methods=['GET'])
 def get_customer():
     token = request.args['token']
@@ -26,7 +27,7 @@ def get_customer():
 
     return jsonify(customer_data)
 
-
+@login_required
 @user.route('/customer/edit-profile/', methods=['POST'])
 def edit_customer():
     token = request.json.get('token')
@@ -48,7 +49,7 @@ def edit_customer():
     db.session.commit()
     return jsonify({"message": "Customer updated"}), 200
 
-
+@login_required
 @user.route('/eatery/edit-profile/', methods=['PUT'])
 def edit_eatery():
     token = request.json.get('token')
@@ -68,7 +69,7 @@ def edit_eatery():
     db.session.commit()
     return jsonify({"message": "Eatery updated"}), 200
 
-
+@login_required
 @user.route('/eatery/profile/', methods=['GET'])
 def get_eatery():
     token = request.args['token']
