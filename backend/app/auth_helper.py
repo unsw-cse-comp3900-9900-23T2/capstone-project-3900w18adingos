@@ -167,7 +167,7 @@ def validate_google_auth_token_and_send_back_token(code):
             user = Customer.query.filter_by(email=email).first()
             if user:
                 return jsonify({'token': user.encode_auth_token(user.id), 'user': name, 'role': 'customer'})
-            user = Customer(email=email, name=name)
+            user = Customer(email=email, name=name, auth_source='google')
             db.session.add(user)
             db.session.commit()
             login_user(user, remember=True)
