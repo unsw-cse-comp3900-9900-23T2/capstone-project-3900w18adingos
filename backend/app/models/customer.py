@@ -13,12 +13,16 @@ class Customer(db.Model, UserMixin):
     #registered_on = db.Column(db.DateTime, nullable=False)
     role = db.Column(db.String(50), default='customer')
 
-    def __init__(self, name, email, password):
-        self.name = name
-        self.email = email
+    # def __init__(self, name, email, password):
+    #     self.name = name
+    #     self.email = email
+    #     self.password_hash = generate_password_hash(password)
+    #    # self.registered_on = datetime.datetime.now()
+    #     self.role = 'customer'
+
+    def __init__(self, password, **kwargs):
+        super(Customer, self).__init__(**kwargs)
         self.password_hash = generate_password_hash(password)
-       # self.registered_on = datetime.datetime.now()
-        self.role = 'customer'
 
     def encode_auth_token(self, user_id):
         s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
