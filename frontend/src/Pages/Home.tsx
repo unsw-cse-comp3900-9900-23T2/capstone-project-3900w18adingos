@@ -77,7 +77,7 @@ const Home = () => {
           </div>
           <div className="">
             <Link to="https://accounts.google.com/o/oauth2/v2/auth?client_id=397558360733-au1inv2shr9v7cqdrkghl31t5pfh9qfp.apps.googleusercontent.com&redirect_uri=http://localhost:5173&response_type=code&scope=email%20profile">Login With Google</Link>
-            <Link to="/auth/forgot-passwod" className="btn">Forgot Password</Link>
+            <Link to="/auth/forgot-password" className="btn">Forgot Password</Link>
           </div>
           {message && <p>{message}</p>}
         </section>

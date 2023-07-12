@@ -16,9 +16,11 @@ class Customer(db.Model, UserMixin):
     auth_source = db.Column(db.String(20), default='local')
     # profile_pic = db.Column(db.String(120), default='default.jpg')
 
-    def __init__(self, password, **kwargs):
+    def __init__(self, **kwargs):
+        password = kwargs.pop('password', None)
         super(Customer, self).__init__(**kwargs)
-        self.password_hash = generate_password_hash(password)
+        if password:
+            self.password_hash = generate_password_hash(password)
 
     def encode_auth_token(self, user_id):
         s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
