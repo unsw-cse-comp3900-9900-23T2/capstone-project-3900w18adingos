@@ -60,6 +60,7 @@ export interface AuthContextType {
     user: User | null;
     getUserById:(id: string) => Promise<User |void>;
     updateProfile: (name: string, email: string) => Promise<User>;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 export interface Props {

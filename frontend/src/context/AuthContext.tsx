@@ -135,7 +135,23 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
   }, [token]);
 
     return (
-        <AuthContext.Provider value={{ updateProfile, googleLogin, getUserById, getAllReviews, user, fetchUser, isAuthenticated, login, logout, register, passwordResetRequest, passwordReset, token }}>
+        <AuthContext.Provider 
+          value={{
+            updateProfile, 
+            googleLogin, 
+            getUserById, 
+            getAllReviews, 
+            fetchUser, 
+            isAuthenticated,
+            login, 
+            logout, 
+            register, 
+            passwordResetRequest, 
+            passwordReset, 
+            setUser,
+            user, 
+            token 
+          }}>
             {children}
         </AuthContext.Provider>
     );

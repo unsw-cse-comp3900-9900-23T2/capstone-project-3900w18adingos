@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';  // Import useHistory
 
 const Profile: React.FC = () => {
-  const { user, logout, passwordResetRequest, passwordReset, fetchUser, updateProfile } = useAuth();  // Get auth functions from context
+  const { user, logout, passwordResetRequest, passwordReset, fetchUser, updateProfile } = useAuth();
   const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [name, setName] = useState(user?.name);
@@ -20,11 +20,17 @@ const Profile: React.FC = () => {
     fetchUser();
   }, [fetchUser]);
 
+  const [currentUser, setCurrentUser] = useState({name: user?.name, email: user?.email});
+
   useEffect(() => {
     if (user) {
       setName(user.name)
       setEmail(user.email)
     }
+  }, [user]);
+
+  useEffect(() => {
+    setCurrentUser({name: user?.name, email: user?.email});
   }, [user]);
 
   const handleLogout = async () => {
@@ -36,7 +42,7 @@ const Profile: React.FC = () => {
 
   const handlePasswordResetRequest = async () => {
     if (user) { 
-      const result = await passwordResetRequest(user.email, user.role);
+      await passwordResetRequest(user.email, user.role);
     }
   };
 
@@ -50,11 +56,7 @@ const Profile: React.FC = () => {
     if (name && email) { 
       const updatedUser = await updateProfile(name, email);
       if (updatedUser) {
-        if(user) { 
-          user.name = updatedUser.name;
-          user.email = updatedUser.email;
-          console.log("ASS")
-        }
+        setCurrentUser({name: name, email: email});
       }
     }
   };
@@ -71,7 +73,7 @@ const Profile: React.FC = () => {
       <div className="profile-page">
 
           <div className="name" onClick={() => {setToggleNameOptions(!toggleNameOptions)}}>
-            <p>{user?.name} </p>
+            <p>{currentUser.name} </p>
             <i className="glyphicon glyphicon-edit" />
           </div>
 
@@ -85,7 +87,7 @@ const Profile: React.FC = () => {
           }
 
           <div className="email" onClick={() => { setToggleResetPasswordOptions(!toggleResetPasswordOptions) }}>
-            <p>{user?.email} </p>
+            <p>{currentUser.email} </p>
             <i className="glyphicon glyphicon-edit" />
           </div>
 

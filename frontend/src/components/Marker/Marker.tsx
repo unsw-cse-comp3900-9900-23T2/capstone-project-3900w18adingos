@@ -8,7 +8,7 @@ interface MarkerProps {
   map: google.maps.Map, 
   infoWindow: google.maps.InfoWindow, 
   navigate: ReturnType<typeof useNavigate>, 
-  getAllReviews: Function
+  getAllReviews: Function,
 }
 
 export async function createMarker(props: MarkerProps) {
