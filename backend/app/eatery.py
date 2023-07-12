@@ -75,12 +75,31 @@ def get_all_eateries():
 
     eateries_list = []
     for eatery in eateries:
+        
+        reviews_list = []
+        for review in eatery.reviews:
+            reviews_list.append ({
+                "rating": review.rating,
+                "review_text": review.review_text,
+                "customer_id": review.customer_id,
+                "eatery_id": review.eatery_id,
+            })
+
+        cuisine_list = []
+        for cooks_cuisine in eatery.cuisines: 
+            cuisine = cooks_cuisine.cuisine
+            cuisine_list.append({
+                "cuisine_name": cuisine.cuisine_name,
+                "cuisine_id": cuisine.id,
+            })
+            
         eateries_list.append({
             "id": eatery.id,
             "email": eatery.email,
             "restaurant_name": eatery.restaurant_name,
             "location": eatery.location,
-            # "cuisine": eatery.cuisine,
+            "cuisines": cuisine_list,
+            "reviews": reviews_list,
             "role": eatery.role,
             "latitude": eatery.latitude,
             "longitude": eatery.longitude
@@ -100,7 +119,6 @@ def get_eatery_by_id(id):
             "review_text": review.review_text,
             "customer_id": review.customer_id,
             "eatery_id": review.eatery_id,
-            
         })
     
     eatery_data = {

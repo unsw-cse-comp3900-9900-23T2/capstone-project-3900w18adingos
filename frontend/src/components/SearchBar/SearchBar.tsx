@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Eatery, SearchBarProps } from '../../interface';
+import { Eatery } from '../../interface';
 import "./Searchbar.css"
 import { useEateryContext } from '../../hooks/useEateryContext';
+import { useNavigate } from 'react-router-dom';
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+const SearchBar: React.FC = () => {
   const { eateries, fetchEateries } = useEateryContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState<Eatery[]>([]);
-
+  const navigate = useNavigate()
   useEffect(() => {
     fetchEateries();
   }, [fetchEateries]);
@@ -25,7 +26,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   }, [searchTerm, eateries]);
 
   const handleSelect = (eatery: Eatery) => {
-    onSearch(eatery);
+    navigate(`/eatery/${eatery.id}`)
     setSearchTerm("");
     setResults([]);
   }

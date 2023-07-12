@@ -93,7 +93,6 @@ const Profile: React.FC = () => {
 
           {toggleResetPasswordOptions &&
             <div className="toggle-reset-password-container">
-
               <div className="reset-code">
                 <input type="text" onChange={(e) => setResetCode(e.target.value)} className='input-field' placeholder="Reset Code" />
                 <button onClick={handlePasswordResetRequest} className='submit-button'>Send Code</button>
@@ -103,7 +102,6 @@ const Profile: React.FC = () => {
                 <input type="password" onChange={(e) => setNewPassword(e.target.value)} className='input-field' placeholder="New Password" />
                 <button onClick={handlePasswordReset} className='submit-button' >Reset Password</button>
               </div>
-
             </div>
           }
 

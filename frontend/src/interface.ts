@@ -1,14 +1,20 @@
 import { ReactNode } from "react";
 
+export interface Cuisine { 
+    cuisine_name: string,
+    cuisine_id: string
+}
+
 export interface Eatery {
     id: string,
     email: string,
     restaurant_name: string,
     location: string,
-    cuisine: string,
+    cuisines: Cuisine[],
     role: string,
     latitude: number,
     longitude: number,
+    reviews: Review[],
 }
 export interface Images {
     images: Array<any>;
@@ -67,14 +73,8 @@ export interface Props {
     children?: ReactNode;
 }
 
-export interface MapProps {
-    findLocation: Eatery | null;
-}
 
-export interface SearchBarProps {
-    location: Eatery | null;
-    onSearch: (place: Eatery) => void;
-}
+
 
 export interface RegisterFormInputs {
     name: string;

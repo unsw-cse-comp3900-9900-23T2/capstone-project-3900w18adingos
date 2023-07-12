@@ -1,40 +1,17 @@
 import Header from "../components/Header/Header";
 import { useEateryContext } from "../hooks/useEateryContext";
-import { useEffect, useState} from 'react';
+import { useEffect} from 'react';
 import "../styles/RestaurantList.css"
-import { Review } from "../interface";
-import StarRatings from "react-star-ratings";
 import Footer from "../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
 
-interface dict { 
-  [key: string]: Review[]
-}
-
 const RestaurantList = () => { 
-  const { eateries, fetchEateries, getAllReviews } = useEateryContext();
-  const [reviews, setReviews] = useState<dict | null>(null);
+  const { eateries, fetchEateries} = useEateryContext();
   const navigate = useNavigate()
 
   useEffect(() => {
     fetchEateries();
   }, [fetchEateries]);
-
-  useEffect(() =>   {
-    if (eateries.length) {
-      const fetchAllReviews = async () => {
-        const allReviews: dict = {};
-        for (const eatery of eateries) {
-          const eateryReviews = await getAllReviews(eatery.id);
-          if (eateryReviews) { 
-            allReviews[eatery.id] = eateryReviews ;
-          }
-        }
-        setReviews(allReviews);
-      }
-      fetchAllReviews();
-    }
-  }, [eateries, getAllReviews]);
 
   return ( 
     <>
@@ -48,17 +25,17 @@ const RestaurantList = () => {
           onClick={() => {navigate(`/eatery/${eatery.id}`)}}
           style={{cursor: "pointer"}}
         >
+
           <div className="title-rating-container">
-          <h3>{eatery.restaurant_name}</h3>
-          <div className="rating">
-          {reviews &&
-            reviews[eatery.id] &&
-            (reviews[eatery.id].reduce((prev, current) => prev + current.rating, 0) / reviews[eatery.id].length / 2)
-            }
-            
+            <h3>{eatery.restaurant_name}</h3>
+            <div className="rating">
+              {eatery.reviews &&
+                (eatery.reviews.reduce((prev, current) => prev + current.rating, 0) / eatery.reviews.length / 2)
+              }  
+            </div>
           </div>
-          </div>
-          <p>{eatery.cuisine}</p>
+
+          <p>Cuisines: {eatery.cuisines.map(cuisine => cuisine.cuisine_name).join(", ")}</p>
           <p>Email: {eatery.email}</p>
           {/* <img src={eatery.image} alt={eatery.name}/> */}
           <p>Address: {eatery.location}</p>

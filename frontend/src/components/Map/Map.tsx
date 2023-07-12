@@ -2,14 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
 import "./Map.css"
 import { useEateryContext } from '../../hooks/useEateryContext';
-import { MapProps } from '../../interface';
 import { getMapStyle } from './MapStyle';
 import { createMarker } from '../Marker/Marker';
 import { setUpLocation } from '../../utils/locations';
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { useNavigate } from 'react-router-dom';
 
-const Map: React.FC<MapProps> = ({findLocation}) => {
+const Map: React.FC = () => {
   const libraries: ("places" | "drawing" | "geometry" | "localContext" | "visualization")[] = ["places"];
 
   const { isLoaded } = useJsApiLoader({
@@ -28,12 +27,6 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
   useEffect(() => {
     setUpLocation(setUserLocation, setLoadingPosition, mapRef);
   }, []);
-
-  useEffect(() => {
-    if (findLocation && mapRef.current) {
-      mapRef.current.setCenter(new google.maps.LatLng(findLocation.latitude, findLocation.longitude));
-    }
-  }, [findLocation]);
 
   useEffect(() => { 
     fetchEateries()
