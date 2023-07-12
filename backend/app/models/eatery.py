@@ -4,6 +4,9 @@ from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from app.extensions import db, login_manager
 from flask_login import UserMixin
 import datetime
+import math
+from sqlalchemy import func
+from sqlalchemy.ext.hybrid import hybrid_method
 
 class Eatery(db.Model, UserMixin):
     __tablename__ = 'eatery'
@@ -28,6 +31,13 @@ class Eatery(db.Model, UserMixin):
       #  self.registered_on = datetime.datetime.now()
         self.role = 'eatery'
 
+    def __init__(self, longitude, latitude, location, password, **kwargs):
+        super(Eatery, self).__init__(**kwargs)
+        self.longitude = longitude
+        self.latitude = latitude
+        self.location = location
+        self.password_hash = generate_password_hash(password)
+
     def encode_auth_token(self, user_id):
         s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         return s.dumps({'id': self.id, 'role': self.role}, salt='auth')
@@ -46,3 +56,47 @@ class Eatery(db.Model, UserMixin):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    @hybrid_method
+    def distance(self, user_lat, user_long, max_distance):
+        earth_radius = 6371  # Radius of the Earth in kilometers
+
+        print(self.latitude)
+        # Convert latitude and longitude to radians
+        lat1_rad = math.radians(self.latitude)
+        lon1_rad = math.radians(self.longitude)
+        lat2_rad = math.radians(user_lat)
+        lon2_rad = math.radians(user_long)
+
+        # Calculate the differences between the latitudes and longitudes
+        delta_lat = lat2_rad - lat1_rad
+        delta_lon = lon2_rad - lon1_rad
+
+        # Calculate the Haversine formula
+        a = math.sin(delta_lat / 2) ** 2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(delta_lon / 2) ** 2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        distance = earth_radius * c
+
+        return distance <= max_distance
+    
+    @distance.expression
+    def distance(cls, user_lat, user_long, max_distance):
+        earth_radius = 6371  # Radius of the Earth in kilometers
+        
+        print(cls.latitude)
+        # Convert latitude and longitude to radians
+        lat1_rad = func.radians(cls.latitude)
+        lon1_rad = func.radians(cls.longitude)
+        lat2_rad = func.radians(user_lat)
+        lon2_rad = func.radians(user_long)
+
+        # Calculate the differences between the latitudes and longitudes
+        delta_lat = lat2_rad - lat1_rad
+        delta_lon = lon2_rad - lon1_rad
+
+        # Calculate the Haversine formula
+        a = func.pow(func.sin(delta_lat / 2), 2) + func.cos(lat1_rad) * func.cos(lat2_rad) * func.pow(func.sin(delta_lon / 2), 2)
+        c = 2 * func.atan2(func.sqrt(a), func.sqrt(1 - a))
+        distance = earth_radius * c
+
+        return distance <= max_distance

@@ -16,17 +16,9 @@ class Customer(db.Model, UserMixin):
     auth_source = db.Column(db.String(20), default='local')
     # profile_pic = db.Column(db.String(120), default='default.jpg')
 
-
-    def __init__(self, name, email, password=None, auth_source='local'):
-        self.name = name
-        self.email = email
-        self.auth_source = auth_source
-        if password:
-            self.password_hash = generate_password_hash(password)
-
+    def __init__(self, password, **kwargs):
+        super(Customer, self).__init__(**kwargs)
         self.password_hash = generate_password_hash(password)
-       # self.registered_on = datetime.datetime.now()
-        self.role = 'customer'
 
     def encode_auth_token(self, user_id):
         s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])

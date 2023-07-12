@@ -14,11 +14,12 @@ engine = create_engine(db.engine.url)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-def eatery_search(search_term, token, qty=1):
-    user = None
-    user = Customer.verify_auth_token(token)
-    if not user:
-        return jsonify({"message": "Invalid token"}), 400
+def eatery_search(search_term, qty=1):
+    # user = None
+    # user = Customer.verify_auth_token(token)
+    # if not user:
+    #     return jsonify({"message": "Invalid token"}), 400
+
     # results = Eatery.query.filter(Eatery.restaurant_name.ilike(f"%{search_term}%")).all()
 
     # results_cuisine = Cuisine.query.filter
@@ -46,18 +47,20 @@ def eatery_search(search_term, token, qty=1):
         eatery_info['longitude'] = result.longitude
         eatery_info['location'] = result.location
         eatery_info['latitude'] = result.latitude
-        
+        eatery_info['cuisine'] = []
+        for cuisine in result.cuisines:
+            eatery_info['cuisine'].append(cuisine.cuisine.cuisine_name)
         return_array.append(eatery_info)
         i = i + 1
 
     return jsonify({'results': return_array}), 200
 
 
-def eatery_distance_search(token, search_term, user_long, user_lat, max_distance, qty=1):
-    user = None
-    user = Customer.verify_auth_token(token)
-    if not user:
-        return jsonify({"message": "Invalid token"}), 400
+def eatery_distance_search(search_term, user_long, user_lat, max_distance, qty=1):
+    # user = None
+    # user = Customer.verify_auth_token(token)
+    # if not user:
+    #     return jsonify({"message": "Invalid token"}), 400
 
     # joined = Eatery.query.join(Cuisine, Cuisine.eatery_id == Eatery.id)
 
@@ -81,14 +84,17 @@ def eatery_distance_search(token, search_term, user_long, user_lat, max_distance
 
     return_array = []
     i = 0
-    for eatery in results:
+    for result in results:
         if i == qty:
             break
         eatery_info = {}
-        eatery_info['name'] = eatery.restaurant_name
-        eatery_info['longitude'] = eatery.longitude
-        eatery_info['latitude'] = eatery.latitude
-        eatery_info['location'] = eatery.location
+        eatery_info['name'] = result.restaurant_name
+        eatery_info['longitude'] = result.longitude
+        eatery_info['latitude'] = result.latitude
+        eatery_info['location'] = result.location
+        eatery_info['cuisine'] = []
+        for cuisine in result.cuisines:
+            eatery_info['cuisine'].append(cuisine.cuisine.cuisine_name)
         return_array.append(eatery_info)
         i = i + 1
     

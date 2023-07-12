@@ -144,10 +144,10 @@ class SearchTestCase(unittest.TestCase):
                 data = json.loads(res.data.decode())
         except:
             pass
-        token = data['token']
+        # token = data['token']
         body = {
             'search_term': 'thai',
-            'token': token,
+            # 'token': token,
             'qty': 3
         }
         res = self.client.post('/search', json=body)
@@ -171,10 +171,10 @@ class SearchTestCase(unittest.TestCase):
                 data = json.loads(res.data.decode())
         except:
             pass
-        token = data['token']
+        # token = data['token']
         body = {
             'search_term': '',
-            'token': token,
+            # 'token': token,
             'qty': 8,
             'user_lat':-33.864928,
             'user_long': 151.217594,
@@ -187,11 +187,11 @@ class SearchTestCase(unittest.TestCase):
         for result in data['results']:
             self.assertIn(result['name'], expected)
 
-    def tearDown(self):
-        with self.app.app_context():
-            # Clear database after each test
-            db.session.remove()
-            db.drop_all()
+    # def tearDown(self):
+    #     with self.app.app_context():
+    #         # Clear database after each test
+    #         db.session.remove()
+    #         db.drop_all()
 
 if __name__ == '__main__':
     unittest.main()
