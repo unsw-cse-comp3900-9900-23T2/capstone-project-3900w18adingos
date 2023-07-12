@@ -1,9 +1,10 @@
 // EateryContext.tsx
 
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import React, { createContext, useState, useCallback} from "react";
-import { useAuth } from "../hooks/useAuth";
+
 import { Eatery, EateryContextProps, Images, Props, Review } from "../interface";
+import { useAuth } from "../hooks/useAuth";
 
 export const EateryContext = createContext<EateryContextProps | undefined>(undefined);
 
@@ -13,7 +14,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
     const [review, setReview] = useState<Review | null>(null);
     const [allReviews, setallReviews] = useState<Array<Review>>([]);
     const [eateryImages, setEateryImages] = useState<Images | null>(null);
-    const { token } = useAuth();
+    const { token } = useAuth()
 
     const api = axios.create({
         baseURL: 'http://127.0.0.1:5000'
@@ -66,6 +67,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
+        setReview(response.data)
         return response.data
       } catch (error) {
         console.error(error);
@@ -79,8 +81,8 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-          setallReviews(response.data.reviews)
-          return response.data.reviews;
+        setallReviews(response.data.reviews)
+        return response.data.reviews
       } catch (error) {
         console.error(error);
       }

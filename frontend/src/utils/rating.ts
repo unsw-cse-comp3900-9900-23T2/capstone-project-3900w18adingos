@@ -14,12 +14,17 @@ export const getStarRating = (reviews: Review[]) =>  {
   
     // Append full stars
     for(let i = 0; i < fullStars; i++) {
-      stars += '<i class="glyphicon glyphicon-star"></i>'; 
+      stars += '<i class="bi bi-star-fill"></i>'; 
     }
     
     // Append half star if needed
     if (halfStar) {
-      stars += '<i class="glyphicon glyphicon-star half"></i>';
+      stars += '<i class="bi bi-star-half"></i>';
+    }
+
+    // Append empty stars
+    for(let i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
+      stars += '<i class="bi bi-star"></i>';
     }
     
     return stars;

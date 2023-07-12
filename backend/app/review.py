@@ -29,7 +29,7 @@ def get_review():
 
 # get all public reviews given a restaurant
 @review.post('/get_all_reviews')
-@login_required
+# @login_required
 def get_all_reviews():
     req_json = request.get_json()
     eatery_id = req_json['eatery_id']
@@ -43,7 +43,8 @@ def get_all_reviews():
         reviews_list.append({ 
             "rating": review.rating, 
             "review_text": review.review_text, 
-            "id": review.id
+            "id": review.id,
+            "customer_id": review.customer_id
         })
     return jsonify({
         'reviews': reviews_list

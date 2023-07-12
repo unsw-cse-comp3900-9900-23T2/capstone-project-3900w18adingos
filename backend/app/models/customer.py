@@ -12,13 +12,9 @@ class Customer(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     #registered_on = db.Column(db.DateTime, nullable=False)
     role = db.Column(db.String(50), default='customer')
-
-    # def __init__(self, name, email, password):
-    #     self.name = name
-    #     self.email = email
-    #     self.password_hash = generate_password_hash(password)
-    #    # self.registered_on = datetime.datetime.now()
-    #     self.role = 'customer'
+    handle = db.Column(db.String(120), unique=True)
+    auth_source = db.Column(db.String(20), default='local')
+    # profile_pic = db.Column(db.String(120), default='default.jpg')
 
     def __init__(self, password, **kwargs):
         super(Customer, self).__init__(**kwargs)

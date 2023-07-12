@@ -2,38 +2,37 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
 import "./Map.css"
 import { useEateryContext } from '../../hooks/useEateryContext';
-import { MapProps } from '../../interface';
 import { getMapStyle } from './MapStyle';
-import Marker from '../Marker/Marker';
+import { createMarker } from '../Marker/Marker';
 import { setUpLocation } from '../../utils/locations';
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
+import { useNavigate } from 'react-router-dom';
 
-const Map: React.FC<MapProps> = ({findLocation}) => {
+const Map: React.FC = () => {
+  const libraries: ("places" | "drawing" | "geometry" | "localContext" | "visualization")[] = ["places"];
+
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries: ["places"],
+    libraries: libraries,
   });
 
   const mapRef = useRef<google.maps.Map | null>(null);
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [loadingPosition, setLoadingPosition] = useState(true);
-  const { eateries, fetchEateries } = useEateryContext();
-  const [markers, setMarkers] = useState<JSX.Element[]>([]);
-
-  // Set default position to user location
+  const { eateries, fetchEateries, getAllReviews } = useEateryContext();
   const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
+  const navigate = useNavigate();
   
   useEffect(() => {
     setUpLocation(setUserLocation, setLoadingPosition, mapRef);
   }, []);
 
-  useEffect(() => {
-    if (findLocation && mapRef.current) {
-      mapRef.current.setCenter(new google.maps.LatLng(findLocation.latitude, findLocation.longitude));
-    }
-  }, [findLocation]);
+  useEffect(() => { 
+    fetchEateries()
+  },[fetchEateries])
 
-  const initialize = () => {
+  const initialize = async () => {
     if (!loadingPosition && isLoaded) {
       mapRef.current = new google.maps.Map(document.getElementById('map') as HTMLElement, {
         center: userLocation,
@@ -42,7 +41,15 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
         styles: getMapStyle()
       });
       infoWindowRef.current = new google.maps.InfoWindow();
-      fetchEateries();
+
+      const map = mapRef.current;
+      const infoWindow = infoWindowRef.current
+      const markers = await Promise.all(eateries.map(async eatery => { 
+        const marker = await createMarker({eatery, map, infoWindow, navigate, getAllReviews});
+        return marker;
+      }));
+
+      new MarkerClusterer({map, markers})
     }
   };
 
@@ -50,28 +57,21 @@ const Map: React.FC<MapProps> = ({findLocation}) => {
     initialize();
   }, [loadingPosition, isLoaded]);
 
-  useEffect(() => {
-    if(mapRef.current !== null && infoWindowRef.current !== null) {
-      setMarkers(eateries.map(eatery => (
-        <Marker key={eatery.id} eatery={eatery} map={mapRef.current} infoWindow={infoWindowRef.current} />
-      )));
-    }
-  }, [ eateries, mapRef.current, infoWindowRef.current]);
-
   return (
     <>
       <div className='map-wrapper'>
         <div id="map" className="map">
           {loadingPosition && 
             <div className="spinner">
-              <img src="/src/icons/cyclone-Loading-wheel.png" alt="Loading..." />
+              <img src="/src/assets/cyclone-Loading-wheel.png" alt="Loading..." />
             </div>
           }
         </div>
       </div>
-      {markers}
     </>
   );
 };
+
+
 
 export default Map;

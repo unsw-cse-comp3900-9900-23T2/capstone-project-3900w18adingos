@@ -1,11 +1,12 @@
 .header { 
     display: flex;
-    flex-direction: column;
-    padding-bottom: 30px;
     background-color: #FFE8C9;
     border-radius: 5px;
     font-family:sans-serif;
-    width: 100%;
+    width: inherit;
+    height: 10%;
+    align-items: center;
+    justify-content: center;
 }
 
 .button {
@@ -15,16 +16,10 @@
     margin-right: 25px;
 } 
 
-.text-header { 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    width: 100%;
-
-}
-
 .account-page-open { 
     height: 100vh;
+}
+
+h2 { 
+    margin: 0;
 }

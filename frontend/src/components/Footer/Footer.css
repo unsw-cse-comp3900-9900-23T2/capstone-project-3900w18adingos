@@ -4,9 +4,10 @@
     justify-content: space-between;
     padding: 20px;
     background-color: #f8f9fa;
-    position: fixed;
-    width: 100%;
+    width: inherit;
     bottom: 0;
+    height: 10%;
+    position: absolute;
   }
   
   .footer-button {

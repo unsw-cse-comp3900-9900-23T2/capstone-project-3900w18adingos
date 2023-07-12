@@ -1,22 +1,30 @@
 import { ReactNode } from "react";
 
-export interface Eatery { 
+export interface Cuisine { 
+    cuisine_name: string,
+    cuisine_id: string
+}
+
+export interface Eatery {
     id: string,
     email: string,
     restaurant_name: string,
     location: string,
-    cuisine: string,
+    cuisines: Cuisine[],
     role: string,
     latitude: number,
     longitude: number,
+    reviews: Review[],
 }
-export interface Images { 
+export interface Images {
     images: Array<any>;
     image_ids: Array<any>;
 }
 export interface Review {
     rating: number;
     review_text: string;
+    id: string;
+    customer_id: string;
 }
 
 export interface EateryContextProps {
@@ -31,40 +39,42 @@ export interface EateryContextProps {
     eatery: Eatery | null;
     eateries: Array<Eatery>;
     eateryImages: Images | null;
-    review: Review | null; 
+    review: Review | null;
     allReviews: Array<Review>;
 }
 
-interface User {
+export interface User {
+    id: string;
     name: string;
     email: string;
+    handle: string;
+    profile_pic: string;
+    role: string;
 }
 
 export interface AuthContextType {
     token: string | null;
     getAllReviews: (eateryId: string) => Promise<Array<Review> | void>;
     isAuthenticated: () => boolean;
-    login: (email: string, password: string) => Promise<boolean>;
+    login: (email: string, password: string, role: string) => Promise<boolean>;
+    googleLogin: (code: string) => Promise<boolean>;
     register: (email: string, password: string, name: string, role: string) => Promise<boolean>;
-    passwordResetRequest: (email: string) => Promise<boolean>;
-    passwordReset: (resetCode: string, newPassword: string) => Promise<boolean>;
+    passwordResetRequest: (email: string, role:string) => Promise<boolean>;
+    passwordReset: (resetCode: any, newPassword: any) => Promise<boolean>;
     logout: () => Promise<boolean>;
     fetchUser: () => Promise<void>;
-    user: User;
+    user: User | null;
+    getUserById:(id: string) => Promise<User |void>;
+    updateProfile: (name: string, email: string) => Promise<User>;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 export interface Props {
     children?: ReactNode;
 }
 
-export interface MapProps {
-    findLocation: Eatery | null;
-}
 
-export interface SearchBarProps {
-    location: Eatery | null;
-    onSearch: (place: Eatery) => void;
-}
+
 
 export interface RegisterFormInputs {
     name: string;
@@ -74,12 +84,19 @@ export interface RegisterFormInputs {
     address: string;
 }
 
+export interface ResetPassword {
+    newPassword: string;
+    resetCode: string;
+}
+
+
 export interface SignInFormInputs {
     email: string;
     password: string;
+    role: 'customer' | 'eatery';
 }
 
-export interface Review { 
+export interface Review {
     rating: number,
     review_text: string,
     id: string,
@@ -88,9 +105,13 @@ export interface Review {
 // utils/location
 export type SetUserLocation = React.Dispatch<React.SetStateAction<{ lat: number; lng: number }>>;
 export interface UserPosition {
-  lat: number;
-  lng: number;
+    lat: number;
+    lng: number;
 }
 export type MapRef = React.MutableRefObject<google.maps.Map | null>;
 export type SetLoadingPosition = React.Dispatch<React.SetStateAction<boolean>>;
 export type SetUpLocation = (setUserLocation: SetUserLocation, setLoadingPosition: SetLoadingPosition, mapRef: MapRef) => void;
+export interface ClusterProps {
+    count: number;
+    position: google.maps.LatLng | google.maps.LatLngLiteral;
+  }

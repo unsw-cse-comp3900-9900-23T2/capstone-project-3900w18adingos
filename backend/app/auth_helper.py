@@ -2,6 +2,8 @@ from flask import jsonify, current_app, url_for, session
 from flask_mail import Mail, Message
 from flask_login import login_user, logout_user, login_required, current_user
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
+import requests
+
 
 from app.extensions import db
 from app.models.customer import Customer
@@ -58,7 +60,7 @@ def auth_login(email, password, role):
 
     return jsonify(
         {
-            'token': user.encode_auth_token(user.id).decode(), 
+            'token': user.encode_auth_token(user.id), 
             'user': user.name if role == 'customer' else user.restaurant_name,
             'role': role
         }
@@ -108,10 +110,12 @@ def auth_passwordreset_reset(token, password):
     db.session.commit()
     return jsonify({'message': 'Password reset successfully'})
 
+
 def send_reset_email(email, reset_url):
     msg = Message('Password Reset Request', sender='', recipients=[email])
     msg.body = f"Reset your password by clicking on the following link: {reset_url}"
     mail.send(msg)
+
 
 def auth_passwordreset_request(email, role):
     UserModel = get_user_model(role)
@@ -123,10 +127,51 @@ def auth_passwordreset_request(email, role):
 
     s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     token = s.dumps({'email': email, 'role': role}, salt='password-reset-key')
-    reset_url = url_for('auth.passwordreset_reset', token=token, _external=True)
+    reset_url = 'http://localhost:5173/auth/reset-password/' + str(token) + '/'
     try:
         send_reset_email(email, reset_url)
     except Exception as e:
         pass
     print(reset_url)
-    return jsonify({'token': token, 'message': 'Check your email for the instructions to reset your password'})
+    return jsonify({'message': 'Check your email for the instructions to reset your password'})
+
+
+def validate_google_auth_token_and_send_back_token(code):
+    client_id = '397558360733-au1inv2shr9v7cqdrkghl31t5pfh9qfp.apps.googleusercontent.com'
+    client_secret = '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'
+    redirect_uri = 'http://localhost:5173'
+
+    token_url = 'https://oauth2.googleapis.com/token'
+    token_payload = {
+        'code': code,
+        'client_id': client_id,
+        'client_secret': client_secret,
+        'redirect_uri': redirect_uri,
+        'grant_type': 'authorization_code'
+    }
+
+    response = requests.post(token_url, data=token_payload)
+    response_json = response.json()
+
+    if 'access_token' in response_json:
+        access_token = response_json['access_token']
+        userinfo_url = 'https://www.googleapis.com/oauth2/v2/userinfo'
+        headers = {'Authorization': f'Bearer {access_token}'}
+        response = requests.get(userinfo_url, headers=headers)
+        userinfo_json = response.json()
+
+        if 'email' in userinfo_json and 'name' in userinfo_json:
+            email = userinfo_json['email'].lower().strip()
+            name = userinfo_json['name']
+
+            user = Customer.query.filter_by(email=email).first()
+            if user:
+                return jsonify({'token': user.encode_auth_token(user.id), 'user': name, 'role': 'customer'})
+            user = Customer(email=email, name=name, auth_source='google')
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, remember=True)
+            return jsonify({'token': user.encode_auth_token(user.id), 'user': name, 'role': 'customer'})
+
+    return jsonify({"message": "Failed to validate token"}), 400
+
