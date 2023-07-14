@@ -122,3 +122,4 @@ class EaterySchema(ma.SQLAlchemySchema):
     cuisines = fields.Nested(CooksCuisineSchema, many=True)
 
 eatery_schema = EaterySchema()
+eatery_schema_list = EaterySchema(many=True)
