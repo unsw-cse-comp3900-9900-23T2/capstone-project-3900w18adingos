@@ -1,7 +1,7 @@
 from flask import Flask, session
 from flask_cors import CORS
 
-from .extensions import db, login_manager
+from .extensions import db, ma, login_manager
 from .mail import init_mail
 from .config import config
 
@@ -25,16 +25,19 @@ def create_app(config_name='default'):
     init_mail(app)
     
     CORS(app, resources={r"/*": {"origins": "*"}})
+    
     db.init_app(app)
+    ma.init_app(app)
+
 
     from app.models.has_voucher import HasVoucher
     from app.models.voucher import Voucher
-    from app.models.eatery import Eatery
-    from app.models.customer import Customer
     from app.models.review import Review
     from app.models.image import Image
     from app.models.cuisine import Cuisine
     from app.models.cooks_cuisine import CooksCuisine
+    from app.models.eatery import Eatery
+    from app.models.customer import Customer
 
     with app.app_context():
         db.create_all()
