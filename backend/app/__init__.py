@@ -56,5 +56,8 @@ def create_app(config_name='default'):
 
         from app.search import search_bp as search_blueprint
         app.register_blueprint(search_blueprint)
+
+        from app.voucher import voucher as voucher_blueprint
+        app.register_blueprint(voucher_blueprint)
     
     return app

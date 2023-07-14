@@ -324,97 +324,137 @@ voucher_arr=[
     Voucher(
             description="50 percent off",
             eatery=1,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="20 percent off",
             eatery=2,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="30 percent off",
             eatery=3,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="10 percent off",
             eatery=4,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="60 percent off",
             eatery=5,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="70 percent off",
             eatery=6,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="80 percent off",
             eatery=7,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="70 percent off",
             eatery=8,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="90 percent off",
             eatery=9,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="45 percent off",
             eatery=10,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="55 percent off",
             eatery=11,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="65 percent off",
             eatery=12,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="75 percent off",
             eatery=13,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="85 percent off",
             eatery=14,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="25 percent off",
             eatery=15,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="5 percent off",
             eatery=16,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="65 percent off",
             eatery=17,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="24 percent off",
             eatery=18,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="27 percent off",
             eatery=19,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
     Voucher(
             description="37 percent off",
             eatery=20,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
 ]
 
 has_voucher_arr=[
     HasVoucher(
-            user_id=1,
+            customer_id=1,
             voucher_id=1),
     HasVoucher(
-            user_id=2,
+            customer_id=2,
             voucher_id=2),
     HasVoucher(
-            user_id=3,
+            customer_id=3,
             voucher_id=3),
     HasVoucher(
-            user_id=4,
+            customer_id=4,
             voucher_id=4),
 ]
 
