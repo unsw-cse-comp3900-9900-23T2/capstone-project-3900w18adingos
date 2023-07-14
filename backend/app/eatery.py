@@ -3,31 +3,31 @@ from flask_login import login_required, current_user
 import os
 
 from app.extensions import db
-from app.models.eatery import Eatery
+from app.models.eatery import Eatery, eatery_schema
 from app.models.image import Image
 from app.eatery_helper import get_image_bytes, generate_image_filename
 eatery = Blueprint('eatery', __name__)
 
 # get all images of this eatery
-@eatery.post('/get_images')
-def get_eatery_images():
-    req_json = request.get_json()
-    eatery_id = req_json['eatery_id'].strip()
-    image_objs = Eatery.query.get_or_404(eatery_id = eatery_id).first().eatery_images
-    # image_objs has .id, .eatery_id, .filepath fields (def'n in models/image.py)
+# @eatery.post('/get_images')
+# def get_eatery_images():
+#     req_json = request.get_json()
+#     eatery_id = req_json['eatery_id'].strip()
+#     image_objs = Eatery.query.get_or_404(eatery_id = eatery_id).first().eatery_images
+#     # image_objs has .id, .eatery_id, .filepath fields (def'n in models/image.py)
 
-    encoded_images = []
-    encoded_images_id = []
-    for image_obj in image_objs:
-        encoded_images.append(get_image_bytes(file_name=img.filepath))
-        # serve image ids to frontend to allow for image deletion
-        encoded_images_id.append(image_obj.id)
-    return jsonify(
-        {
-            'images': encoded_images,
-            'image_ids': encoded_images_id
-        }
-    ), 200
+#     encoded_images = []
+#     encoded_images_id = []
+#     for image_obj in image_objs:
+#         encoded_images.append(get_image_bytes(file_name=img.filepath))
+#         # serve image ids to frontend to allow for image deletion
+#         encoded_images_id.append(image_obj.id)
+#     return jsonify(
+#         {
+#             'images': encoded_images,
+#             'image_ids': encoded_images_id
+#         }
+#     ), 200
 
 @eatery.post('/add_image')
 @login_required
@@ -108,30 +108,7 @@ def get_all_eateries():
 
 @eatery.route('/eatery/<int:id>', methods=['GET'])
 def get_eatery_by_id(id):
-    eatery = Eatery.query.get(id)
-    if not eatery:
-        return jsonify({"message": "No eatery found"}), 404
+    eatery = Eatery.query.get_or_404(id)
 
-    reviews_list = []
-    for review in eatery.reviews:
-        reviews_list.append ({
-            "rating": review.rating,
-            "review_text": review.review_text,
-            "customer_id": review.customer_id,
-            "eatery_id": review.eatery_id,
-        })
-    
-    eatery_data = {
-        "id": eatery.id,
-        "email": eatery.email,
-        "restaurant_name": eatery.restaurant_name,
-        "location": eatery.location,
-        # "cuisine": eatery.cuisine,
-        "role": eatery.role,
-        "latitude": eatery.latitude,
-        "longitude": eatery.longitude,
-        "reviews": reviews_list,
+    return eatery_schema.dump(eatery), 200
 
-        # "cuisine": eatery.cuisines
-    }
-    return jsonify({"eatery": eatery_data}), 200
