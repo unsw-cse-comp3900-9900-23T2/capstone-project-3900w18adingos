@@ -1,12 +1,16 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
-from app.extensions import db, login_manager
 from flask_login import UserMixin
-import datetime
 import math
 from sqlalchemy import func
 from sqlalchemy.ext.hybrid import hybrid_method
+from marshmallow import fields
+
+from app.extensions import db, ma
+from app.models.review import ReviewSchema
+from app.models.image import ImageSchema
+from app.models.cooks_cuisine import CooksCuisineSchema
 
 class Eatery(db.Model, UserMixin):
     __tablename__ = 'eatery'
@@ -100,3 +104,21 @@ class Eatery(db.Model, UserMixin):
         distance = earth_radius * c
 
         return distance <= max_distance
+
+class EaterySchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Eatery
+    
+    id = ma.auto_field()
+    email = ma.auto_field()
+    password_hash = ma.auto_field()
+    restaurant_name = ma.auto_field()
+    location = ma.auto_field()
+    role = ma.auto_field()
+    latitude = ma.auto_field()
+    longitude = ma.auto_field()
+    reviews = fields.Nested(ReviewSchema, many=True)
+    eatery_image = fields.Nested(ImageSchema, many=True)
+    cuisines = fields.Nested(CooksCuisineSchema, many=True)
+
+eatery_schema = EaterySchema()
