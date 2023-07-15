@@ -1,17 +1,19 @@
 
-import SignUp from "./pages/SignUp";
-import AuthHome from "./pages/AuthHome"
-import Profile from "./pages/Profile"
+import SignUp from "./Pages/SignUp";
+import AuthHome from "./Pages/AuthHome"
+import Profile from "./Pages/Profile"
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import { AuthProvider } from "./context/AuthContext";
-import SignIn from "./pages/SignIn";
-import Home from "./pages/Home";
+import SignIn from "./Pages/SignIn";
+import Home from "./Pages/Home";
 import { EateryProvider } from "./context/EateryContext";
 
-import RestaurantList from "./pages/RestaurantList";
-import EateryProfile from "./pages/EateryProfile";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import RestaurantList from "./Pages/RestaurantList";
+import EateryProfile from "./Pages/EateryProfile";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
+import Wallet from './Pages/Wallet';
+import VoucherDetails from './Pages/VoucherDetails';
 
 
 const App = () => { 
@@ -23,7 +25,7 @@ const App = () => {
               <Router>
                 <Routes>
 
-                  {/* Entry pages */}
+                  {/* Entry Pages */}
                   <Route path="/auth/register" element={<SignUp />} />
                   <Route path="/auth/login" element={<SignIn />} />
 
@@ -37,6 +39,8 @@ const App = () => {
                   <Route path="/auth/profile" element={<Profile />} />
                   <Route path="/auth/list" element={<RestaurantList />} />
                   <Route path="/eatery/:id" element={<EateryProfile />} />
+                  <Route path="/wallet" element={<Wallet />} />
+                  <Route path="/voucher/:id" element={<VoucherDetails />} />
                 </Routes>
               </Router>
             </EateryProvider>

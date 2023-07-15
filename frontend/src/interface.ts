@@ -115,3 +115,17 @@ export interface ClusterProps {
     count: number;
     position: google.maps.LatLng | google.maps.LatLngLiteral;
   }
+
+  export interface Voucher {
+  id: number;
+  description: string;
+  eatery: number;
+  quantity: number;
+  start: Date;
+  expiry: Date;
+}
+
+export interface VoucherContextProps {
+  vouchers: Array<Voucher>;
+  fetchVouchers: (customerId: string) => Promise<void>;
+}
