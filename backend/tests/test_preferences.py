@@ -28,7 +28,30 @@ class PreferencesTestCase(unittest.TestCase):
             # create all tables
             db.create_all()
     
-    def test_add_preferences(self):
+    # def test_add_preferences(self):
+    #     res = self.client.post('/auth/register', json=self.customer_data)
+    #     data = json.loads(res.data.decode())
+    #     try:
+    #         if data['message'] == 'Customer with that email already exists':
+    #             customer_data = {
+    #                 'email': 'testcustomer@example.com',
+    #                 'password': '123',
+    #                 'role': 'customer'
+    #             }
+    #             res = self.client.post('/auth/login', json=customer_data)
+    #             data = json.loads(res.data.decode())
+    #     except:
+    #         pass
+
+    #     body={
+    #         'customer_id': 3,
+    #         'cuisines': ['Chinese', 'Italian']
+    #     }
+    #     res = self.client.post('/add_preferences', json=body)
+    #     data = json.loads(res.data.decode())
+    #     print(data)
+
+    def test_get_preferences(self):
         res = self.client.post('/auth/register', json=self.customer_data)
         data = json.loads(res.data.decode())
         try:
@@ -43,11 +66,7 @@ class PreferencesTestCase(unittest.TestCase):
         except:
             pass
 
-        body={
-            'customer_id': 3,
-            'cuisines': ['american', 'thai']
-        }
-        res = self.client.post('/add_preferences', json=body)
+        res = self.client.get('/get_preferences/3')
         data = json.loads(res.data.decode())
         print(data)
 
