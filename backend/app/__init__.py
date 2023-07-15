@@ -37,6 +37,7 @@ def create_app(config_name='default'):
     from app.models.cuisine import Cuisine
     from app.models.cooks_cuisine import CooksCuisine
     from app.models.eatery import Eatery
+    from app.models.likes_cuisine import LikesCuisine
     from app.models.customer import Customer
 
     with app.app_context():
@@ -62,5 +63,8 @@ def create_app(config_name='default'):
 
         from app.voucher import voucher as voucher_blueprint
         app.register_blueprint(voucher_blueprint)
+
+        from app.preferences import preferences as preferences_blueprint
+        app.register_blueprint(preferences_blueprint)
     
     return app
