@@ -35,7 +35,7 @@ const AddReview: React.FC = () => {
   return (
     <>
       <div className="add-review-container">
-        <button className="review-back-step">
+        <button className="review-back-step" onClick={() => navigate(-1)}>
           <i className="bi bi-arrow-left"></i>
           <h2 className="review-title">Write Review</h2>
         </button>
