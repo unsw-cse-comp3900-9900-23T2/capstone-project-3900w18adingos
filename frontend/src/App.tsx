@@ -9,10 +9,11 @@ import Home from "./Pages/Home";
 import { EateryProvider } from "./context/EateryContext";
 import { VoucherProvider } from "./context/VoucherContext";
 
-import RestaurantList from "./Pages/RestaurantList";
-import EateryProfile from "./Pages/EateryProfile";
-import ForgotPassword from "./Pages/ForgotPassword";
-import ResetPassword from "./Pages/ResetPassword";
+import RestaurantList from "./pages/RestaurantList";
+import EateryProfile from "./pages/EateryProfile";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import AddReview from "./pages/AddReview";
 import Wallet from './Pages/Wallet';
 import VoucherDetails from './Pages/VoucherDetails';
 
@@ -22,30 +23,30 @@ const App = () => {
       <div className="app-outer">
         <div className="app-inner">
           <AuthProvider>
-          <EateryProvider>
-          <VoucherProvider>
-            <Router>
-              <Routes>
+            <EateryProvider>
+              <Router>
+                <Routes>
 
-                {/* Entry Pages */}
-                <Route path="/" element={<Home />} />
-                <Route path="/auth/register" element={<SignUp />} />
-                <Route path="/auth/login" element={<SignIn />} />
+                  {/* Entry pages */}
+                  <Route path="/auth/register" element={<SignUp />} />
+                  <Route path="/auth/login" element={<SignIn />} />
+
+                  <Route path="/" element={<Home />} />
 
 
-                <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-                <Route path="/auth/reset-passwod/:code" element={<ResetPassword />} />
+                  <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/auth/reset-passwod/:code" element={<ResetPassword />} />
 
-                <Route path="/auth/home" element={<AuthHome />} />
-                <Route path="/auth/profile" element={<Profile />} />
-                <Route path="/auth/list" element={<RestaurantList />} />
-                <Route path="/eatery/:id" element={<EateryProfile />} />
-                <Route path="/auth/wallet" element={<Wallet />} />
-                <Route path="/voucher/:id" element={<VoucherDetails />} />
-              </Routes>
-            </Router>
-          </VoucherProvider>
-          </EateryProvider>
+                  <Route path="/auth/home" element={<AuthHome />} />
+                  <Route path="/auth/profile" element={<Profile />} />
+                  <Route path="/auth/list" element={<RestaurantList />} />
+                  <Route path="/eatery/:id" element={<EateryProfile />} />
+                  <Route path="/add-review/:id" element={<AddReview />} />
+                  <Route path="/auth/wallet" element={<Wallet />} />
+                  <Route path="/voucher/:id" element={<VoucherDetails />} />
+                </Routes>
+              </Router>
+            </EateryProvider>
           </AuthProvider>
         </div>
       </div>

@@ -27,7 +27,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
               Authorization: `Bearer ${token}`,
             },
           });
-          setEateries(response.data.eateries); 
+          setEateries(response.data); 
         } catch (error) {
           console.error(error);
         }
@@ -40,7 +40,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setEatery(response.data.eatery)
+        setEatery(response.data)
       } catch (error) {
         console.error(error);
       }
@@ -99,7 +99,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        return response.data.success; // return the success status
+        return response.data; // return the success status
       } catch (error) {
         console.error(error);
       }
