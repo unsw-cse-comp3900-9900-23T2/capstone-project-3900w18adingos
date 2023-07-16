@@ -1,15 +1,17 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from flask_login import login_required, current_user 
 
 from app.models.eatery import Eatery
 from app.models.review import Review
 from app.extensions import db
+from app.auth_helper import token_required
+
 
 review = Blueprint('review', __name__)
 
 # get the current_user 's review
 @review.post('/get_review')
-@login_required
+@token_required
 def get_review():
     req_json = request.get_json()
     eatery_id = req_json['eatery_id'].strip()
@@ -51,15 +53,25 @@ def get_all_reviews():
     }), 200
 
 @review.post('/add_review')
-@login_required
+@token_required
 def add_review():
+    print(f'User authenticated: {g.current_user.is_authenticated}')
+
+        # Check if a token is included in the Authorization header
+    auth_header = request.headers.get('Authorization')
+    if auth_header:
+        token = auth_header.split(" ")[1]
+        print(f'Authorization token: {token}')
+    else:
+        print('No Authorization header')
+
     req_json = request.get_json()
     rating = req_json['rating'].strip()
     review_text = req_json['review_text'].strip()
     eatery_id = req_json['eatery_id'].strip()
 
     eatery = Eatery.query.first_or_404(eatery_id)
-    new_review = Review(rating=rating, review_text=review_text, customer_id=current_user.id, eatery_id=eatery)
+    new_review = Review(rating=rating, review_text=review_text, customer_id=g.current_user.id, eatery_id=eatery.id)
     db.session.add(new_review)
     db.session.commit()
 
