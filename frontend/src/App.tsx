@@ -9,14 +9,13 @@ import Home from "./Pages/Home";
 import { EateryProvider } from "./context/EateryContext";
 import { VoucherProvider } from "./context/VoucherContext";
 
-import RestaurantList from "./pages/RestaurantList";
-import EateryProfile from "./pages/EateryProfile";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import AddReview from "./pages/AddReview";
+import RestaurantList from "./Pages/RestaurantList";
+import EateryProfile from "./Pages/EateryProfile";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
+import AddReview from "./Pages/AddReview";
 import Wallet from './Pages/Wallet';
 import VoucherDetails from './Pages/VoucherDetails';
-import { VoucherProvider } from "./context/VoucherContext";
 
 
 const App = () => { 
@@ -29,7 +28,7 @@ const App = () => {
               <Router>
                 <Routes>
 
-                  {/* Entry pages */}
+                  {/* Entry Pages */}
                   <Route path="/" element={<Home />} />
                   <Route path="/auth/register" element={<SignUp />} />
                   <Route path="/auth/login" element={<SignIn />} />
