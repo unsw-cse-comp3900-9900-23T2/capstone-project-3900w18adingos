@@ -13,6 +13,7 @@ import EateryProfile from "./pages/EateryProfile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AddReview from "./pages/AddReview";
+import { CuisineForm } from "./pages/CuisineForm";
 
 
 const App = () => { 
@@ -25,11 +26,10 @@ const App = () => {
                 <Routes>
 
                   {/* Entry pages */}
+                  <Route path="/" element={<Home />} />
                   <Route path="/auth/register" element={<SignUp />} />
                   <Route path="/auth/login" element={<SignIn />} />
-
-                  <Route path="/" element={<Home />} />
-
+                  <Route path="/auth/cuisine-form" element={<CuisineForm />} />
 
                   <Route path="/auth/forgot-password" element={<ForgotPassword />} />
                   <Route path="/auth/reset-passwod/:code" element={<ResetPassword />} />
@@ -39,6 +39,7 @@ const App = () => {
                   <Route path="/auth/list" element={<RestaurantList />} />
                   <Route path="/eatery/:id" element={<EateryProfile />} />
                   <Route path="/add-review/:id" element={<AddReview />} />
+
                 </Routes>
               </Router>
             </EateryProvider>
