@@ -32,11 +32,9 @@ const Map: React.FC = () => {
     fetchEateries()
   },[fetchEateries])
 
-  useEffect(() => { 
-    fetchEateryImages("1")
-  }, [fetchEateryImages])
-
-  console.log(eateryImages)
+  // useEffect(() => { 
+  //   fetchEateryImages("1")
+  // }, [fetchEateryImages])
 
   const initialize = async () => {
     if (!loadingPosition && isLoaded) {

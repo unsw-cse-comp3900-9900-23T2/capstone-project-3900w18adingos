@@ -16,7 +16,7 @@ const AddReview: React.FC = () => {
       console.log(`${id} ${rating} ${reviewText}`)
       const success = await addReview(id, rating, reviewText);
       if (success) {
-        navigate(`/eateries/${id}`);
+        navigate(`/eatery/${id}`);
       } else {
         console.error("Failed to add review");
       }

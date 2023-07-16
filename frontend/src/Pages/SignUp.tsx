@@ -22,7 +22,7 @@ const SignUp: React.FC = () => {
       const success = await registerUser(email, password, name, role);
       if (success) { 
         setMessage("success"); 
-        navigate("/auth/home"); 
+        navigate("/auth/cuisine-form"); 
       } else { 
         setMessage("failure"); 
       }
