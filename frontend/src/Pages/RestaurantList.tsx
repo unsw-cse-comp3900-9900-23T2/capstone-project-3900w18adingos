@@ -30,7 +30,7 @@ const RestaurantList = () => {
             <h3>{eatery.restaurant_name}</h3>
             <div className="rating">
               {eatery.reviews &&
-                (eatery.reviews.reduce((prev, current) => prev + current.rating, 0) / eatery.reviews.length / 2)
+                (eatery.reviews.reduce((prev, current) => prev + current.rating, 0) / eatery.reviews.length)
               }  
             </div>
           </div>
