@@ -13,6 +13,8 @@ const RestaurantList = () => {
     fetchEateries();
   }, [fetchEateries]);
 
+  
+
   return ( 
     <>
     <Header>

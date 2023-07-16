@@ -7,32 +7,39 @@ import { useAuth } from "../hooks/useAuth";
 
 const EateryProfile: React.FC = () => { 
   const { id } = useParams<{ id: string }>();
-  const {getAllReviews, allReviews,fetchEatery, eatery} = useEateryContext();
+  const {fetchEatery, eatery} = useEateryContext();
   const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS'>();
+  const {getUserById} = useAuth()
   const [users, setUsers] = useState<{[key: string]: any}>({});
 
-  const {getUserById} = useAuth()
 
   useEffect(() => {
     if (id){
-      getAllReviews(id);
       fetchEatery(id);
-      allReviews.forEach(async (review) => {
-        if (!users[review.customer_id]) {
-          const user = await getUserById(review.customer_id);
-          setUsers(prevUsers => ({
-            ...prevUsers,
-            [review.customer_id]: user,
-          }));
-        }
+    }
+  }, [fetchEatery]);
+  console.log(eatery)
+
+  // get user's name from review[].customer_id
+  useEffect(() => {
+    if (eatery?.reviews) {
+      const userIds = eatery.reviews.map(r => r.customer_id);
+      const userPromises = userIds.map(id => getUserById(id));
+      Promise.all(userPromises).then(usersData => {
+        const usersObj = usersData.reduce((acc, user) => user ? ({...acc, [user.id]: user}) : acc, {});
+        setUsers(usersObj);
       });
     }
-  }, [fetchEatery, getAllReviews, getUserById]);
-  
+  }, [eatery, getUserById]);
 
-  let totalRating = allReviews.reduce((sum, review) => sum + review.rating, 0);
-  let averageRating = (totalRating / allReviews.length) / 2;
-  averageRating = Math.round(averageRating * 10) / 10;
+
+  let averageRating;
+  if (eatery?.reviews) { 
+  const allReviews = eatery.reviews
+    let totalRating = allReviews.reduce((sum, review) => sum + review.rating, 0);
+    averageRating = (totalRating / allReviews.length) / 2;
+    averageRating = Math.round(averageRating * 10) / 10;
+  }
 
   return (
     <>
@@ -69,7 +76,7 @@ const EateryProfile: React.FC = () => {
       {currentTab === 'PHOTOS' && <div>Photos Content</div>}
       {currentTab === 'REVIEWS' && (
         <div className="display-reviews">
-          {allReviews.map((review, index) => (
+          {eatery?.reviews.map((review, index) => (
             <div key={index} className="list-item">
               <div>Rating: {review.rating}</div>
               <div>Review: {review.review_text}</div>

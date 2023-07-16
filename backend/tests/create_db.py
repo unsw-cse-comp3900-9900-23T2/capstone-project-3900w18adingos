@@ -234,7 +234,11 @@ customers_arr=[
     Customer(
             name="John4", 
             email="email4@email.com",
-            password='123')
+            password='123'),
+    Customer(
+            name="John5", 
+            email="email5@email.com",
+            password='123'),
 ]
 
 reviews_arr=[
