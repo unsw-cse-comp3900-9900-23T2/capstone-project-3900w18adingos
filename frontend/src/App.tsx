@@ -1,18 +1,21 @@
 
-import SignUp from "./pages/SignUp";
-import AuthHome from "./pages/AuthHome"
-import Profile from "./pages/Profile"
+import SignUp from "./Pages/SignUp";
+import AuthHome from "./Pages/AuthHome"
+import Profile from "./Pages/Profile"
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import { AuthProvider } from "./context/AuthContext";
-import SignIn from "./pages/SignIn";
-import Home from "./pages/Home";
+import SignIn from "./Pages/SignIn";
+import Home from "./Pages/Home";
 import { EateryProvider } from "./context/EateryContext";
+import { VoucherProvider } from "./context/VoucherContext";
 
 import RestaurantList from "./pages/RestaurantList";
 import EateryProfile from "./pages/EateryProfile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AddReview from "./pages/AddReview";
+import Wallet from './Pages/Wallet';
+import VoucherDetails from './Pages/VoucherDetails';
 
 
 const App = () => { 
@@ -39,6 +42,8 @@ const App = () => {
                   <Route path="/auth/list" element={<RestaurantList />} />
                   <Route path="/eatery/:id" element={<EateryProfile />} />
                   <Route path="/add-review/:id" element={<AddReview />} />
+                  <Route path="/auth/wallet" element={<Wallet />} />
+                  <Route path="/voucher/:id" element={<VoucherDetails />} />
                 </Routes>
               </Router>
             </EateryProvider>
