@@ -99,7 +99,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        return response.data.success; // return the success status
+        return response.data; // return the success status
       } catch (error) {
         console.error(error);
       }

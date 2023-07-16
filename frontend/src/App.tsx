@@ -12,6 +12,7 @@ import RestaurantList from "./pages/RestaurantList";
 import EateryProfile from "./pages/EateryProfile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import AddReview from "./pages/AddReview";
 
 
 const App = () => { 
@@ -37,6 +38,7 @@ const App = () => {
                   <Route path="/auth/profile" element={<Profile />} />
                   <Route path="/auth/list" element={<RestaurantList />} />
                   <Route path="/eatery/:id" element={<EateryProfile />} />
+                  <Route path="/add-review/:id" element={<AddReview />} />
                 </Routes>
               </Router>
             </EateryProvider>
