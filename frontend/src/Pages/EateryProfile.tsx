@@ -4,23 +4,20 @@ import { useEateryContext } from "../hooks/useEateryContext";
 import { useEffect, useState } from "react";
 import "../styles/EateryProfile.css"
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from 'react-router-dom';  // Import useHistory
+
 
 const EateryProfile: React.FC = () => { 
   const { id } = useParams<{ id: string }>();
   const {fetchEatery, eatery} = useEateryContext();
   const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS'>();
-
+  const {getUserById} = useAuth()
   const [users, setUsers] = useState<{[key: string]: any}>({});
+  const navigate = useNavigate()
 
-  const navigate = useNavigate();
   const checkToken = localStorage.getItem('token')
   if (!checkToken){
     navigate("/")
   }
-  const {getUserById} = useAuth()
-  const [users, setUsers] = useState<{[key: string]: any}>({});
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (id){
@@ -48,7 +45,7 @@ const EateryProfile: React.FC = () => {
   if (eatery?.reviews) { 
   const allReviews = eatery.reviews
     let totalRating = allReviews.reduce((sum, review) => sum + review.rating, 0);
-    averageRating = (totalRating / allReviews.length) / 2;
+    averageRating = (totalRating / allReviews.length);
     averageRating = Math.round(averageRating * 10) / 10;
   }
 
