@@ -5,6 +5,8 @@ import "../styles/Wallet.css";
 import qrCode from "../assets/qr-code.png";
 import Footer from '../components/Footer/Footer';
 import Header from "../components/Header/Header";
+import { useVoucher } from '../hooks/useVoucher';
+import { useAuth } from '../hooks/useAuth';
 
 const Wallet: React.FC = () => {
   const navigate = useNavigate();
@@ -22,6 +24,16 @@ const Wallet: React.FC = () => {
 
   const [openStarBucks, setOpenStarBucks] = useState(false);
   const [openStellinis, setOpenStellinis] = useState(false);
+  const {fetchVouchers, vouchers} = useVoucher();
+  // const {fetchUser, user} = useAuth()
+
+  // useEffect(() => {
+  //   fetchUser() 
+  // },[fetchUser])
+
+  useEffect(() => { 
+      fetchVouchers("1")
+  },[fetchVouchers])
 
   return (
     <>

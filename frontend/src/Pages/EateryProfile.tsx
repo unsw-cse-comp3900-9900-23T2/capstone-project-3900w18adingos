@@ -39,7 +39,7 @@ const EateryProfile: React.FC = () => {
   if (eatery?.reviews) { 
   const allReviews = eatery.reviews
     let totalRating = allReviews.reduce((sum, review) => sum + review.rating, 0);
-    averageRating = (totalRating / allReviews.length) / 2;
+    averageRating = (totalRating / allReviews.length);
     averageRating = Math.round(averageRating * 10) / 10;
   }
 

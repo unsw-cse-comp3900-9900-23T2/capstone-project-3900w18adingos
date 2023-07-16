@@ -24,15 +24,14 @@ const App = () => {
         <div className="app-inner">
           <AuthProvider>
             <EateryProvider>
+            <VoucherProvider>
               <Router>
                 <Routes>
 
                   {/* Entry Pages */}
                   <Route path="/auth/register" element={<SignUp />} />
                   <Route path="/auth/login" element={<SignIn />} />
-
-                  <Route path="/" element={<Home />} />
-
+                  <Route path="/auth/cuisine-form" element={<CuisineForm />} />
 
                   <Route path="/auth/forgot-password" element={<ForgotPassword />} />
                   <Route path="/auth/reset-passwod/:code" element={<ResetPassword />} />
@@ -42,10 +41,12 @@ const App = () => {
                   <Route path="/auth/list" element={<RestaurantList />} />
                   <Route path="/eatery/:id" element={<EateryProfile />} />
                   <Route path="/add-review/:id" element={<AddReview />} />
+
                   <Route path="/auth/wallet" element={<Wallet />} />
                   <Route path="/voucher/:id" element={<VoucherDetails />} />
                 </Routes>
               </Router>
+              </VoucherProvider>
             </EateryProvider>
           </AuthProvider>
         </div>
