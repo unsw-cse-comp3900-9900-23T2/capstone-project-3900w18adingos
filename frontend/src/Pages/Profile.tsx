@@ -7,6 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';  // Import useHistory
 
 const Profile: React.FC = () => {
+
   const { user, logout, passwordResetRequest, passwordReset, fetchUser, updateProfile } = useAuth();
   const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -19,6 +20,19 @@ const Profile: React.FC = () => {
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
+
+  
+  const checkToken = localStorage.getItem('token')
+  useEffect(() => {
+    if (!checkToken) {
+      navigate('/');
+    }
+  }, [checkToken, navigate]);
+
+  if (!checkToken) {
+    return null;
+  }
+
 
   const [currentUser, setCurrentUser] = useState({name: user?.name, email: user?.email});
 
@@ -38,6 +52,7 @@ const Profile: React.FC = () => {
     if (result) {
       navigate("/")
     }
+    navigate("/")
   };
 
   const handlePasswordResetRequest = async () => {

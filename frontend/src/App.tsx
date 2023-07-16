@@ -7,13 +7,14 @@ import { AuthProvider } from "./context/AuthContext";
 import SignIn from "./pages/SignIn";
 import Home from "./pages/Home";
 import { EateryProvider } from "./context/EateryContext";
-
 import RestaurantList from "./pages/RestaurantList";
 import EateryProfile from "./pages/EateryProfile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AddReview from "./pages/AddReview";
 import { CuisineForm } from "./pages/CuisineForm";
+import Wallet from './pages/Wallet';
+import VoucherDetails from './pages/VoucherDetails';
 
 
 const App = () => { 
@@ -40,6 +41,8 @@ const App = () => {
                   <Route path="/eatery/:id" element={<EateryProfile />} />
                   <Route path="/add-review/:id" element={<AddReview />} />
 
+                  <Route path="/auth/wallet" element={<Wallet />} />
+                  <Route path="/voucher/:id" element={<VoucherDetails />} />
                 </Routes>
               </Router>
             </EateryProvider>
