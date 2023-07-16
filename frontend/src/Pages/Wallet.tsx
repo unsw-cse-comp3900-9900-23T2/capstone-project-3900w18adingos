@@ -1,48 +1,132 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import QRCode from 'react-qr-code';
+import "../styles/Wallet.css";
+import qrCode from "../assets/qr-code.png";
 import Footer from '../components/Footer/Footer';
-import Header from '../components/Header/Header';
-import { useAuth } from '../hooks/useAuth';
-import { useVoucher } from '../hooks/useVoucher';
-import { Voucher } from '../interface';
+import Header from "../components/Header/Header";
+import { useNavigate } from 'react-router-dom';  // Import useHistory
+import { useEffect} from 'react';
 
 const Wallet: React.FC = () => {
-  const [vouchers, setVouchers] = useState<Array<Voucher> | void>([]);
-  const { user } = useAuth();  // get the user from the auth context
-  const customerId = user ? user.id : '';  // get customer id from the user object
-  const { fetchVouchers } = useVoucher();
+  const navigate = useNavigate();
+  const checkToken = localStorage.getItem('token')
 
   useEffect(() => {
-    // Fetch vouchers on component mount
-    fetchVouchers(customerId)
-      .then((vouchers) => setVouchers(vouchers))
-      .catch((error) => console.error(error));
-  }, [customerId, fetchVouchers]);
+    if (!checkToken) {
+      navigate('/');
+    }
+  }, [checkToken, navigate]);
+
+  if (!checkToken) {
+    return null;
+  }
 
   return (
     <>
       <Header>
-        <h1>Your Wallet</h1>
+        <h3>My Wallet</h3>
       </Header>
-      <div className="wallet-page">
-        <QRCode value={customerId.toString()} />
-        <h3>Your Vouchers:</h3>
-        {vouchers && 
-          vouchers.length > 0 ? (
-          vouchers.map((voucher: Voucher) => (
-            <Link key={voucher.id} to={`/voucher/${voucher.id}`}>
-              <div>
-                <h4>{voucher.description}</h4>
-                {/* Display other voucher details here */}
+      <div className="wallet">
+        <div className="qr-code-img">
+          <img src={qrCode} alt="qr code" />
+        </div>
+        <div className="wallet-accordian">
+          <div className="panel-group" id="accordion">
+            <div className="panel panel-default">
+              <div
+                className="panel-heading"
+                data-toggle="collapse"
+                data-parent="#accordion"
+                // href="#collapse2"
+              >
+                <h4 className="panel-title">
+                  <a
+                    className="accordion-toggle"
+                    data-toggle="collapse"
+                    data-parent="#accordion"
+                    href="#collapse2"
+                  >
+                    Star Bucks
+                    <div className="ratings">
+                      <i className="bi bi-star-fill"></i>
+                      <i className="bi bi-star-fill"></i>
+                      <i className="bi bi-star-fill"></i>
+                      <i className="bi bi-star-half"></i>
+                      <i className="bi bi-star-half"></i>
+                    </div>
+                  </a>
+                </h4>
+                <div className="panel-bottom">
+                  <h5>10% off Coffee</h5>
+                  <span>25%</span>
+                </div>
+                <i className="bi bi-chevron-down arrow-down"></i>
               </div>
-            </Link>
-          ))
-        ) : (
-          <p>No vouchers available</p>
-        )}
+              <div id="collapse2" className="panel-collapse collapse">
+                <div className="panel-body">
+                  <h3>Star Bucks</h3>
+                  <div className="ratings">
+                    <i className="bi bi-star-fill"></i>
+                    <i className="bi bi-star-fill"></i>
+                    <i className="bi bi-star-fill"></i>
+                    <i className="bi bi-star-half"></i>
+                    <i className="bi bi-star-half"></i>
+                  </div>
+                  <div className="panel-body-meta">
+                    <h6>My Vouchers</h6>
+                    <div className="panel-body-content">
+                      <p>10% off any coffee</p>
+                      <p>25% off lunch offer 2pm</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="panel panel-default">
+              <div
+                className="panel-heading"
+                data-toggle="collapse"
+                data-parent="#accordion"
+                // href="#collapse3"
+              >
+                <h4 className="panel-title">
+                  <a
+                    className="accordion-toggle"
+                    data-toggle="collapse"
+                    data-parent="#accordion"
+                    href="#collapse3"
+                  >
+                    Stellini's
+                    <div className="ratings">
+                      <span>2517 pts</span>
+                    </div>
+                  </a>
+                </h4>
+                <div className="panel-bottom">
+                  <h5>10% off Coffee</h5>
+                  <span>free</span>
+                </div>
+                <i className="bi bi-chevron-down arrow-down"></i>
+              </div>
+              <div id="collapse3" className="panel-collapse collapse">
+                <div className="panel-body">
+                  <h3>Stellini's</h3>
+                  <div className="ratings">
+                    <strong>2517 pts</strong>
+                  </div>
+                  <div className="panel-body-meta">
+                    <h6>My Vouchers</h6>
+                    <div className="panel-body-content">
+                      <p>10% off any coffee</p>
+                      <p>25% off lunch offer 2pm</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <Footer />
+
     </>
   );
 };
