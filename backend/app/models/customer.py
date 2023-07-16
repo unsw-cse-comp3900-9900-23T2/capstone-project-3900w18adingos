@@ -14,6 +14,7 @@ class Customer(db.Model, UserMixin):
     role = db.Column(db.String(50), default='customer')
     handle = db.Column(db.String(120), unique=True)
     auth_source = db.Column(db.String(20), default='local')
+    # cuisine_preferences = db.relationship('LikesCuisine', backref='customer')
     # profile_pic = db.Column(db.String(120), default='default.jpg')
 
     def __init__(self, **kwargs):
