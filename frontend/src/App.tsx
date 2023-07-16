@@ -16,6 +16,7 @@ import ResetPassword from "./Pages/ResetPassword";
 import AddReview from "./Pages/AddReview";
 import Wallet from './Pages/Wallet';
 import VoucherDetails from './Pages/VoucherDetails';
+import { CuisineForm } from "./Pages/CuisineForm";
 
 
 const App = () => { 

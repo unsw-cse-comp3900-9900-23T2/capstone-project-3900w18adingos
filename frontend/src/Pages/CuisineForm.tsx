@@ -24,7 +24,6 @@ export const CuisineForm: React.FC = () => {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    console.log("ASS")
     const api = axios.create({
       baseURL: 'http://127.0.0.1:5000'
     });
@@ -58,7 +57,7 @@ export const CuisineForm: React.FC = () => {
           <button 
             type="submit" 
             className='submit-button'
-            style={{"gridColumn":"1/3", "marginTop": "5px"}}  >
+            style={{"gridColumn":"1/3", "marginTop": "5px"}}>
               Submit
           </button>
         </form>

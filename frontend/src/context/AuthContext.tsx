@@ -110,7 +110,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setUser(response.data); // assuming the response data is the user object
+      setUser(response.data);
     } catch (error) {
       console.error(error);
     }

@@ -244,124 +244,63 @@ customers_arr=[
 reviews_arr=[
     Review(rating=5, review_text='Pretty good, would come back!', customer_id=2, eatery_id=1),
     Review(rating=3, review_text='Average, nothing stood out.', customer_id=3, eatery_id=1),
-    Review(rating=2, review_text='Not my taste, sorry.', customer_id=4, eatery_id=1),
-    Review(rating=3, review_text='Could be better.', customer_id=1, eatery_id=1),
-    Review(rating=4, review_text='Nice place!', customer_id=5, eatery_id=1),
 
     Review(rating=4, review_text='Great service!', customer_id=2, eatery_id=2),
     Review(rating=5, review_text='Enjoyed the atmosphere.', customer_id=3, eatery_id=2),
-    Review(rating=3, review_text='Decent food, but pricey.', customer_id=4, eatery_id=2),
-    Review(rating=2, review_text='Could improve food quality.', customer_id=1, eatery_id=2),
-    Review(rating=4, review_text='Friendly staff!', customer_id=5, eatery_id=2),
     
     Review(rating=4, review_text='Interesting menu, good food.', customer_id=2, eatery_id=3),
     Review(rating=5, review_text='Wonderful ambiance and great service.', customer_id=3, eatery_id=3),
-    Review(rating=3, review_text='Average, nothing special.', customer_id=4, eatery_id=3),
-    Review(rating=2, review_text='The food was cold.', customer_id=5, eatery_id=3),
-    Review(rating=4, review_text='Good for family dinners.', customer_id=1, eatery_id=3),
     
     Review(rating=5, review_text='Delicious food, excellent service!', customer_id=2, eatery_id=4),
     Review(rating=5, review_text='Nice environment, SICK food 5/5.', customer_id=3, eatery_id=4),
-    Review(rating=3, review_text='Nothing special, overpriced.', customer_id=4, eatery_id=4),
-    Review(rating=1, review_text='Terrible service.', customer_id=5, eatery_id=4),
-    Review(rating=4, review_text='Nice place for a quick bite.', customer_id=1, eatery_id=4),
     
     Review(rating=5, review_text='Absolutely loved the food! A must-try for food enthusiasts.', customer_id=2, eatery_id=5),
     Review(rating=4, review_text='Good variety of dishes and friendly staff.', customer_id=3, eatery_id=5),
-    Review(rating=3, review_text='Average experience, could use some improvement.', customer_id=4, eatery_id=5),
-    Review(rating=2, review_text='Disappointing food quality and slow service.', customer_id=5, eatery_id=5),
-    Review(rating=3, review_text='Decent place for a casual meal.', customer_id=1, eatery_id=5),
     
     Review(rating=4, review_text='Great atmosphere and friendly service!', customer_id=2, eatery_id=6),
     Review(rating=5, review_text='Delicious food and excellent presentation.', customer_id=3, eatery_id=6),
-    Review(rating=2, review_text='Okay place, but nothing extraordinary.', customer_id=4, eatery_id=6),
-    Review(rating=2, review_text='Unimpressive menu and tasteless food.', customer_id=5, eatery_id=6),
-    Review(rating=4, review_text='Good place to hang out with friends.', customer_id=1, eatery_id=6),
     
     Review(rating=5, review_text='The flavors were fantastic! Highly recommended.', customer_id=2, eatery_id=7),
     Review(rating=4, review_text='Cozy ambiance and attentive staff.', customer_id=3, eatery_id=7),
-    Review(rating=4, review_text='Average food quality, but good portion sizes.', customer_id=4, eatery_id=7),
-    Review(rating=1, review_text='Service needs improvement, food was cold.', customer_id=5, eatery_id=7),
-    Review(rating=4, review_text='Decent place for a quick meal.', customer_id=1, eatery_id=7),
     
     Review(rating=5, review_text='The food was delicious and beautifully presented.', customer_id=2, eatery_id=8),
     Review(rating=5, review_text='Wonderful service and cozy atmosphere.', customer_id=3, eatery_id=8),
-    Review(rating=5, review_text='extraordinary.', customer_id=4, eatery_id=8),
-    Review(rating=5, review_text='beast restuarant', customer_id=5, eatery_id=8),
-    Review(rating=4, review_text='Bru how do you spell restoraunt', customer_id=1, eatery_id=8),
     
      Review(rating=5, review_text='Exquisite flavors and impeccable service!', customer_id=2, eatery_id=9),
     Review(rating=5, review_text='Cozy ambiance and tasty dishes.', customer_id=3, eatery_id=9),
-    Review(rating=3, review_text='Average experience, nothing remarkable.', customer_id=4, eatery_id=9),
-    Review(rating=2, review_text='Disappointed with the portion sizes and pricing.', customer_id=5, eatery_id=9),
-    Review(rating=4, review_text='Decent place for a casual meal.', customer_id=1, eatery_id=9),
     
     Review(rating=4, review_text='Great food and attentive staff!', customer_id=2, eatery_id=10),
     Review(rating=5, review_text='Charming atmosphere and delicious dishes.', customer_id=3, eatery_id=10),
-    Review(rating=4, review_text='Mediocre experience, needs improvement.', customer_id=4, eatery_id=10),
-    Review(rating=3, review_text='Unsatisfactory service and tasteless food.', customer_id=5, eatery_id=10),
-    Review(rating=4, review_text='Good place to have a quick bite.', customer_id=1, eatery_id=10),
     
     Review(rating=5, review_text='Absolutely loved the food! A hidden gem.', customer_id=2, eatery_id=11),
     Review(rating=4, review_text='Friendly staff and enjoyable atmosphere.', customer_id=3, eatery_id=11),
-    Review(rating=3, review_text='Average food quality, nothing exceptional.', customer_id=4, eatery_id=11),
-    Review(rating=2, review_text='Slow service and overpriced menu.', customer_id=5, eatery_id=11),
-    Review(rating=4, review_text='Convenient spot for a casual meal.', customer_id=1, eatery_id=11),
     
     Review(rating=4, review_text='Delicious cuisine with great presentation.', customer_id=2, eatery_id=12),
     Review(rating=5, review_text='Attentive service and cozy ambiance.', customer_id=3, eatery_id=12),
-    Review(rating=3, review_text='Average experience, could be better.', customer_id=4, eatery_id=12),
-    Review(rating=2, review_text='Unimpressive taste and portion sizes.', customer_id=5, eatery_id=12),
-    Review(rating=4, review_text='Good spot for a relaxed meal.', customer_id=1, eatery_id=12),
     
     Review(rating=5, review_text='Flavors that will blow your mind!', customer_id=2, eatery_id=13),
     Review(rating=5, review_text='Welcoming staff and cozy setting.', customer_id=3, eatery_id=13),
-    Review(rating=3, review_text='Average food, nothing to write home about.', customer_id=4, eatery_id=13),
-    Review(rating=2, review_text='Disappointed with the service and pricing.', customer_id=5, eatery_id=13),
-    Review(rating=4, review_text='Decent place for a quick meal.', customer_id=1, eatery_id=13),
     
     Review(rating=4, review_text='Fantastic food and great service!', customer_id=2, eatery_id=14),
     Review(rating=5, review_text='Wonderful atmosphere and attentive staff.', customer_id=3, eatery_id=14),
-    Review(rating=3, review_text='Average experience, lacks uniqueness.', customer_id=4, eatery_id=14),
-    Review(rating=2, review_text='Poor service and tasteless dishes.', customer_id=5, eatery_id=14),
-    Review(rating=4, review_text='Good for a quick meal on the go.', customer_id=1, eatery_id=14),
     
     Review(rating=5, review_text='Memorable flavors and excellent service!', customer_id=2, eatery_id=15),
     Review(rating=4, review_text='Lovely ambiance and delicious cuisine.', customer_id=3, eatery_id=15),
-    Review(rating=3, review_text='Average food quality, nothing extraordinary.', customer_id=4, eatery_id=15),
-    Review(rating=1, review_text='Disappointed with the service and pricing.', customer_id=5, eatery_id=15),
-    Review(rating=4, review_text='Convenient place for a casual meal.', customer_id=1, eatery_id=15),
     
     Review(rating=4, review_text='Great food and friendly staff!', customer_id=2, eatery_id=16),
     Review(rating=5, review_text='Enjoyable atmosphere and tasty dishes.', customer_id=3, eatery_id=16),
-    Review(rating=3, review_text='Average experience, could be better.', customer_id=4, eatery_id=16),
-    Review(rating=2, review_text='Unimpressive taste and slow service.', customer_id=5, eatery_id=16),
-    Review(rating=4, review_text='Decent spot for a quick meal.', customer_id=1, eatery_id=16),
     
     Review(rating=5, review_text='Exquisite flavors and impeccable service!', customer_id=2, eatery_id=17),
     Review(rating=4, review_text='Cozy ambiance and delightful dishes.', customer_id=3, eatery_id=17),
-    Review(rating=3, review_text='Average experience, nothing remarkable.', customer_id=4, eatery_id=17),
-    Review(rating=1, review_text='Disappointed with the portion sizes and pricing.', customer_id=5, eatery_id=17),
-    Review(rating=4, review_text='Decent place for a casual meal.', customer_id=1, eatery_id=17),
     
     Review(rating=5, review_text='Great food and attentive staff!', customer_id=2, eatery_id=18),
     Review(rating=5, review_text='Charming atmosphere and delicious dishes.', customer_id=3, eatery_id=18),
-    Review(rating=3, review_text='Mediocre experience, needs improvement.', customer_id=4, eatery_id=18),
-    Review(rating=2, review_text='Unsatisfactory service and tasteless food.', customer_id=5, eatery_id=18),
-    Review(rating=4, review_text='Good place to have a quick bite.', customer_id=1, eatery_id=18),
     
     Review(rating=5, review_text='Absolutely loved the food! A hidden gem.', customer_id=2, eatery_id=19),
     Review(rating=4, review_text='Friendly staff and enjoyable atmosphere.', customer_id=3, eatery_id=19),
-    Review(rating=3, review_text='Average food quality, nothing exceptional.', customer_id=4, eatery_id=19),
-    Review(rating=1, review_text='Slow service and overpriced menu.', customer_id=5, eatery_id=19),
-    Review(rating=4, review_text='Convenient spot for a casual meal.', customer_id=1, eatery_id=19),
     
     Review(rating=1, review_text='this restuarant is ass', customer_id=2, eatery_id=20),
     Review(rating=1, review_text='pure ass', customer_id=3, eatery_id=20),
-    Review(rating=1, review_text='absolute cheeks, dont go here', customer_id=4, eatery_id=20),
-    Review(rating=1, review_text='skip this hole', customer_id=5, eatery_id=20),
-    Review(rating=1, review_text='Good spot for a relaxed meal, if you like shit food', customer_id=1, eatery_id=20),
-
 ]
 
 voucher_arr=[
