@@ -15,6 +15,7 @@ import AddReview from "./Pages/AddReview";
 import { CuisineForm } from "./Pages/CuisineForm";
 import Wallet from './Pages/Wallet';
 import VoucherDetails from './Pages/VoucherDetails';
+import { VoucherProvider } from "./context/VoucherContext";
 
 
 const App = () => { 
@@ -23,6 +24,7 @@ const App = () => {
         <div className="app-inner">
           <AuthProvider>
             <EateryProvider>
+            <VoucherProvider>
               <Router>
                 <Routes>
 
@@ -45,6 +47,7 @@ const App = () => {
                   <Route path="/voucher/:id" element={<VoucherDetails />} />
                 </Routes>
               </Router>
+              </VoucherProvider>
             </EateryProvider>
           </AuthProvider>
         </div>
