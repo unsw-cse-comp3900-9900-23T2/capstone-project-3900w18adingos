@@ -4,6 +4,7 @@ import { useEateryContext } from "../hooks/useEateryContext";
 import { useEffect, useState } from "react";
 import "../styles/EateryProfile.css"
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from 'react-router-dom';  // Import useHistory
 
 const EateryProfile: React.FC = () => { 
   const { id } = useParams<{ id: string }>();
@@ -11,6 +12,11 @@ const EateryProfile: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS'>();
   const [users, setUsers] = useState<{[key: string]: any}>({});
 
+  const navigate = useNavigate();
+  const checkToken = localStorage.getItem('token')
+  if (!checkToken){
+    navigate("/")
+  }
   const {getUserById} = useAuth()
 
   useEffect(() => {
