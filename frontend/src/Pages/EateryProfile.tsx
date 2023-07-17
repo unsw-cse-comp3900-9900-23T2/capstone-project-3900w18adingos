@@ -7,9 +7,9 @@ import { useAuth } from "../hooks/useAuth";
 
 const EateryProfile: React.FC = () => { 
   const { id } = useParams<{ id: string }>();
-  const {fetchEatery, eatery} = useEateryContext();
+  const {fetchEatery, eatery, deleteReview} = useEateryContext();
   const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS'>();
-  const {getUserById} = useAuth()
+  const {getUserById, user, fetchUser} = useAuth()
   const [users, setUsers] = useState<{[key: string]: any}>({});
   const navigate = useNavigate()
 
@@ -17,13 +17,13 @@ const EateryProfile: React.FC = () => {
     if (id){
       fetchEatery(id);
     }
-  }, [fetchEatery]);
+    fetchUser()
+  }, [fetchEatery, fetchUser]);
 
   // console.log(eatery?.cuisines[0].cuisine.cuisine_name)
 
   // get user's name from review[].customer_id
   useEffect(() => {
-
     if (eatery?.reviews) {
       const userIds = eatery.reviews.map(r => r.customer_id);
       const userPromises = userIds.map(id => getUserById(id));
@@ -42,6 +42,10 @@ const EateryProfile: React.FC = () => {
     averageRating = (totalRating / allReviews.length);
     averageRating = Math.round(averageRating * 10) / 10;
   }
+
+  const handleDeleteReview = async (reviewId: string) => {
+    await deleteReview(reviewId);
+  };
 
   return (
     <>
@@ -85,9 +89,19 @@ const EateryProfile: React.FC = () => {
         <div className="display-reviews">
           {eatery?.reviews.map((review, index) => (
             <div key={index} className="list-item">
-              <div>Rating: {review.rating}</div>
+              
+              <div className="title-rating-container">
+                <div>Rating: {review.rating}</div>
+                {user?.id === review.customer_id && (
+                  <button onClick={() => handleDeleteReview(review.id)}>
+                    <i className="bi bi-trash gl" style={{"padding": "10px"}}></i>
+                  </button>
+                )}
+              </div>
+
               <div>Review: {review.review_text}</div>
               <div>User: {users[review.customer_id]?.name}</div>
+
             </div>
           ))}
         </div>

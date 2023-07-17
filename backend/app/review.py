@@ -77,7 +77,7 @@ def add_review():
 
     return jsonify(success=True), 201
 
-@review.delete('/delete_review')
+@review.delete('/delete_review/<int:review_id>')
 def delete_review(review_id):
     review = Review.query.first_or_404(review_id)
     db.session.delete(review)
