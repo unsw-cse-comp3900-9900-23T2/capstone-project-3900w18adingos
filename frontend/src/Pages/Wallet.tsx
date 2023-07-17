@@ -22,18 +22,39 @@ const Wallet: React.FC = () => {
     return null;
   }
 
-  const [openStarBucks, setOpenStarBucks] = useState(false);
-  const [openStellinis, setOpenStellinis] = useState(false);
-  const {fetchVouchers, vouchers} = useVoucher();
-  // const {fetchUser, user} = useAuth()
+  const { vouchers, fetchVouchers } = useVoucher();
+  const { user, fetchUser } = useAuth();
 
-  // useEffect(() => {
-  //   fetchUser() 
-  // },[fetchUser])
+  // This will add an 'open' property to each voucher
+  const [vouchersState, setVouchersState] = useState(
+    vouchers.map((voucher) => ({ ...voucher, open: false }))
+  );
 
-  useEffect(() => { 
-      fetchVouchers("1")
-  },[fetchVouchers])
+  // call fetchUser once when component is mounted
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+
+  // call fetchVouchers once when user data is fetched
+  useEffect(() => {
+    if (user) {
+      fetchVouchers(user.id);
+    }
+  }, [fetchVouchers, user]);
+
+  // update vouchersState when vouchers data is fetched
+  useEffect(() => {
+    setVouchersState(vouchers.map((voucher) => ({ ...voucher, open: false })));
+  }, [vouchers]);
+
+  // Function to handle opening/closing of a voucher
+  const handleVoucherToggle = (index: number) => {
+    setVouchersState((prevState) =>
+      prevState.map((voucher, i) =>
+        i === index ? { ...voucher, open: !voucher.open } : voucher
+      )
+    );
+  };
 
   return (
     <>
@@ -45,61 +66,33 @@ const Wallet: React.FC = () => {
           <img src={qrCode} alt="qr code" />
         </div>
         <div className="wallet-accordian">
-          <Button onClick={() => setOpenStarBucks(!openStarBucks)}>
-            Star Bucks
-            <div className="ratings">
-              <i className="bi bi-star-fill"></i>
-              <i className="bi bi-star-fill"></i>
-              <i className="bi bi-star-fill"></i>
-              <i className="bi bi-star-half"></i>
-              <i className="bi bi-star-half"></i>
-            </div>
-          </Button>
-          <Collapse in={openStarBucks}>
-            <Card>
-              <Card.Body>
-                <h3>Star Bucks</h3>
+          {vouchersState.map((voucher, index) => (
+            <div key={index}>
+              <Button onClick={() => handleVoucherToggle(index)}>
+                {voucher.description}
                 <div className="ratings">
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-half"></i>
-                  <i className="bi bi-star-half"></i>
+                  <strong>{voucher.quantity} pts</strong>
                 </div>
-                <div className="panel-body-meta">
-                  <h6>My Vouchers</h6>
-                  <div className="panel-body-content">
-                    <p>10% off any coffee</p>
-                    <p>25% off lunch offer 2pm</p>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Collapse>
-
-          <Button onClick={() => setOpenStellinis(!openStellinis)}>
-            Stellini's
-            <div className="ratings">
-              <strong>2517 pts</strong>
+              </Button>
+              <Collapse in={voucher.open}>
+                <Card>
+                  <Card.Body>
+                    <h3>{voucher.description}</h3>
+                    <div className="ratings">
+                      <strong>{voucher.quantity} pts</strong>
+                    </div>
+                    <div className="panel-body-meta">
+                      <h6>My Vouchers</h6>
+                      <div className="panel-body-content">
+                        <p>10% off any coffee</p>
+                        <p>25% off lunch offer 2pm</p>
+                      </div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Collapse>
             </div>
-          </Button>
-          <Collapse in={openStellinis}>
-            <Card>
-              <Card.Body>
-                <h3>Stellini's</h3>
-                <div className="ratings">
-                  <strong>2517 pts</strong>
-                </div>
-                <div className="panel-body-meta">
-                  <h6>My Vouchers</h6>
-                  <div className="panel-body-content">
-                    <p>10% off any coffee</p>
-                    <p>25% off lunch offer 2pm</p>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Collapse>
+          ))}
         </div>
       </div>
       <Footer />
