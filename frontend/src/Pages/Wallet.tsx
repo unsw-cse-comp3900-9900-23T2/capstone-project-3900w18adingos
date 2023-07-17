@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Collapse } from 'react-bootstrap';
+import { Card, Button, Collapse, ListGroup, Badge } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import "../styles/Wallet.css";
 import qrCode from "../assets/qr-code.png";
@@ -34,10 +34,11 @@ const Wallet: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      fetchVouchers('1'); // AAAAAAAAAAAAAAAAAAAAAAAAAA
+      fetchVouchers(user.id);
     }
-  }, [fetchVouchers]);
+  }, [fetchVouchers, user]);
 
+  
   type VoucherWithEatery = { voucher: Voucher, open: boolean, eatery: Eatery | null };
   const [vouchersState, setVouchersState] = useState<VoucherWithEatery[]>([]);
 
@@ -48,12 +49,11 @@ const Wallet: React.FC = () => {
       setVouchersState(vouchersWithEatery);
     };
   }, [fetchVouchers, user]);
-  
+
   useEffect(() => {
     const updateVouchersWithEateries = async () => {
       const vouchersWithEateries = await Promise.all(
         vouchers.map(async voucher => {
-          console.log(voucher.eatery_id, "v each")
           const eatery = await fetchEatery((voucher.eatery_id));
           return { voucher, open: false, eatery };
         })
@@ -82,28 +82,26 @@ const Wallet: React.FC = () => {
           <img src={qrCode} alt="qr code" />
         </div>
         <div className="wallet-accordian">
-          {vouchersState.map((voucher, index) => (
+          {vouchersState.map((item, index) => (
             <div key={index}>
               <Button onClick={() => handleVoucherToggle(index)}>
-                {voucher.voucher.description}
+                {item.eatery?.restaurant_name}
                 <div className="ratings">
-                  <strong>{voucher.voucher.quantity} pts</strong>
+                  <strong>{item.voucher.quantity} pts</strong>
                 </div>
               </Button>
-              <Collapse in={voucher.open}>
+              <Collapse in={item.open}>
                 <Card>
                   <Card.Body>
-                    <h3>{voucher.voucher.description}</h3>
-                    <h3>{voucher.eatery?.restaurant_name}</h3> /// NAME 
-                    <div className="ratings">
-                      <strong>{voucher.voucher.quantity} pts</strong>
-                    </div>
                     <div className="panel-body-meta">
                       <h6>My Vouchers</h6>
-                      <div className="panel-body-content">
-                        <p>10% off any coffee</p>
-                        <p>25% off lunch offer 2pm</p>
-                      </div>
+                      <ListGroup variant="flush">
+                        <ListGroup.Item>
+                          <Badge pill bg="primary" className="mr-2">{item.voucher.quantity} pts</Badge>
+                          <p>{item.voucher.description}</p>
+                          <p>Expires on: {new Date(item.voucher.expiry).toLocaleDateString()}</p>
+                        </ListGroup.Item>
+                      </ListGroup>
                     </div>
                   </Card.Body>
                 </Card>
