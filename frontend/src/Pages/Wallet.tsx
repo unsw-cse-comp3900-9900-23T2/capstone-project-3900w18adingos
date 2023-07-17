@@ -7,6 +7,8 @@ import Footer from '../components/Footer/Footer';
 import Header from "../components/Header/Header";
 import { useVoucher } from '../hooks/useVoucher';
 import { useAuth } from '../hooks/useAuth';
+import { Eatery, Voucher } from '../interface';
+import { useEateryContext } from '../hooks/useEateryContext';
 
 const Wallet: React.FC = () => {
   const navigate = useNavigate();
@@ -24,28 +26,42 @@ const Wallet: React.FC = () => {
 
   const { vouchers, fetchVouchers } = useVoucher();
   const { user, fetchUser } = useAuth();
+  const {fetchEatery} = useEateryContext()
 
-  // This will add an 'open' property to each voucher
-  const [vouchersState, setVouchersState] = useState(
-    vouchers.map((voucher) => ({ ...voucher, open: false }))
-  );
-
-  // call fetchUser once when component is mounted
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
 
-  // call fetchVouchers once when user data is fetched
   useEffect(() => {
     if (user) {
-      fetchVouchers(user.id);
+      fetchVouchers('1'); // AAAAAAAAAAAAAAAAAAAAAAAAAA
     }
-  }, [fetchVouchers, user]);
+  }, [fetchVouchers]);
 
-  // update vouchersState when vouchers data is fetched
+  type VoucherWithEatery = { voucher: Voucher, open: boolean, eatery: Eatery | null };
+  const [vouchersState, setVouchersState] = useState<VoucherWithEatery[]>([]);
+
   useEffect(() => {
-    setVouchersState(vouchers.map((voucher) => ({ ...voucher, open: false })));
-  }, [vouchers]);
+    if (user) {
+      fetchVouchers(user.id)
+      const vouchersWithEatery = vouchers.map(voucher => ({ voucher, open: false, eatery: null }));
+      setVouchersState(vouchersWithEatery);
+    };
+  }, [fetchVouchers, user]);
+  
+  useEffect(() => {
+    const updateVouchersWithEateries = async () => {
+      const vouchersWithEateries = await Promise.all(
+        vouchers.map(async voucher => {
+          console.log(voucher.eatery_id, "v each")
+          const eatery = await fetchEatery((voucher.eatery_id));
+          return { voucher, open: false, eatery };
+        })
+      );
+      setVouchersState(vouchersWithEateries);
+    };
+    updateVouchersWithEateries();
+  }, [vouchers, fetchEatery]);
 
   // Function to handle opening/closing of a voucher
   const handleVoucherToggle = (index: number) => {
@@ -69,17 +85,18 @@ const Wallet: React.FC = () => {
           {vouchersState.map((voucher, index) => (
             <div key={index}>
               <Button onClick={() => handleVoucherToggle(index)}>
-                {voucher.description}
+                {voucher.voucher.description}
                 <div className="ratings">
-                  <strong>{voucher.quantity} pts</strong>
+                  <strong>{voucher.voucher.quantity} pts</strong>
                 </div>
               </Button>
               <Collapse in={voucher.open}>
                 <Card>
                   <Card.Body>
-                    <h3>{voucher.description}</h3>
+                    <h3>{voucher.voucher.description}</h3>
+                    <h3>{voucher.eatery?.restaurant_name}</h3> /// NAME 
                     <div className="ratings">
-                      <strong>{voucher.quantity} pts</strong>
+                      <strong>{voucher.voucher.quantity} pts</strong>
                     </div>
                     <div className="panel-body-meta">
                       <h6>My Vouchers</h6>
