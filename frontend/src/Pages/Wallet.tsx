@@ -83,7 +83,7 @@ const Wallet: React.FC = () => {
         </div>
         <div className="wallet-accordian">
           {vouchersState.map((item, index) => (
-            <div key={index}>
+            <div key={index} className="voucher">
               <Button onClick={() => handleVoucherToggle(index)}>
                 {item.eatery?.restaurant_name}
                 <div className="ratings">
