@@ -1,8 +1,9 @@
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
-from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
-from app.extensions import db, login_manager
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
+
+from app.extensions import db
 
 class Customer(db.Model, UserMixin):
     __tablename__ = 'customer'
