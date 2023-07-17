@@ -8,10 +8,14 @@ from .config import config
 def create_app(config_name='default'):
 
     app = Flask(__name__)
+    
+    app.config.from_object(config[config_name])
+        
+    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
-
+    
     @login_manager.user_loader
     def load_user(user_id):
         user_type = session.get('user_type')
@@ -20,15 +24,10 @@ def create_app(config_name='default'):
         elif user_type == 'eatery':
             return Eatery.query.get(int(user_id))
 
-    app.config.from_object(config[config_name])
-
     init_mail(app)
-    
-    CORS(app, resources={r"/*": {"origins": "*"}})
-    
+
     db.init_app(app)
     ma.init_app(app)
-
 
     from app.models.has_voucher import HasVoucher
     from app.models.voucher import Voucher

@@ -1,6 +1,6 @@
-from flask import jsonify, current_app, url_for, session, request, g
+from flask import jsonify, current_app, session, after_this_request
 from flask_mail import Mail, Message
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, current_user
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 import requests
 from functools import wraps
@@ -24,40 +24,40 @@ def get_user_model(role):
     else:
         return None
 
-def token_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token = None
+# def token_required(f):
+#     @wraps(f)
+#     def decorated(*args, **kwargs):
+#         token = None
 
-        if 'Authorization' in request.headers:
-            token = request.headers['Authorization'].split(" ")[1]
-            print(f'Token received: {token}')  # Print received token
-        else:
-            print('No token found in the headers')  # Print message if no token found
+#         if 'Authorization' in request.headers:
+#             token = request.headers['Authorization'].split(" ")[1]
+#             print(f'Token received: {token}')  # Print received token
+#         else:
+#             print('No token found in the headers')  # Print message if no token found
 
-        if not token:
-            return jsonify({'message' : 'Token is missing!'}), 401
+#         if not token:
+#             return jsonify({'message' : 'Token is missing!'}), 401
 
-        try:
-            # Try decoding the token with Customer model
-            data = Customer.decode_auth_token(token)
-            if isinstance(data, str): 
-                # Try decoding the token with Eatery model
-                data = Eatery.decode_auth_token(token)
-            if isinstance(data, str):
-                return jsonify({'message' : 'Token is invalid!'}), 401
-            print(f'Decoded data from token: {data}')  # Print the decoded data from the token
-            user = Customer.query.filter_by(id=data['id']).first() if data['role'] == 'customer' else Eatery.query.filter_by(id=data['id']).first()
-            if not user:
-                return jsonify({'message': 'User not found!'}), 401
-            else:
-                g.current_user = user
-        except:
-            return jsonify({'message' : 'Token is invalid!'}), 401
+#         try:
+#             # Try decoding the token with Customer model
+#             data = Customer.decode_auth_token(token)
+#             if isinstance(data, str): 
+#                 # Try decoding the token with Eatery model
+#                 data = Eatery.decode_auth_token(token)
+#             if isinstance(data, str):
+#                 return jsonify({'message' : 'Token is invalid!'}), 401
+#             print(f'Decoded data from token: {data}')  # Print the decoded data from the token
+#             user = Customer.query.filter_by(id=data['id']).first() if data['role'] == 'customer' else Eatery.query.filter_by(id=data['id']).first()
+#             if not user:
+#                 return jsonify({'message': 'User not found!'}), 401
+#             else:
+#                 g.current_user = user
+#         except:
+#             return jsonify({'message' : 'Token is invalid!'}), 401
 
-        return f(*args, **kwargs)
+#         return f(*args, **kwargs)
 
-    return decorated
+#     return decorated
 
 
 def auth_logout(token):
@@ -209,4 +209,3 @@ def validate_google_auth_token_and_send_back_token(code):
             return jsonify({'token': user.encode_auth_token(user.id), 'user': name, 'role': 'customer'})
 
     return jsonify({"message": "Failed to validate token"}), 400
-

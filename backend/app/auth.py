@@ -1,7 +1,9 @@
-from flask import Blueprint, request, jsonify
-from flask_login import current_user, logout_user
+from flask import Blueprint, jsonify, request, session
+from flask_login import current_user, logout_user, login_required
+
 from app import auth_helper
 from app.auth_helper import validate_google_auth_token_and_send_back_token
+
 from app.models.customer import Customer
 
 auth = Blueprint('auth', __name__)
@@ -78,26 +80,26 @@ def passwordreset_reset():
     result = auth_helper.auth_passwordreset_reset(reset_code, new_password)
     return result
 
-@auth.route('/auth/me', methods=['GET'])
-def me():
-    token = request.headers.get('Authorization')
-    if not token:
-        return jsonify({"message": "Missing token"}), 400
+# @auth.route('/auth/me', methods=['GET'])
+# def me():
+#     token = request.headers.get('Authorization')
+#     if not token:
+#         return jsonify({"message": "Missing token"}), 400
 
-    token = token.split(" ")[1]  # The Authorization header format is "Bearer <token>"
-    data = Customer.decode_auth_token(token)
-    if not data:
-        return jsonify({"message": "Invalid token"}), 401  # unauthorized
+#     token = token.split(" ")[1]  # The Authorization header format is "Bearer <token>"
+#     data = Customer.decode_auth_token(token)
+#     if not data:
+#         return jsonify({"message": "Invalid token"}), 401  # unauthorized
 
-    user = Customer.query.get(data['id'])
+#     user = Customer.query.get(data['id'])
 
-    # return the user's data
-    return jsonify({
-        "id": user.id,
-        "name": user.name,
-        "email": user.email,
-        # add any other fields you want to return here
-    }), 200
+#     # return the user's data
+#     return jsonify({
+#         "id": user.id,
+#         "name": user.name,
+#         "email": user.email,
+#         # add any other fields you want to return here
+#     }), 200
     
 @auth.route('/auth/whoami', methods=['GET'])
 def whoami():
@@ -111,6 +113,7 @@ def whoami():
     }), 200
     
 @auth.route('/user/<int:user_id>', methods=['GET'])
+@login_required
 def get_user(user_id):
     user = Customer.query.get(user_id)
     if not user:

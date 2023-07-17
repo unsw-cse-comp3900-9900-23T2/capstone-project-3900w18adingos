@@ -4,12 +4,11 @@ from app.models.customer import Customer
 from app.models.eatery import Eatery
 from app.extensions import db
 from app.auth_helper import user_is_eatery
-from app.auth_helper import token_required
 
 
 user = Blueprint('user', __name__)
 
-@token_required
+@login_required
 @user.route('/customer/profile/', methods=['GET'])
 def get_customer():
     token = request.args['token']
@@ -28,7 +27,7 @@ def get_customer():
 
     return jsonify(customer_data)
 
-@token_required
+@login_required
 @user.route('/customer/edit-profile/', methods=['POST'])
 def edit_customer():
     token = request.json.get('token')
@@ -50,7 +49,7 @@ def edit_customer():
     db.session.commit()
     return jsonify({"message": "Customer updated"}), 200
 
-@token_required
+@login_required
 @user.route('/eatery/edit-profile/', methods=['PUT'])
 def edit_eatery():
     token = request.json.get('token')
@@ -70,7 +69,7 @@ def edit_eatery():
     db.session.commit()
     return jsonify({"message": "Eatery updated"}), 200
 
-@token_required
+@login_required
 @user.route('/eatery/profile/', methods=['GET'])
 def get_eatery():
     token = request.args['token']
