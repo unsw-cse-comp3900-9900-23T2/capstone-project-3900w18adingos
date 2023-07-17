@@ -14,10 +14,10 @@ user = Blueprint('user', __name__)
 def get_customer():
     token = request.args['token']
     customer_id = Customer.decode_auth_token(token)
-    if not isinstance(customer_id, int):
-        return jsonify({"message": customer_id}), 400
+    if isinstance(customer_id, str):  # Check if it's an error message
+        return jsonify({"message": customer_id}), 400 
 
-    customer = Customer.query.get(customer_id)
+    customer = Customer.query.get(customer_id['id'])
     customer_data = {
         'id': customer.id,
         'name': customer.name,
@@ -33,10 +33,10 @@ def get_customer():
 def edit_customer():
     token = request.json.get('token')
     customer_id = Customer.decode_auth_token(token)
-    if not isinstance(customer_id, int):
+    if isinstance(customer_id, str):  # Check if it's an error message
         return jsonify({"message": customer_id}), 400 
 
-    customer = Customer.query.get(customer_id)
+    customer = Customer.query.get(customer_id['id'])
     data = request.get_json()
     customer.name = data.get('name', customer.name)
     customer.email = data.get('email', customer.email)
@@ -55,10 +55,10 @@ def edit_customer():
 def edit_eatery():
     token = request.json.get('token')
     eatery_id = Eatery.decode_auth_token(token)
-    if not isinstance(eatery_id, int):
-        return jsonify({"message": eatery_id}), 400 # It means an error message is returned
+    if isinstance(eatery_id, str):  # Check if it's an error message
+        return jsonify({"message": eatery_id}), 400 
 
-    eatery = Eatery.query.get(eatery_id)
+    eatery = Customer.query.get(eatery_id['id'])
     data = request.get_json()
     eatery.restaurant_name = data.get('restaurant_name', eatery.restaurant_name)
     eatery.location = data.get('location', eatery.location)
@@ -75,10 +75,10 @@ def edit_eatery():
 def get_eatery():
     token = request.args['token']
     eatery_id = Eatery.decode_auth_token(token)
-    if not isinstance(eatery_id, int):
-        return jsonify({"message": eatery_id}), 400 # It means an error message is returned
+    if isinstance(eatery_id, str):  # Check if it's an error message
+        return jsonify({"message": eatery_id}), 400 
 
-    eatery = Eatery.query.get(eatery_id)
+    eatery = Customer.query.get(eatery_id['id'])
     eatery_data = {
         'id': eatery.id,
         'restaurant_name': eatery.restaurant_name,

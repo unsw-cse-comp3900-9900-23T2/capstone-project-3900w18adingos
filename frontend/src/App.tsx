@@ -29,6 +29,7 @@ const App = () => {
                 <Routes>
 
                   {/* Entry Pages */}
+                  <Route path="/" element={<Home />} />
                   <Route path="/auth/register" element={<SignUp />} />
                   <Route path="/auth/login" element={<SignIn />} />
                   <Route path="/auth/cuisine-form" element={<CuisineForm />} />
