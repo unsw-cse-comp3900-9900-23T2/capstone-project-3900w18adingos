@@ -9,9 +9,24 @@ const RestaurantList = () => {
   const { eateries, fetchEateries} = useEateryContext();
   const navigate = useNavigate()
 
+  const checkToken = localStorage.getItem('token')
+  if (!checkToken){
+    navigate("/")
+  }
   useEffect(() => {
     fetchEateries();
   }, [fetchEateries]);
+
+  useEffect(() => {
+    if (!checkToken) {
+      navigate('/');
+    }
+  }, [checkToken, navigate]);
+
+  if (!checkToken) {
+    return null;
+  }
+  
 
   return ( 
     <>
@@ -30,7 +45,7 @@ const RestaurantList = () => {
             <h3>{eatery.restaurant_name}</h3>
             <div className="rating">
               {eatery.reviews &&
-                (eatery.reviews.reduce((prev, current) => prev + current.rating, 0) / eatery.reviews.length)
+                (Math.round((eatery.reviews.reduce((prev, current) => prev + current.rating, 0) / eatery.reviews.length) * 10) / 10)
               }  
             </div>
           </div>

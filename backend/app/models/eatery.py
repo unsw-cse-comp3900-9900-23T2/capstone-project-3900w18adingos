@@ -53,7 +53,7 @@ class Eatery(db.Model, UserMixin):
             data = s.loads(token, salt='auth')
         except (SignatureExpired, BadSignature):
             return "Token invalid or expired. Please log in again."
-        return data['id'] if data['role'] == 'eatery' else None
+        return {'id': data['id'], 'role': data['role']} if data['role'] == 'eatery' else None
 
     def hash_password(self, password):
         self.password_hash = generate_password_hash(password)

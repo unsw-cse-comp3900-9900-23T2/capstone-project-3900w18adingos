@@ -1,5 +1,5 @@
 import Footer from "../components/Footer/Footer";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEateryContext } from "../hooks/useEateryContext";
 import { useEffect, useState } from "react";
 import "../styles/EateryProfile.css"
@@ -7,32 +7,41 @@ import { useAuth } from "../hooks/useAuth";
 
 const EateryProfile: React.FC = () => { 
   const { id } = useParams<{ id: string }>();
-  const {getAllReviews, allReviews,fetchEatery, eatery} = useEateryContext();
+  const {fetchEatery, eatery} = useEateryContext();
   const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS'>();
-  const [users, setUsers] = useState<{[key: string]: any}>({});
-
   const {getUserById} = useAuth()
+  const [users, setUsers] = useState<{[key: string]: any}>({});
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (id){
-      getAllReviews(id);
       fetchEatery(id);
-      allReviews.forEach(async (review) => {
-        if (!users[review.customer_id]) {
-          const user = await getUserById(review.customer_id);
-          setUsers(prevUsers => ({
-            ...prevUsers,
-            [review.customer_id]: user,
-          }));
-        }
+    }
+  }, [fetchEatery]);
+
+  // console.log(eatery?.cuisines[0].cuisine.cuisine_name)
+
+  // get user's name from review[].customer_id
+  useEffect(() => {
+
+    if (eatery?.reviews) {
+      const userIds = eatery.reviews.map(r => r.customer_id);
+      const userPromises = userIds.map(id => getUserById(id));
+      Promise.all(userPromises).then(usersData => {
+        const usersObj = usersData.reduce((acc, user) => user ? ({...acc, [user.id]: user}) : acc, {});
+        setUsers(usersObj);
       });
     }
-  }, [fetchEatery, getAllReviews, getUserById]);
-  
+  }, [eatery, getUserById]);
 
-  let totalRating = allReviews.reduce((sum, review) => sum + review.rating, 0);
-  let averageRating = (totalRating / allReviews.length) / 2;
-  averageRating = Math.round(averageRating * 10) / 10;
+
+  let averageRating;
+  if (eatery?.reviews) { 
+  const allReviews = eatery.reviews
+    let totalRating = allReviews.reduce((sum, review) => sum + review.rating, 0);
+    averageRating = (totalRating / allReviews.length);
+    averageRating = Math.round(averageRating * 10) / 10;
+  }
 
   return (
     <>
@@ -45,31 +54,36 @@ const EateryProfile: React.FC = () => {
           <h3>{eatery?.restaurant_name}</h3>
           <p className="rating">{averageRating ? averageRating: ""}</p>
         </div>
-        <p>cuisine</p>
+        {/* <p>ASS{eatery?.cuisines[0].cuisine_name}</p> */}
         <p>price in $$$$</p>
-        <p>Open Now?</p>
-        
+
+        <div className="title-rating-container">
+          <p style={{"color":"green"}}>Open Now?</p>
+          <button className="add-review" onClick={() => navigate(`/add-review/${id}`)}>Add Review</button>
+        </div>
+
         <div className="info-photos-reviews-button-container">
-          <div className="button" onClick={() => setCurrentTab('INFO')}>
+          <button className="button" onClick={() => setCurrentTab('INFO')}>
             <i className="glyphicon glyphicon-info-sign gl" />
             <p>info</p>
-          </div>
-          <div className="button" onClick={() => setCurrentTab('PHOTOS')}>
+          </button>
+          <button className="button" onClick={() => setCurrentTab('PHOTOS')}>
             <i className="glyphicon glyphicon-picture gl" />
             <p>photos</p>
-          </div>
-          <div className="button" onClick={() => setCurrentTab('REVIEWS')}>
+          </button>
+          <button className="button" onClick={() => setCurrentTab('REVIEWS')}>
             <i className="glyphicon glyphicon-comment gl" />
             <p>reviews</p>
-          </div>
+          </button>
         </div>
+
       </div>
 
       {currentTab === 'INFO' && <div>Info Content</div>}
       {currentTab === 'PHOTOS' && <div>Photos Content</div>}
       {currentTab === 'REVIEWS' && (
         <div className="display-reviews">
-          {allReviews.map((review, index) => (
+          {eatery?.reviews.map((review, index) => (
             <div key={index} className="list-item">
               <div>Rating: {review.rating}</div>
               <div>Review: {review.review_text}</div>

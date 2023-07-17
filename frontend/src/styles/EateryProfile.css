@@ -6,6 +6,20 @@
     padding-right: 20px;
 }
 
+button { 
+    background-color: transparent;
+    border: none;
+}
+
+.add-review { 
+    padding: 10px 15px 10px 15px;
+
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
 h3 { 
     margin: 0;
 }
@@ -40,4 +54,13 @@ h3 {
     background-color: #FEC8C9;
     border-radius: 5px;
     font-weight: bold;
+}
+
+.display-reviews { 
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow:scroll;
+    overflow-x: hidden;
+    height: 60%;
 }

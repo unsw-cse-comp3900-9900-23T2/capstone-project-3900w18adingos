@@ -89,7 +89,7 @@ def me():
     if not data:
         return jsonify({"message": "Invalid token"}), 401  # unauthorized
 
-    user = Customer.query.get(data)
+    user = Customer.query.get(data['id'])
 
     # return the user's data
     return jsonify({

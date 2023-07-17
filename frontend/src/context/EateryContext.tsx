@@ -41,19 +41,21 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
           },
         });
         setEatery(response.data)
+        return response.data
       } catch (error) {
         console.error(error);
+        return null
       }
   }, [token]);
 
     const fetchEateryImages = useCallback(async (eateryId: string) => {
         try {
-          const response = await api.post('/eatery/get_images', { eatery_id: eateryId }, {
+          const response = await api.post('/get_images', { eatery_id: eateryId }, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-          setEateryImages(response.data.images);
+          setEateryImages(response.data);
         } catch (error) {
           console.error(error);
         }
@@ -99,7 +101,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        return response.data.success; // return the success status
+        return response.data; // return the success status
       } catch (error) {
         console.error(error);
       }
@@ -117,7 +119,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
         console.error(error);
       }
     }, [token]);
-  
+    
     return (
       <EateryContext.Provider value={{
         fetchEateryImages, 

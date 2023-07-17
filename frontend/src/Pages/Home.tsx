@@ -13,10 +13,10 @@ const Home = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    debugger
+    
     if (code) {
       try {
-        debugger
+        
         googleLogin(code).then(res => {
           if (res) {
             setMessage("success");

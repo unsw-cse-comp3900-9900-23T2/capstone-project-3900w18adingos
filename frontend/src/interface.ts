@@ -35,7 +35,7 @@ export interface EateryContextProps {
     getAllReviews: (eateryId: string) => Promise<Array<Review> | void>;
     addReview: (eateryId: string, rating: string, reviewText: string) => Promise<boolean | void>;
     deleteReview: (reviewId: string) => Promise<boolean | void>;
-    fetchEatery: (id: string) => Promise<void>;
+    fetchEatery: (id: string) => Promise<Eatery | null>;
     eatery: Eatery | null;
     eateries: Array<Eatery>;
     eateryImages: Images | null;
@@ -115,3 +115,17 @@ export interface ClusterProps {
     count: number;
     position: google.maps.LatLng | google.maps.LatLngLiteral;
   }
+
+  export interface Voucher {
+  id: string;
+  description: string;
+  eatery_id: string;
+  quantity: number;
+  start: Date;
+  expiry: Date;
+}
+
+export interface VoucherContextProps {
+  vouchers: Array<Voucher>;
+  fetchVouchers: (customerId: string) => Promise<void>;
+}

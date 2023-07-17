@@ -196,7 +196,7 @@ cuisine_arr=[
 
 cooks_cuisine_arr=[
     CooksCuisine(
-                eatery_id = 15,
+                eatery_id = 1,
                 cuisine_id = 1),
     CooksCuisine(
                 eatery_id = 16,

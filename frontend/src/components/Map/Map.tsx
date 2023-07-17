@@ -20,7 +20,7 @@ const Map: React.FC = () => {
   const mapRef = useRef<google.maps.Map | null>(null);
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [loadingPosition, setLoadingPosition] = useState(true);
-  const { eateries, fetchEateries, getAllReviews } = useEateryContext();
+  const { eateries, fetchEateries, getAllReviews, fetchEateryImages, eateryImages } = useEateryContext();
   const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
   const navigate = useNavigate();
   
@@ -31,6 +31,10 @@ const Map: React.FC = () => {
   useEffect(() => { 
     fetchEateries()
   },[fetchEateries])
+
+  // useEffect(() => { 
+  //   fetchEateryImages("1")
+  // }, [fetchEateryImages])
 
   const initialize = async () => {
     if (!loadingPosition && isLoaded) {
