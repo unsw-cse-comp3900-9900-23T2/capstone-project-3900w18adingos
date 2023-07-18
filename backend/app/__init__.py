@@ -1,5 +1,6 @@
-from flask import Flask, session
+from flask import Flask, g
 from flask_cors import CORS
+from flask.sessions import SecureCookieSessionInterface, SessionMixin
 
 from .extensions import db, ma, login_manager
 from .mail import init_mail
@@ -12,6 +13,12 @@ def create_app(config_name='default'):
     app.config.from_object(config[config_name])
         
     CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
+
+    class CustomSessionInterface(SecureCookieSessionInterface):
+        def should_set_cookie(self, app: "Flask", session: SessionMixin) -> bool:
+            return False
+    
+    app.session_interface = CustomSessionInterface()
 
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
@@ -30,6 +37,7 @@ def create_app(config_name='default'):
     from app.models.eatery import Eatery
     from app.models.likes_cuisine import LikesCuisine
     from app.models.customer import Customer
+
 
     with app.app_context():
         db.create_all()
