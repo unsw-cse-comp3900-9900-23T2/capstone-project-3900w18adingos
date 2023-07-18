@@ -4,7 +4,8 @@ from flask_login import current_user, logout_user, login_required
 from app import auth_helper
 from app.auth_helper import validate_google_auth_token_and_send_back_token
 
-from app.models.customer import Customer
+from app.models.customer import Customer, customer_schema
+from app.models.eatery import eatery_schema
 
 auth = Blueprint('auth', __name__)
 
@@ -79,14 +80,7 @@ def whoami():
     if not current_user or not current_user.is_authenticated:
         return jsonify({"message": "Not logged in"}), 401
 
-    role_str='customer' if isinstance(current_user, Customer) else 'eatery'
-    
-    return jsonify({
-        "id": current_user.id,
-        "email": current_user.email, 
-        "name": current_user.name if role_str == 'customer' else current_user.restaurant_name,
-        "role": role_str
-    }), 200
+    return customer_schema.dump(current_user) if isinstance(current_user, Customer) else eatery_schema.dump(current_user), 200
     
 # @auth.route('/user/<int:user_id>', methods=['GET'])
 # @login_required
