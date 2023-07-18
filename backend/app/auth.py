@@ -103,5 +103,7 @@ def get_user(user_id):
 @auth.route('/auth/validate-google-token', methods=['POST'])
 def validate_google_token():
     code = request.json.get('code')
-    return validate_google_auth_token_and_send_back_token(code)
+    role = 'customer'  # Set role as 'customer' by default
+    return validate_google_auth_token_and_send_back_token(code, role)
+
 
