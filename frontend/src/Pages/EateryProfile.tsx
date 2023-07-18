@@ -59,8 +59,8 @@ const EateryProfile: React.FC = () => {
   };
 
   const voucherClaim = async (voucherId: string) => { 
-    if (id) { 
-      const success = await claimVoucher(voucherId, id)
+    if (user) { 
+      const success = await claimVoucher(voucherId, user.id)
       if (success) { 
         return "Claim successful!"
       }
