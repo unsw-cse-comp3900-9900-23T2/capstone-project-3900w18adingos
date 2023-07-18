@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash
 
-from app.extensions import db
+from app.extensions import db, ma
 from app.models.user import User
 
 class Customer(User):
@@ -20,3 +20,13 @@ class Customer(User):
         super(Customer, self).__init__(**kwargs)
         if password:
             self.password_hash = generate_password_hash(password)
+
+class CustomerSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Customer
+    
+    id = ma.auto_field()
+    email = ma.auto_field()
+    name = ma.auto_field()
+
+customer_schema = CustomerSchema()
