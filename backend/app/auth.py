@@ -79,26 +79,29 @@ def whoami():
     if not current_user or not current_user.is_authenticated:
         return jsonify({"message": "Not logged in"}), 401
 
-    # return the user's data
+    role_str='customer' if isinstance(current_user, Customer) else 'eatery'
+    
     return jsonify({
         "id": current_user.id,
-        "email": current_user.email,
+        "email": current_user.email, 
+        "name": current_user.name if role_str == 'customer' else current_user.restaurant_name,
+        "role": role_str
     }), 200
     
-@auth.route('/user/<int:user_id>', methods=['GET'])
-@login_required
-def get_user(user_id):
-    user = Customer.query.get(user_id)
-    if not user:
-        return jsonify({"message": "User not found"}), 404
+# @auth.route('/user/<int:user_id>', methods=['GET'])
+# @login_required
+# def get_user(user_id):
+#     user = Customer.query.get(user_id)
+#     if not user:
+#         return jsonify({"message": "User not found"}), 404
 
-    # return the user's data
-    return jsonify({
-        "id": user.id,
-        "name": user.name,
-        "email": user.email,
-        # add any other fields you want to return here
-    }), 200
+#     # return the user's data
+#     return jsonify({
+#         "id": user.id,
+#         "name": user.name,
+#         "email": user.email,
+#         # add any other fields you want to return here
+#     }), 200
 
 @auth.route('/auth/validate-google-token', methods=['POST'])
 def validate_google_token():
