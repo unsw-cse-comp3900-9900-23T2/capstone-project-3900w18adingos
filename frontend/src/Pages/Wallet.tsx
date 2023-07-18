@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Collapse } from 'react-bootstrap';
+import { Card, Button, Collapse, ListGroup, Badge } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import "../styles/Wallet.css";
 import qrCode from "../assets/qr-code.png";
@@ -7,6 +7,8 @@ import Footer from '../components/Footer/Footer';
 import Header from "../components/Header/Header";
 import { useVoucher } from '../hooks/useVoucher';
 import { useAuth } from '../hooks/useAuth';
+import { Eatery, Voucher } from '../interface';
+import { useEateryContext } from '../hooks/useEateryContext';
 
 const Wallet: React.FC = () => {
   const navigate = useNavigate();
@@ -22,18 +24,53 @@ const Wallet: React.FC = () => {
     return null;
   }
 
-  const [openStarBucks, setOpenStarBucks] = useState(false);
-  const [openStellinis, setOpenStellinis] = useState(false);
-  const {fetchVouchers, vouchers} = useVoucher();
-  // const {fetchUser, user} = useAuth()
+  const { cusomterVouchers, fetchVouchers } = useVoucher();
+  const { user, fetchUser } = useAuth();
+  const {fetchEatery} = useEateryContext()
 
-  // useEffect(() => {
-  //   fetchUser() 
-  // },[fetchUser])
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
-  useEffect(() => { 
-      fetchVouchers("1")
-  },[fetchVouchers])
+  useEffect(() => {
+    if (user) {
+      fetchVouchers(user.id);
+    }
+  }, [fetchVouchers, user]);
+
+  
+  type VoucherWithEatery = { voucher: Voucher, open: boolean, eatery: Eatery | null };
+  const [vouchersState, setVouchersState] = useState<VoucherWithEatery[]>([]);
+
+  useEffect(() => {
+    if (user) {
+      fetchVouchers(user.id)
+      const vouchersWithEatery = cusomterVouchers.map(voucher => ({ voucher, open: false, eatery: null }));
+      setVouchersState(vouchersWithEatery);
+    };
+  }, [fetchVouchers, user]);
+
+  useEffect(() => {
+    const updateVouchersWithEateries = async () => {
+      const vouchersWithEateries = await Promise.all(
+        cusomterVouchers.map(async voucher => {
+          const eatery = await fetchEatery((voucher.eatery_id));
+          return { voucher, open: false, eatery };
+        })
+      );
+      setVouchersState(vouchersWithEateries);
+    };
+    updateVouchersWithEateries();
+  }, [cusomterVouchers, fetchEatery]);
+
+  // Function to handle opening/closing of a voucher
+  const handleVoucherToggle = (index: number) => {
+    setVouchersState((prevState) =>
+      prevState.map((voucher, i) =>
+        i === index ? { ...voucher, open: !voucher.open } : voucher
+      )
+    );
+  };
 
   return (
     <>
@@ -45,61 +82,32 @@ const Wallet: React.FC = () => {
           <img src={qrCode} alt="qr code" />
         </div>
         <div className="wallet-accordian">
-          <Button onClick={() => setOpenStarBucks(!openStarBucks)}>
-            Star Bucks
-            <div className="ratings">
-              <i className="bi bi-star-fill"></i>
-              <i className="bi bi-star-fill"></i>
-              <i className="bi bi-star-fill"></i>
-              <i className="bi bi-star-half"></i>
-              <i className="bi bi-star-half"></i>
-            </div>
-          </Button>
-          <Collapse in={openStarBucks}>
-            <Card>
-              <Card.Body>
-                <h3>Star Bucks</h3>
+          {vouchersState.map((item, index) => (
+            <div key={index} className="voucher">
+              <Button onClick={() => handleVoucherToggle(index)}>
+                {item.eatery?.restaurant_name}
                 <div className="ratings">
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-fill"></i>
-                  <i className="bi bi-star-half"></i>
-                  <i className="bi bi-star-half"></i>
+                  <strong>{item.voucher.quantity} pts</strong>
                 </div>
-                <div className="panel-body-meta">
-                  <h6>My Vouchers</h6>
-                  <div className="panel-body-content">
-                    <p>10% off any coffee</p>
-                    <p>25% off lunch offer 2pm</p>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Collapse>
-
-          <Button onClick={() => setOpenStellinis(!openStellinis)}>
-            Stellini's
-            <div className="ratings">
-              <strong>2517 pts</strong>
+              </Button>
+              <Collapse in={item.open}>
+                <Card>
+                  <Card.Body>
+                    <div className="panel-body-meta">
+                      <h6>My Vouchers</h6>
+                      <ListGroup variant="flush">
+                        <ListGroup.Item>
+                          <Badge pill bg="primary" className="mr-2">{item.voucher.quantity} pts</Badge>
+                          <p>{item.voucher.description}</p>
+                          <p>Expires on: {new Date(item.voucher.expiry).toLocaleDateString()}</p>
+                        </ListGroup.Item>
+                      </ListGroup>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Collapse>
             </div>
-          </Button>
-          <Collapse in={openStellinis}>
-            <Card>
-              <Card.Body>
-                <h3>Stellini's</h3>
-                <div className="ratings">
-                  <strong>2517 pts</strong>
-                </div>
-                <div className="panel-body-meta">
-                  <h6>My Vouchers</h6>
-                  <div className="panel-body-content">
-                    <p>10% off any coffee</p>
-                    <p>25% off lunch offer 2pm</p>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Collapse>
+          ))}
         </div>
       </div>
       <Footer />

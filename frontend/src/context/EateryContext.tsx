@@ -41,8 +41,10 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
           },
         });
         setEatery(response.data)
+        return response.data
       } catch (error) {
         console.error(error);
+        return null
       }
   }, [token]);
 

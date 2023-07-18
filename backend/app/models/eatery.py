@@ -118,7 +118,7 @@ class EaterySchema(ma.SQLAlchemySchema):
     latitude = ma.auto_field()
     longitude = ma.auto_field()
     reviews = fields.Nested(ReviewSchema, many=True)
-    eatery_image = fields.Nested(ImageSchema, many=True)
+    eatery_image = ma.auto_field()
     cuisines = fields.Nested(CooksCuisineSchema, many=True)
 
 eatery_schema = EaterySchema()

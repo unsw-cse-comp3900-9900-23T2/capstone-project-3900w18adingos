@@ -1,43 +1,32 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, send_file
+from flask import request, current_app
 from flask_login import login_required, current_user
 import os
 
 from app.extensions import db
 from app.models.eatery import Eatery, eatery_schema, eatery_schema_list
 from app.models.image import Image
-from app.eatery_helper import get_image_bytes, generate_image_filename
+from app.eatery_helper import generate_image_filename
+
 eatery = Blueprint('eatery', __name__)
 
-# get all images of this eatery
-# @eatery.post('/get_images')
-# def get_eatery_images():
-#     req_json = request.get_json()
-#     eatery_id = req_json['eatery_id'].strip()
-#     image_objs = Eatery.query.get_or_404(eatery_id = eatery_id).first().eatery_images
-#     # image_objs has .id, .eatery_id, .filepath fields (def'n in models/image.py)
-
-#     encoded_images = []
-#     encoded_images_id = []
-#     for image_obj in image_objs:
-#         encoded_images.append(get_image_bytes(file_name=img.filepath))
-#         # serve image ids to frontend to allow for image deletion
-#         encoded_images_id.append(image_obj.id)
-#     return jsonify(
-#         {
-#             'images': encoded_images,
-#             'image_ids': encoded_images_id
-#         }
-#     ), 200
+@eatery.get('/get_image/<int:image_id>')
+def get_eatery_image(image_id):
+    image_obj = Image.query.first_or_404(image_id)
+    # image_objs has .id, .eatery_id, .filepath fields (def'n in models/image.py)
+    return send_file(os.path.join(current_app.config['IMAGE_SAVE_DIRECTORY'], image_obj.filepath), mimetype='image/jpg')
+    
 
 @eatery.post('/add_image')
 @login_required
 def add_image():
-    # TODO check logged-in user is actually an eatery
-
+    if not isinstance(current_user, Eatery):
+        return jsonify(success=False), 403
+        
     # save image on disk
     f = request.files['file']
     filename = generate_image_filename()
-    f.save(os.path.join(app.config['IMAGE_SAVE_DIRECTORY'], filename))
+    f.save(os.path.join(current_app.config['IMAGE_SAVE_DIRECTORY'], filename))
 
     # new Image instance to database
     new_image = Image(filepath=filename, eatery_id=current_user.id)
