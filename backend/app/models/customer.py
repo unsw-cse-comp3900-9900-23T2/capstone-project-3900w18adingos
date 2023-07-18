@@ -1,4 +1,5 @@
 from werkzeug.security import generate_password_hash
+from marshmallow import fields
 
 from app.extensions import db, ma
 from app.models.user import User
@@ -26,6 +27,7 @@ class CustomerSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Customer
     
+    role = fields.Constant('customer')
     id = ma.auto_field()
     email = ma.auto_field()
     name = ma.auto_field()

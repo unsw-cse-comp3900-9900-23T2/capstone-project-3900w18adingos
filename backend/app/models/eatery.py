@@ -85,11 +85,11 @@ class EaterySchema(ma.SQLAlchemySchema):
     class Meta:
         model = Eatery
     
+    role = fields.Constant('eatery')
     id = ma.auto_field()
     email = ma.auto_field()
     restaurant_name = ma.auto_field()
     location = ma.auto_field()
-    # role = ma.auto_field()
     latitude = ma.auto_field()
     longitude = ma.auto_field()
     reviews = fields.Nested(ReviewSchema, many=True)
