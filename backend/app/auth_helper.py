@@ -22,7 +22,6 @@ mail = Mail(current_app)
 #     logout_user()
 #     return jsonify({'message': 'Logged out successfully'}), 200
 
-
 def auth_login(email, password, role):
    
     user = User.query.filter_by(email=email).first_or_404()
@@ -110,7 +109,7 @@ def auth_passwordreset_request(email, role):
     return jsonify({'message': 'Check your email for the instructions to reset your password'})
 
 
-def validate_google_auth_token_and_send_back_token(code):
+def validate_google_auth_token_and_send_back_token(code, role):
     client_id = '397558360733-au1inv2shr9v7cqdrkghl31t5pfh9qfp.apps.googleusercontent.com'
     client_secret = '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'
     redirect_uri = 'http://localhost:5173'
@@ -138,13 +137,19 @@ def validate_google_auth_token_and_send_back_token(code):
             email = userinfo_json['email'].lower().strip()
             name = userinfo_json['name']
 
-            user = Customer.query.filter_by(email=email).first()
+            user = User.query.filter_by(email=email).first()
             if user:
-                return jsonify({'token': user.encode_auth_token(user.id), 'user': name, 'role': 'customer'})
-            user = Customer(email=email, name=name, auth_source='google')
+                role = 'customer' if isinstance(user, Customer) else 'eatery'
+                return jsonify({'token': user.encode_auth_token(user.id, "Customer"), 'user': name, 'role': role})
+
+            if role == 'customer':
+                user = Customer(email=email, name=name, auth_source='google')
+            else: # role == 'eatery'
+                user = Eatery(email=email, restaurant_name=name, auth_source='google')
+
             db.session.add(user)
             db.session.commit()
             login_user(user, remember=True)
-            return jsonify({'token': user.encode_auth_token(user.id), 'user': name, 'role': 'customer'})
+            return jsonify({'token': user.encode_auth_token(user.id, "Customer"), 'user': name, 'role': role})
 
     return jsonify({"message": "Failed to validate token"}), 400

@@ -1,3 +1,5 @@
+from flask import current_app
+from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 
@@ -18,9 +20,9 @@ class User(db.Model, UserMixin):
         'polymorphic_on':type
     }
 
-    # def encode_auth_token(self, user_id):
-    #     s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-    #     return s.dumps({'id': self.id, 'role': self.role}, salt='auth')
+    def encode_auth_token(self, user_id, role):
+        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        return s.dumps({'id': self.id, 'role': role}, salt='auth')
 
     # @staticmethod
     # def decode_auth_token(token):
