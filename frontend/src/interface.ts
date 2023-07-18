@@ -27,6 +27,26 @@ export interface Review {
     customer_id: string;
 }
 
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+    handle: string;
+    profile_pic: string;
+    role: string;
+}
+
+export interface Voucher {
+    id: string;
+    description: string;
+    eatery_id: string;
+    quantity: number;
+    start: Date;
+    expiry: Date;
+}
+
+// CONTEXT
+
 export interface EateryContextProps {
     token: string | null;
     fetchEateries: () => Promise<void>;
@@ -42,16 +62,6 @@ export interface EateryContextProps {
     review: Review | null;
     allReviews: Array<Review>;
 }
-
-export interface User {
-    id: string;
-    name: string;
-    email: string;
-    handle: string;
-    profile_pic: string;
-    role: string;
-}
-
 export interface AuthContextType {
     token: string | null;
     getAllReviews: (eateryId: string) => Promise<Array<Review> | void>;
@@ -68,13 +78,19 @@ export interface AuthContextType {
     updateProfile: (name: string, email: string) => Promise<User>;
     setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
-
-export interface Props {
-    children?: ReactNode;
+export interface VoucherContextProps {
+  cusomterVouchers: Array<Voucher>;
+  eateryVouchers: Array<Voucher>;
+  fetchVouchers: (customerId: string) => Promise<void>;
+  claimVoucher: (voucherId: string, customerId: string) => Promise<any>
+  fetchVouchersForEatery: (eateryId: string) => Promise<void>
 }
 
 
 
+export interface Props {
+    children?: ReactNode;
+}
 
 export interface RegisterFormInputs {
     name: string;
@@ -108,6 +124,8 @@ export interface UserPosition {
     lat: number;
     lng: number;
 }
+
+// Map 
 export type MapRef = React.MutableRefObject<google.maps.Map | null>;
 export type SetLoadingPosition = React.Dispatch<React.SetStateAction<boolean>>;
 export type SetUpLocation = (setUserLocation: SetUserLocation, setLoadingPosition: SetLoadingPosition, mapRef: MapRef) => void;
@@ -115,17 +133,3 @@ export interface ClusterProps {
     count: number;
     position: google.maps.LatLng | google.maps.LatLngLiteral;
   }
-
-  export interface Voucher {
-  id: string;
-  description: string;
-  eatery_id: string;
-  quantity: number;
-  start: Date;
-  expiry: Date;
-}
-
-export interface VoucherContextProps {
-  vouchers: Array<Voucher>;
-  fetchVouchers: (customerId: string) => Promise<void>;
-}
