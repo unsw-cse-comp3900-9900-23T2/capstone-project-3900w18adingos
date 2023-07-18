@@ -8,7 +8,7 @@ from app.extensions import db
 user = Blueprint('user', __name__)
 
 @login_required
-@user.route('/customer/profile/', methods=['GET'])
+@user.route('/customer/profile', methods=['GET'])
 def get_customer():
     if not isinstance(current_user, Customer):
         return jsonify(success=False), 403
@@ -16,7 +16,7 @@ def get_customer():
     return customer_schema.dump(current_user)
 
 @login_required
-@user.route('/customer/edit-profile/', methods=['POST'])
+@user.route('/customer/edit-profile', methods=['POST'])
 def edit_customer():
     if not isinstance(current_user, Customer):
         return jsonify(success=False), 403
@@ -33,7 +33,7 @@ def edit_customer():
     return jsonify({"message": "Customer updated"}), 200
 
 @login_required
-@user.route('/eatery/edit-profile/', methods=['PUT'])
+@user.route('/eatery/edit-profile', methods=['PUT'])
 def edit_eatery():
     if not isinstance(current_user, Eatery):
         return jsonify(success=False), 403

@@ -67,7 +67,7 @@ def forgotpasswordreset_request():
     result = auth_helper.auth_passwordreset_request(email, role)
     return result
 
-@auth.route('/auth/passwordreset/reset/', methods=['POST'])
+@auth.route('/auth/passwordreset/reset', methods=['POST'])
 def passwordreset_reset():
     reset_code = request.json.get('resetCode')
     new_password = request.json.get('newPassword')
