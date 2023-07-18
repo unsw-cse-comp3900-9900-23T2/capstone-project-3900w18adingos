@@ -2,20 +2,19 @@ import datetime
 import sys
 import os
 
-
-
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from app import create_app, db
-from app.models.eatery import Eatery
-from app.models.cuisine import Cuisine
-from app.models.cooks_cuisine import CooksCuisine
 from app.models.image import Image
 from app.models.review import Review
-from app.models.customer import Customer
+from app.models.cuisine import Cuisine
+from app.models.cooks_cuisine import CooksCuisine
 from app.models.voucher import Voucher
 from app.models.has_voucher import HasVoucher
+from app.models.eatery import Eatery
+from app.models.customer import Customer
+
 from werkzeug.security import generate_password_hash
 
 hashed_password = generate_password_hash('123', method='sha256')
@@ -502,6 +501,17 @@ has_voucher_arr=[
             voucher_id=4),
 ]
 
+images_arr=[
+    Image(
+        filepath='thezucc.jpg',
+        eatery_id=1
+    ),
+    Image(
+        filepath='themusk.jpg',
+        eatery_id=1
+    )
+]
+    
 if __name__ == '__main__':
     app = create_app(config_name='testing')
     with app.app_context():
