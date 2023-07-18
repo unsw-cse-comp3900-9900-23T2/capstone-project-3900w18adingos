@@ -41,7 +41,7 @@ class TimedDictionary:
             return self.data[key]['expires_at'] < time.time()
         return False
 
-code_dict = TimedDictionary(300)
+code_dict = TimedDictionary(30)
 
 def generate_short_code():
     charset="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
