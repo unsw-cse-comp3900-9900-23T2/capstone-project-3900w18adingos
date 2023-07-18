@@ -7,7 +7,8 @@ import { useAuth } from "../hooks/useAuth";
 export const VoucherContext = createContext<VoucherContextProps | undefined>(undefined);
 
 export const VoucherProvider: React.FC<Props> = ({ children }) => {
-  const [vouchers, setVouchers] = useState<Array<Voucher>>([]);
+  const [cusomterVouchers, setCusomterVouchers] = useState<Array<Voucher>>([]);
+  const [eateryVouchers, setEateryVouchers] = useState<Array<Voucher>>([]);
   const { token } = useAuth();
 
   const api = axios.create({
@@ -21,14 +22,54 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setVouchers(response.data.vouchers);
+      setCusomterVouchers(response.data.vouchers);
     } catch (error) {
       console.error(error);
     }
   }, [token]);
 
+  const claimVoucher = useCallback(async (voucherId: string, customerId: string) => {
+    try {
+      const response = await api.post(`/claim_voucher`, {
+        voucher_id: voucherId,
+        customer_id: customerId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      
+      // Refresh vouchers after a successful claim
+      fetchVouchers(customerId);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }, [token, fetchVouchers]);
+
+  const fetchVouchersForEatery = useCallback(async (eateryId: string) => {
+    try {
+      const response = await api.get(`/get_vouchers_eatery/${eateryId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setEateryVouchers(response.data.vouchers);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [token]);
+
+
   return (
-    <VoucherContext.Provider value={{ vouchers, fetchVouchers }}>
+    <VoucherContext.Provider value={{ 
+        cusomterVouchers, 
+        fetchVouchers, 
+        claimVoucher, 
+        fetchVouchersForEatery,
+        eateryVouchers
+      }}>
       {children}
     </VoucherContext.Provider>
   );

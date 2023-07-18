@@ -4,12 +4,16 @@ import { useEateryContext } from "../hooks/useEateryContext";
 import { useEffect, useState } from "react";
 import "../styles/EateryProfile.css"
 import { useAuth } from "../hooks/useAuth";
+import { useVoucher } from "../hooks/useVoucher";
 
 const EateryProfile: React.FC = () => { 
   const { id } = useParams<{ id: string }>();
+
   const {fetchEatery, eatery, deleteReview} = useEateryContext();
-  const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS'>();
   const {getUserById, user, fetchUser} = useAuth()
+  const {claimVoucher} = useVoucher()
+
+  const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS'>();
   const [users, setUsers] = useState<{[key: string]: any}>({});
   const navigate = useNavigate()
 
@@ -19,8 +23,6 @@ const EateryProfile: React.FC = () => {
     }
     fetchUser()
   }, [fetchEatery, fetchUser]);
-
-  // console.log(eatery?.cuisines[0].cuisine.cuisine_name)
 
   // get user's name from review[].customer_id
   useEffect(() => {
@@ -58,7 +60,7 @@ const EateryProfile: React.FC = () => {
           <h3>{eatery?.restaurant_name}</h3>
           <p className="rating">{averageRating ? averageRating: ""}</p>
         </div>
-        {/* <p>ASS{eatery?.cuisines[0].cuisine_name}</p> */}
+        <p>Cusinies: {eatery && eatery.cuisines.map(cuisine => cuisine.cuisine_name).join(", ")}</p>
         <p>price in $$$$</p>
 
         <div className="title-rating-container">
