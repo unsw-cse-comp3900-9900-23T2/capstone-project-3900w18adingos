@@ -11,9 +11,9 @@ const EateryProfile: React.FC = () => {
 
   const {fetchEatery, eatery, deleteReview} = useEateryContext();
   const {getUserById, user, fetchUser} = useAuth()
-  const {claimVoucher} = useVoucher()
+  const {claimVoucher, fetchVouchersForEatery, eateryVouchers} = useVoucher()
 
-  const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS'>();
+  const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS' | 'VOUCHERS'>("VOUCHERS");
   const [users, setUsers] = useState<{[key: string]: any}>({});
   const navigate = useNavigate()
 
@@ -23,6 +23,12 @@ const EateryProfile: React.FC = () => {
     }
     fetchUser()
   }, [fetchEatery, fetchUser]);
+
+  useEffect(() => { 
+    if(id) { 
+      fetchVouchersForEatery(id)
+    }
+  },[fetchVouchersForEatery])
 
   // get user's name from review[].customer_id
   useEffect(() => {
@@ -47,7 +53,20 @@ const EateryProfile: React.FC = () => {
 
   const handleDeleteReview = async (reviewId: string) => {
     await deleteReview(reviewId);
+    if (id) { 
+      fetchEatery(id);
+    }
   };
+
+  const voucherClaim = async (voucherId: string) => { 
+    if (id) { 
+      const success = await claimVoucher(voucherId, id)
+      if (success) { 
+        return "Claim successful!"
+      }
+    }
+    return "Claim unsuccessful L"
+  }
 
   return (
     <>
@@ -63,9 +82,11 @@ const EateryProfile: React.FC = () => {
         <p>Cusinies: {eatery && eatery.cuisines.map(cuisine => cuisine.cuisine_name).join(", ")}</p>
         <p>price in $$$$</p>
 
-        <div className="title-rating-container">
+        <div className="title-rating-container" style={{"height": "40px"}}>
           <p style={{"color":"green"}}>Open Now?</p>
-          <button className="add-review" onClick={() => navigate(`/add-review/${id}`)}>Add Review</button>
+          {currentTab === 'REVIEWS' && (
+            <button className="add-review" onClick={() => navigate(`/add-review/${id}`)}>Add Review</button>
+          )}
         </div>
 
         <div className="info-photos-reviews-button-container">
@@ -80,6 +101,10 @@ const EateryProfile: React.FC = () => {
           <button className="button" onClick={() => setCurrentTab('REVIEWS')}>
             <i className="glyphicon glyphicon-comment gl" />
             <p>reviews</p>
+          </button>
+          <button className="button" onClick={() => setCurrentTab('VOUCHERS')}>
+            <i className="glyphicon glyphicon-credit-card	gl"></i>
+            <p>vouchers</p>
           </button>
         </div>
 
@@ -108,6 +133,24 @@ const EateryProfile: React.FC = () => {
           ))}
         </div>
       )}
+      {currentTab === 'VOUCHERS' && (
+        <div className="display-reviews">
+          {eateryVouchers && eateryVouchers.map((voucher, index) => {
+            const startDate = new Date(voucher.start);
+            const expiryDate = new Date(voucher.expiry);
+
+            return (
+              <div key={index} className="list-item">
+                <p>Description: {voucher.description}</p>
+                <p>Quantity: {voucher.quantity}</p>
+                <p>Start: {startDate.toLocaleDateString()}</p>
+                <p>Expires: {expiryDate.toLocaleDateString()}</p>
+                <button className="claim-voucher" onClick={() => voucherClaim(voucher.id)}>Claim Voucher</button>
+              </div>
+            );
+        })}
+        </div>
+        )}
 
     </div>
       <Footer />
