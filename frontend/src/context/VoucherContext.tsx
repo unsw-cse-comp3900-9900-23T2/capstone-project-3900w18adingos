@@ -17,7 +17,7 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
 
   const fetchVouchers = useCallback(async (customerId: string) => {
     try {
-      const response = await api.get(`/get_vouchers_customer/${customerId}`, {
+      const response = await api.get(`/api/get_vouchers_customer/${customerId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -30,7 +30,7 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
 
   const claimVoucher = useCallback(async (voucherId: string, customerId: string) => {
     try {
-      const response = await api.post(`/claim_voucher`, {
+      const response = await api.post(`/api/claim_voucher`, {
         voucher_id: voucherId,
         customer_id: customerId,
       }, {
@@ -50,7 +50,7 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
 
   const fetchVouchersForEatery = useCallback(async (eateryId: string) => {
     try {
-      const response = await api.get(`/get_vouchers_eatery/${eateryId}`, {
+      const response = await api.get(`/api/get_vouchers_eatery/${eateryId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

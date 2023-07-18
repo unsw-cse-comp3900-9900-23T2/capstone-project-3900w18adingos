@@ -44,27 +44,27 @@ def create_app(config_name='default'):
         db.create_all()
 
         from app.main import main as main_blueprint
-        app.register_blueprint(main_blueprint)
+        app.register_blueprint(main_blueprint, url_prefix='/api')
 
         from app.auth import auth as auth_blueprint
-        app.register_blueprint(auth_blueprint)
+        app.register_blueprint(auth_blueprint, url_prefix='/api')
 
         from app.user import user as user_blueprint
-        app.register_blueprint(user_blueprint)
+        app.register_blueprint(user_blueprint, url_prefix='/api')
     
         from app.eatery import eatery as eatery_blueprint
-        app.register_blueprint(eatery_blueprint)
+        app.register_blueprint(eatery_blueprint, url_prefix='/api')
 
         from app.review import review as review_blueprint
-        app.register_blueprint(review_blueprint)
+        app.register_blueprint(review_blueprint, url_prefix='/api')
 
         from app.search import search_bp as search_blueprint
-        app.register_blueprint(search_blueprint)
+        app.register_blueprint(search_blueprint, url_prefix='/api')
 
         from app.voucher import voucher as voucher_blueprint
-        app.register_blueprint(voucher_blueprint)
+        app.register_blueprint(voucher_blueprint, url_prefix='/api')
 
         from app.preferences import preferences as preferences_blueprint
-        app.register_blueprint(preferences_blueprint)
+        app.register_blueprint(preferences_blueprint, url_prefix='/api')
     
     return app

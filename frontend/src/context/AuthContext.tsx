@@ -15,7 +15,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const login = useCallback(async (email: string, password: string, role: string) => {
     try {
-      const response = await api.post('/auth/login', { email, password, role });
+      const response = await api.post('/api/auth/login', { email, password, role });
       const { token } = response.data;
       debugger
       localStorage.setItem('token', token)
@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const googleLogin = useCallback(async (code: string) => {
     try {
-      const response = await api.post('/auth/validate-google-token', { code });
+      const response = await api.post('/api/auth/validate-google-token', { code });
       console.log(response)
       const { token } = response.data;
       localStorage.setItem('token', token)
@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const register = useCallback(async (email: string, password: string, name: string, role: string) => {
     try {
-      const response = await api.post('/auth/register', { email, password, name, role });
+      const response = await api.post('/api/auth/register', { email, password, name, role });
       const { token } = response.data;
       console.log(response)
       localStorage.setItem('token', token)
@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      await api.post('/auth/logout', { token });
+      await api.post('/api/auth/logout', { token });
       localStorage.clear()
       setToken(null);
       return true;
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const passwordResetRequest = useCallback(async (email: string, role: string) => {
       try {
-        await api.post('/auth/passwordreset/request', { email, role });  // include role here
+        await api.post('/api/auth/passwordreset/request', { email, role });  // include role here
         return true;
       } catch (error) {
         console.error(error);
@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const updateProfile = useCallback(async (name: string, email: string) => {
     try {
-      const response = await api.post('/customer/edit-profile/', { email, name, token });
+      const response = await api.post('/api/customer/edit-profile/', { email, name, token });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -93,7 +93,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const passwordReset = useCallback(async (resetCode: any, newPassword: any) => {
     try {
-      await api.post('/auth/passwordreset/reset', { resetCode, newPassword });
+      await api.post('/api/auth/passwordreset/reset', { resetCode, newPassword });
       return true;
     } catch (error) {
       console.error(error);
@@ -105,7 +105,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await api.get('/auth/me', {
+      const response = await api.get('/api/auth/me', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -118,7 +118,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const getAllReviews = useCallback(async (eateryId: string) => {
     try {
-      const response = await api.post('/get_all_reviews', { eatery_id: eateryId });
+      const response = await api.post('/api/get_all_reviews', { eatery_id: eateryId });
       return response.data.reviews
     } catch (error) {
       console.error(error);
@@ -127,7 +127,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const getUserById = useCallback(async (id: string) => {
     try {
-      const response = await api.get(`/user/${id}`)
+      const response = await api.get(`/api/user/${id}`)
       return response.data
     } catch (error) {
       console.error(error);

@@ -22,7 +22,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
 
     const fetchEateries = useCallback(async () => {
         try {
-          const response = await api.get('/eatery', {
+          const response = await api.get('/api/eatery', {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -35,7 +35,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
 
     const fetchEatery = useCallback(async (id: string) => {
       try {
-        const response = await api.get(`/eatery/${id}`, {
+        const response = await api.get(`/api/eatery/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -50,7 +50,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
 
     const fetchEateryImages = useCallback(async (eateryId: string) => {
         try {
-          const response = await api.post('/get_images', { eatery_id: eateryId }, {
+          const response = await api.post('/api/get_images', { eatery_id: eateryId }, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -64,7 +64,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
   
     const getReview = useCallback(async (eateryId: string) => {
       try {
-        const response = await api.post('/get_review', { eatery_id: eateryId }, {
+        const response = await api.post('/api/get_review', { eatery_id: eateryId }, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -78,7 +78,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
   
     const getAllReviews = useCallback(async (eateryId: string) => {
       try {
-        const response = await api.post('/get_all_reviews', { eatery_id: eateryId }, {
+        const response = await api.post('/api/get_all_reviews', { eatery_id: eateryId }, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -92,7 +92,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
   
     const addReview = useCallback(async (eateryId: string, rating: string, reviewText: string) => {
       try {
-        const response = await api.post('/add_review', { 
+        const response = await api.post('/api/add_review', { 
           eatery_id: eateryId,
           rating,
           review_text: reviewText 
@@ -109,7 +109,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
   
     const deleteReview = useCallback(async (reviewId: string) => {
       try {
-        const response = await api.delete(`/delete_review/${reviewId}`);
+        const response = await api.delete(`/api/delete_review/${reviewId}`);
         return response.data.success; // return the success status
       } catch (error) {
         console.error(error + " ASSS");
