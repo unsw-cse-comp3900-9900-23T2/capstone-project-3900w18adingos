@@ -423,20 +423,53 @@ voucher_arr=[
             quantity=250,
             start=datetime.datetime(2023,12,12),
             expiry=datetime.datetime(2024,12,12)),
+    Voucher(
+            description="37 percent off",
+            eatery=1,
+            quantity=250,
+            start=datetime.datetime(2023,12,12),
+            expiry=datetime.datetime(2024,12,12)),
 ]
 
 has_voucher_arr=[
     HasVoucher(
-            customer_id=1,
+            customer_id=21,
             voucher_id=1),
     HasVoucher(
-            customer_id=2,
+            customer_id=21,
             voucher_id=2),
     HasVoucher(
-            customer_id=3,
+            customer_id=21,
             voucher_id=3),
     HasVoucher(
-            customer_id=4,
+            customer_id=21,
+            voucher_id=4),
+    HasVoucher(
+            customer_id=21,
+            voucher_id=5),
+    HasVoucher(
+            customer_id=21,
+            voucher_id=6),
+    HasVoucher(
+            customer_id=21,
+            voucher_id=7),
+    HasVoucher(
+            customer_id=21,
+            voucher_id=8),
+    HasVoucher(
+            customer_id=21,
+            voucher_id=9),
+    HasVoucher(
+            customer_id=21,
+            voucher_id=21),
+    HasVoucher(
+            customer_id=22,
+            voucher_id=2),
+    HasVoucher(
+            customer_id=23,
+            voucher_id=3),
+    HasVoucher(
+            customer_id=24,
             voucher_id=4),
 ]
 
