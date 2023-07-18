@@ -34,8 +34,7 @@ def get_user_vouchers():
     if not isinstance(current_user, Eatery):
         return jsonify(success=False), 403
 
-    code = request.json.get('code')
-    
+    code = request.json.get('code').upper()    
     customer_id = code_dict.get(code)
     if not customer_id:
         return jsonify(success=False), 404
