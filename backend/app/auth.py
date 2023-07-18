@@ -37,15 +37,9 @@ def register():
         return jsonify({"message": "Invalid role"}), 400
     result = auth_helper.auth_register(email, password, name, role)
     return result
-
-
-@auth.route('/auth/logout', methods=['POST'])
-def logout():
-    token = request.json.get('token')
-    result = auth_helper.auth_logout(token)
-    return result
     
 @auth.route('/auth/logout')
+@login_required
 def logout_get():
     if current_user and current_user.is_authenticated:
         logout_user()
@@ -79,27 +73,6 @@ def passwordreset_reset():
     new_password = request.json.get('newPassword')
     result = auth_helper.auth_passwordreset_reset(reset_code, new_password)
     return result
-
-# @auth.route('/auth/me', methods=['GET'])
-# def me():
-#     token = request.headers.get('Authorization')
-#     if not token:
-#         return jsonify({"message": "Missing token"}), 400
-
-#     token = token.split(" ")[1]  # The Authorization header format is "Bearer <token>"
-#     data = Customer.decode_auth_token(token)
-#     if not data:
-#         return jsonify({"message": "Invalid token"}), 401  # unauthorized
-
-#     user = Customer.query.get(data['id'])
-
-#     # return the user's data
-#     return jsonify({
-#         "id": user.id,
-#         "name": user.name,
-#         "email": user.email,
-#         # add any other fields you want to return here
-#     }), 200
     
 @auth.route('/auth/whoami', methods=['GET'])
 def whoami():

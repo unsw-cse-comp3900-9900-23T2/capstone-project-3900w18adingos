@@ -1,51 +1,41 @@
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.ext.declarative import declared_attr
-from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
-from flask import current_app
+from werkzeug.security import generate_password_hash
+
 from app.extensions import db, login_manager
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    return User.query.get(int(user_id))
 
-class User(UserMixin, db.Model):
-    __abstract__ = True
-
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
-    role = db.Column(db.String(50))
+    type = db.Column(db.String(20))
+    
+    __mapper_args__ = {
+        'polymorphic_identity':'user',
+        'polymorphic_on':type
+    }
 
-    @property
-    def password(self):
-        raise AttributeError('password: write-only field')
+    # def encode_auth_token(self, user_id):
+    #     s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    #     return s.dumps({'id': self.id, 'role': self.role}, salt='auth')
 
-    @password.setter
-    def password(self, password):
+    # @staticmethod
+    # def decode_auth_token(token):
+    #     s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    #     try:
+    #         data = s.loads(token, salt='auth')
+    #     except (SignatureExpired, BadSignature):
+    #         return "Token invalid or expired. Please log in again."
+    #     return {'id': data['id'], 'role': data['role']} if data['role'] == 'eatery' else None
+
+    def hash_password(self, password):
         self.password_hash = generate_password_hash(password)
 
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-    def get_id(self):
-        return self.id
-
-    def generate_auth_token(self, expiration=600):
-        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        return s.dumps({'id': self.id, 'role': self.role}, salt='auth')
-
-    @staticmethod
-    def verify_auth_token(token):
-        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token, salt='auth')
-        except (SignatureExpired, BadSignature):
-            return None  # invalid token
-        user = User.query.get(data['id'])
-        if user.role != data['role']:
-            return None  # invalid token role
-        return user
+    # def verify_password(self, password):
+    #     return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return '<User {}>'.format(self.email)

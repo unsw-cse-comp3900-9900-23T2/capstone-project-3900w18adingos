@@ -3,8 +3,6 @@ from flask_login import current_user, login_required
 from app.models.customer import Customer
 from app.models.eatery import Eatery
 from app.extensions import db
-from app.auth_helper import user_is_eatery
-
 
 user = Blueprint('user', __name__)
 
