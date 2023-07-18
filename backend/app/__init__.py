@@ -1,10 +1,11 @@
-from flask import Flask, g
+from flask import Flask
 from flask_cors import CORS
 from flask.sessions import SecureCookieSessionInterface, SessionMixin
 
-from .extensions import db, ma, login_manager
-from .mail import init_mail
-from .config import config
+from app.extensions import db, ma, login_manager
+from app.mail import init_mail
+from app.config import config
+from app.wallet_helper import code_dict
 
 def create_app(config_name='default'):
 
@@ -65,5 +66,8 @@ def create_app(config_name='default'):
 
         from app.preferences import preferences as preferences_blueprint
         app.register_blueprint(preferences_blueprint)
+        
+        from app.wallet import wallet as wallet_blueprint
+        app.register_blueprint(wallet_blueprint)
     
     return app
