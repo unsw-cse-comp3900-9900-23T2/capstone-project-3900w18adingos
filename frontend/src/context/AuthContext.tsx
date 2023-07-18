@@ -25,19 +25,16 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         }
     }, []);
 
-  const googleLogin = useCallback(async (code: string) => {
-    try {
-      const response = await api.post('/auth/validate-google-token', { code });
-      console.log(response)
-      const { token } = response.data;
-      localStorage.setItem('token', token)
-      setToken(token);
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  }, []);
+    const googleLogin = useCallback(async (code: string) => {
+      try {
+        const response = await api.post('/auth/validate-google-token', { code });
+        setUser(response.data.user);
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    }, []);
 
 
 const register = useCallback(async (email: string, password: string, name: string, role: string) => {
