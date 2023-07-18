@@ -15,14 +15,6 @@ def create_app(config_name='default'):
 
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
-    
-    @login_manager.user_loader
-    def load_user(user_id):
-        user_type = session.get('user_type')
-        if user_type == 'customer':
-            return Customer.query.get(int(user_id))
-        elif user_type == 'eatery':
-            return Eatery.query.get(int(user_id))
 
     init_mail(app)
 
