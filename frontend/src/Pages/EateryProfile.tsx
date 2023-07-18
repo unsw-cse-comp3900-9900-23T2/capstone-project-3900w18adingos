@@ -4,12 +4,16 @@ import { useEateryContext } from "../hooks/useEateryContext";
 import { useEffect, useState } from "react";
 import "../styles/EateryProfile.css"
 import { useAuth } from "../hooks/useAuth";
+import { useVoucher } from "../hooks/useVoucher";
 
 const EateryProfile: React.FC = () => { 
   const { id } = useParams<{ id: string }>();
-  const {fetchEatery, eatery} = useEateryContext();
-  const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS'>();
-  const {getUserById} = useAuth()
+
+  const {fetchEatery, eatery, deleteReview} = useEateryContext();
+  const {getUserById, user, fetchUser} = useAuth()
+  const {claimVoucher, fetchVouchersForEatery, eateryVouchers} = useVoucher()
+
+  const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS' | 'VOUCHERS'>("VOUCHERS");
   const [users, setUsers] = useState<{[key: string]: any}>({});
   const navigate = useNavigate()
 
@@ -17,13 +21,17 @@ const EateryProfile: React.FC = () => {
     if (id){
       fetchEatery(id);
     }
-  }, [fetchEatery]);
+    fetchUser()
+  }, [fetchEatery, fetchUser]);
 
-  // console.log(eatery?.cuisines[0].cuisine.cuisine_name)
+  useEffect(() => { 
+    if(id) { 
+      fetchVouchersForEatery(id)
+    }
+  },[fetchVouchersForEatery])
 
   // get user's name from review[].customer_id
   useEffect(() => {
-
     if (eatery?.reviews) {
       const userIds = eatery.reviews.map(r => r.customer_id);
       const userPromises = userIds.map(id => getUserById(id));
@@ -43,6 +51,23 @@ const EateryProfile: React.FC = () => {
     averageRating = Math.round(averageRating * 10) / 10;
   }
 
+  const handleDeleteReview = async (reviewId: string) => {
+    await deleteReview(reviewId);
+    if (id) { 
+      fetchEatery(id);
+    }
+  };
+
+  const voucherClaim = async (voucherId: string) => { 
+    if (id) { 
+      const success = await claimVoucher(voucherId, id)
+      if (success) { 
+        return "Claim successful!"
+      }
+    }
+    return "Claim unsuccessful L"
+  }
+
   return (
     <>
     <div className="profile-wrapper">
@@ -54,12 +79,14 @@ const EateryProfile: React.FC = () => {
           <h3>{eatery?.restaurant_name}</h3>
           <p className="rating">{averageRating ? averageRating: ""}</p>
         </div>
-        {/* <p>ASS{eatery?.cuisines[0].cuisine_name}</p> */}
+        <p>Cusinies: {eatery && eatery.cuisines.map(cuisine => cuisine.cuisine_name).join(", ")}</p>
         <p>price in $$$$</p>
 
-        <div className="title-rating-container">
+        <div className="title-rating-container" style={{"height": "40px"}}>
           <p style={{"color":"green"}}>Open Now?</p>
-          <button className="add-review" onClick={() => navigate(`/add-review/${id}`)}>Add Review</button>
+          {currentTab === 'REVIEWS' && (
+            <button className="add-review" onClick={() => navigate(`/add-review/${id}`)}>Add Review</button>
+          )}
         </div>
 
         <div className="info-photos-reviews-button-container">
@@ -75,6 +102,10 @@ const EateryProfile: React.FC = () => {
             <i className="glyphicon glyphicon-comment gl" />
             <p>reviews</p>
           </button>
+          <button className="button" onClick={() => setCurrentTab('VOUCHERS')}>
+            <i className="glyphicon glyphicon-credit-card	gl"></i>
+            <p>vouchers</p>
+          </button>
         </div>
 
       </div>
@@ -85,13 +116,41 @@ const EateryProfile: React.FC = () => {
         <div className="display-reviews">
           {eatery?.reviews.map((review, index) => (
             <div key={index} className="list-item">
-              <div>Rating: {review.rating}</div>
+              
+              <div className="title-rating-container">
+                <div>Rating: {review.rating}</div>
+                {user?.id === review.customer_id && (
+                  <button onClick={() => handleDeleteReview(review.id)}>
+                    <i className="bi bi-trash gl" style={{"padding": "10px"}}></i>
+                  </button>
+                )}
+              </div>
+
               <div>Review: {review.review_text}</div>
               <div>User: {users[review.customer_id]?.name}</div>
+
             </div>
           ))}
         </div>
       )}
+      {currentTab === 'VOUCHERS' && (
+        <div className="display-reviews">
+          {eateryVouchers && eateryVouchers.map((voucher, index) => {
+            const startDate = new Date(voucher.start);
+            const expiryDate = new Date(voucher.expiry);
+
+            return (
+              <div key={index} className="list-item">
+                <p>Description: {voucher.description}</p>
+                <p>Quantity: {voucher.quantity}</p>
+                <p>Start: {startDate.toLocaleDateString()}</p>
+                <p>Expires: {expiryDate.toLocaleDateString()}</p>
+                <button className="claim-voucher" onClick={() => voucherClaim(voucher.id)}>Claim Voucher</button>
+              </div>
+            );
+        })}
+        </div>
+        )}
 
     </div>
       <Footer />

@@ -64,3 +64,11 @@ h3 {
     overflow-x: hidden;
     height: 60%;
 }
+
+.claim-voucher { 
+    background-color: #E07893;
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+}
