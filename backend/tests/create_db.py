@@ -475,3 +475,6 @@ if __name__ == '__main__':
         for has_voucher in has_voucher_arr:
             db.session.add(has_voucher)
             db.session.commit()
+        for image in images_arr:
+            db.session.add(image)
+            db.session.commit()
