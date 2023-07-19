@@ -430,13 +430,13 @@ has_voucher_arr=[
             customer_id=21,
             voucher_id=1),
     HasVoucher(
-            customer_id=2,
+            customer_id=22,
             voucher_id=2),
     HasVoucher(
             customer_id=23,
             voucher_id=3),
     HasVoucher(
-            customer_id=4,
+            customer_id=24,
             voucher_id=4),
 ]
 
