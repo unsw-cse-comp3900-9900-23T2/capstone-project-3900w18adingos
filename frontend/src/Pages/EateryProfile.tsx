@@ -120,13 +120,10 @@ const EateryProfile: React.FC = () => {
 
       </div>
 
-      {currentTab === 'INFO' && <div>Info Content</div>}
-      <div>
-      {eatery && eatery.opening_hours && Object.entries(JSON.parse(eatery.opening_hours)).map(([key, value], index) => ( 
-        <p key={index}> {key}: {value as string}</p>
-      ))}
-
-      </div>
+      {currentTab === 'INFO' && eatery && eatery.opening_hours && Object.entries(JSON.parse(eatery.opening_hours)).map(([key, value], index) => ( 
+          <p key={index}> {key}: {value as string}</p>
+        ))
+      }
       {currentTab === 'PHOTOS' && <div>Photos Content</div>}
       {currentTab === 'REVIEWS' && (
         <div className="display-reviews">
