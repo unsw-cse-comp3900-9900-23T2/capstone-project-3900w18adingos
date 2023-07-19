@@ -1,34 +1,33 @@
-from flask import Flask, session
+from flask import Flask
 from flask_cors import CORS
+from flask.sessions import SecureCookieSessionInterface, SessionMixin
 
-from .extensions import db, ma, login_manager
-from .mail import init_mail
-from .config import config
+from app.extensions import db, ma, login_manager
+from app.mail import init_mail
+from app.config import config
+from app.wallet_helper import code_dict
 
 def create_app(config_name='default'):
 
     app = Flask(__name__)
+    
+    app.config.from_object(config[config_name])
+        
+    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
+
+    class CustomSessionInterface(SecureCookieSessionInterface):
+        def should_set_cookie(self, app: "Flask", session: SessionMixin) -> bool:
+            return False
+    
+    app.session_interface = CustomSessionInterface()
 
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    @login_manager.user_loader
-    def load_user(user_id):
-        user_type = session.get('user_type')
-        if user_type == 'customer':
-            return Customer.query.get(int(user_id))
-        elif user_type == 'eatery':
-            return Eatery.query.get(int(user_id))
-
-    app.config.from_object(config[config_name])
-
     init_mail(app)
-    
-    CORS(app, resources={r"/*": {"origins": "*"}})
-    
+
     db.init_app(app)
     ma.init_app(app)
-
 
     from app.models.has_voucher import HasVoucher
     from app.models.voucher import Voucher
@@ -39,6 +38,7 @@ def create_app(config_name='default'):
     from app.models.eatery import Eatery
     from app.models.likes_cuisine import LikesCuisine
     from app.models.customer import Customer
+
 
     with app.app_context():
         db.create_all()
@@ -66,5 +66,8 @@ def create_app(config_name='default'):
 
         from app.preferences import preferences as preferences_blueprint
         app.register_blueprint(preferences_blueprint)
+        
+        from app.wallet import wallet as wallet_blueprint
+        app.register_blueprint(wallet_blueprint)
     
     return app

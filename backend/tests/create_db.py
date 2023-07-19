@@ -2,20 +2,19 @@ import datetime
 import sys
 import os
 
-
-
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from app import create_app, db
-from app.models.eatery import Eatery
-from app.models.cuisine import Cuisine
-from app.models.cooks_cuisine import CooksCuisine
 from app.models.image import Image
 from app.models.review import Review
-from app.models.customer import Customer
+from app.models.cuisine import Cuisine
+from app.models.cooks_cuisine import CooksCuisine
 from app.models.voucher import Voucher
 from app.models.has_voucher import HasVoucher
+from app.models.eatery import Eatery
+from app.models.customer import Customer
+
 from werkzeug.security import generate_password_hash
 
 hashed_password = generate_password_hash('123', method='sha256')
@@ -275,65 +274,65 @@ customers_arr=[
 ]
 
 reviews_arr=[
-    Review(rating=5, review_text='Pretty good, would come back!', customer_id=2, eatery_id=1),
-    Review(rating=3, review_text='Average, nothing stood out.', customer_id=3, eatery_id=1),
+    Review(rating=5, review_text='Pretty good, would come back!', customer_id=22, eatery_id=1),
+    Review(rating=3, review_text='Average, nothing stood out.', customer_id=23, eatery_id=1),
 
-    Review(rating=4, review_text='Great service!', customer_id=2, eatery_id=2),
-    Review(rating=5, review_text='Enjoyed the atmosphere.', customer_id=3, eatery_id=2),
+    Review(rating=4, review_text='Great service!', customer_id=22, eatery_id=2),
+    Review(rating=5, review_text='Enjoyed the atmosphere.', customer_id=23, eatery_id=2),
     
-    Review(rating=4, review_text='Interesting menu, good food.', customer_id=2, eatery_id=3),
-    Review(rating=5, review_text='Wonderful ambiance and great service.', customer_id=3, eatery_id=3),
+    Review(rating=4, review_text='Interesting menu, good food.', customer_id=22, eatery_id=3),
+    Review(rating=5, review_text='Wonderful ambiance and great service.', customer_id=23, eatery_id=3),
     
-    Review(rating=5, review_text='Delicious food, excellent service!', customer_id=2, eatery_id=4),
-    Review(rating=5, review_text='Nice environment, SICK food 5/5.', customer_id=3, eatery_id=4),
+    Review(rating=5, review_text='Delicious food, excellent service!', customer_id=22, eatery_id=4),
+    Review(rating=5, review_text='Nice environment, SICK food 5/5.', customer_id=23, eatery_id=4),
     
-    Review(rating=5, review_text='Absolutely loved the food! A must-try for food enthusiasts.', customer_id=2, eatery_id=5),
-    Review(rating=4, review_text='Good variety of dishes and friendly staff.', customer_id=3, eatery_id=5),
+    Review(rating=5, review_text='Absolutely loved the food! A must-try for food enthusiasts.', customer_id=22, eatery_id=5),
+    Review(rating=4, review_text='Good variety of dishes and friendly staff.', customer_id=23, eatery_id=5),
     
-    Review(rating=4, review_text='Great atmosphere and friendly service!', customer_id=2, eatery_id=6),
-    Review(rating=5, review_text='Delicious food and excellent presentation.', customer_id=3, eatery_id=6),
+    Review(rating=4, review_text='Great atmosphere and friendly service!', customer_id=22, eatery_id=6),
+    Review(rating=5, review_text='Delicious food and excellent presentation.', customer_id=23, eatery_id=6),
     
-    Review(rating=5, review_text='The flavors were fantastic! Highly recommended.', customer_id=2, eatery_id=7),
-    Review(rating=4, review_text='Cozy ambiance and attentive staff.', customer_id=3, eatery_id=7),
+    Review(rating=5, review_text='The flavors were fantastic! Highly recommended.', customer_id=22, eatery_id=7),
+    Review(rating=4, review_text='Cozy ambiance and attentive staff.', customer_id=23, eatery_id=7),
     
-    Review(rating=5, review_text='The food was delicious and beautifully presented.', customer_id=2, eatery_id=8),
-    Review(rating=5, review_text='Wonderful service and cozy atmosphere.', customer_id=3, eatery_id=8),
+    Review(rating=5, review_text='The food was delicious and beautifully presented.', customer_id=22, eatery_id=8),
+    Review(rating=5, review_text='Wonderful service and cozy atmosphere.', customer_id=23, eatery_id=8),
     
-     Review(rating=5, review_text='Exquisite flavors and impeccable service!', customer_id=2, eatery_id=9),
-    Review(rating=5, review_text='Cozy ambiance and tasty dishes.', customer_id=3, eatery_id=9),
+     Review(rating=5, review_text='Exquisite flavors and impeccable service!', customer_id=22, eatery_id=9),
+    Review(rating=5, review_text='Cozy ambiance and tasty dishes.', customer_id=23, eatery_id=9),
     
-    Review(rating=4, review_text='Great food and attentive staff!', customer_id=2, eatery_id=10),
-    Review(rating=5, review_text='Charming atmosphere and delicious dishes.', customer_id=3, eatery_id=10),
+    Review(rating=4, review_text='Great food and attentive staff!', customer_id=22, eatery_id=10),
+    Review(rating=5, review_text='Charming atmosphere and delicious dishes.', customer_id=23, eatery_id=10),
     
-    Review(rating=5, review_text='Absolutely loved the food! A hidden gem.', customer_id=2, eatery_id=11),
-    Review(rating=4, review_text='Friendly staff and enjoyable atmosphere.', customer_id=3, eatery_id=11),
+    Review(rating=5, review_text='Absolutely loved the food! A hidden gem.', customer_id=22, eatery_id=11),
+    Review(rating=4, review_text='Friendly staff and enjoyable atmosphere.', customer_id=23, eatery_id=11),
     
-    Review(rating=4, review_text='Delicious cuisine with great presentation.', customer_id=2, eatery_id=12),
-    Review(rating=5, review_text='Attentive service and cozy ambiance.', customer_id=3, eatery_id=12),
+    Review(rating=4, review_text='Delicious cuisine with great presentation.', customer_id=22, eatery_id=12),
+    Review(rating=5, review_text='Attentive service and cozy ambiance.', customer_id=23, eatery_id=12),
     
-    Review(rating=5, review_text='Flavors that will blow your mind!', customer_id=2, eatery_id=13),
-    Review(rating=5, review_text='Welcoming staff and cozy setting.', customer_id=3, eatery_id=13),
+    Review(rating=5, review_text='Flavors that will blow your mind!', customer_id=22, eatery_id=13),
+    Review(rating=5, review_text='Welcoming staff and cozy setting.', customer_id=23, eatery_id=13),
     
-    Review(rating=4, review_text='Fantastic food and great service!', customer_id=2, eatery_id=14),
-    Review(rating=5, review_text='Wonderful atmosphere and attentive staff.', customer_id=3, eatery_id=14),
+    Review(rating=4, review_text='Fantastic food and great service!', customer_id=22, eatery_id=14),
+    Review(rating=5, review_text='Wonderful atmosphere and attentive staff.', customer_id=23, eatery_id=14),
     
-    Review(rating=5, review_text='Memorable flavors and excellent service!', customer_id=2, eatery_id=15),
-    Review(rating=4, review_text='Lovely ambiance and delicious cuisine.', customer_id=3, eatery_id=15),
+    Review(rating=5, review_text='Memorable flavors and excellent service!', customer_id=22, eatery_id=15),
+    Review(rating=4, review_text='Lovely ambiance and delicious cuisine.', customer_id=23, eatery_id=15),
     
-    Review(rating=4, review_text='Great food and friendly staff!', customer_id=2, eatery_id=16),
-    Review(rating=5, review_text='Enjoyable atmosphere and tasty dishes.', customer_id=3, eatery_id=16),
+    Review(rating=4, review_text='Great food and friendly staff!', customer_id=22, eatery_id=16),
+    Review(rating=5, review_text='Enjoyable atmosphere and tasty dishes.', customer_id=23, eatery_id=16),
     
-    Review(rating=5, review_text='Exquisite flavors and impeccable service!', customer_id=2, eatery_id=17),
-    Review(rating=4, review_text='Cozy ambiance and delightful dishes.', customer_id=3, eatery_id=17),
+    Review(rating=5, review_text='Exquisite flavors and impeccable service!', customer_id=22, eatery_id=17),
+    Review(rating=4, review_text='Cozy ambiance and delightful dishes.', customer_id=23, eatery_id=17),
     
-    Review(rating=5, review_text='Great food and attentive staff!', customer_id=2, eatery_id=18),
-    Review(rating=5, review_text='Charming atmosphere and delicious dishes.', customer_id=3, eatery_id=18),
+    Review(rating=5, review_text='Great food and attentive staff!', customer_id=22, eatery_id=18),
+    Review(rating=5, review_text='Charming atmosphere and delicious dishes.', customer_id=23, eatery_id=18),
     
-    Review(rating=5, review_text='Absolutely loved the food! A hidden gem.', customer_id=2, eatery_id=19),
-    Review(rating=4, review_text='Friendly staff and enjoyable atmosphere.', customer_id=3, eatery_id=19),
+    Review(rating=5, review_text='Absolutely loved the food! A hidden gem.', customer_id=22, eatery_id=19),
+    Review(rating=4, review_text='Friendly staff and enjoyable atmosphere.', customer_id=23, eatery_id=19),
     
-    Review(rating=1, review_text='this restuarant is ass', customer_id=2, eatery_id=20),
-    Review(rating=1, review_text='pure ass', customer_id=3, eatery_id=20),
+    Review(rating=1, review_text='this restuarant is ass', customer_id=22, eatery_id=20),
+    Review(rating=1, review_text='pure ass', customer_id=23, eatery_id=20),
 ]
 
 voucher_arr=[
@@ -461,19 +460,30 @@ voucher_arr=[
 
 has_voucher_arr=[
     HasVoucher(
-            customer_id=1,
+            customer_id=21,
             voucher_id=1),
     HasVoucher(
-            customer_id=2,
+            customer_id=22,
             voucher_id=2),
     HasVoucher(
-            customer_id=3,
+            customer_id=23,
             voucher_id=3),
     HasVoucher(
-            customer_id=4,
+            customer_id=24,
             voucher_id=4),
 ]
 
+images_arr=[
+    Image(
+        filepath='thezucc.jpg',
+        eatery_id=1
+    ),
+    Image(
+        filepath='themusk.jpg',
+        eatery_id=1
+    )
+]
+    
 if __name__ == '__main__':
     app = create_app(config_name='testing')
     with app.app_context():
@@ -497,4 +507,7 @@ if __name__ == '__main__':
             db.session.commit()
         for has_voucher in has_voucher_arr:
             db.session.add(has_voucher)
+            db.session.commit()
+        for image in images_arr:
+            db.session.add(image)
             db.session.commit()

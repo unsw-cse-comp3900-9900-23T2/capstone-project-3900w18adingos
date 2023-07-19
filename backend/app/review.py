@@ -4,14 +4,13 @@ from flask_login import login_required, current_user
 from app.models.eatery import Eatery
 from app.models.review import Review
 from app.extensions import db
-from app.auth_helper import token_required
 
 
 review = Blueprint('review', __name__)
 
 # get the current_user 's review
 @review.post('/get_review')
-@token_required
+@login_required
 def get_review():
     req_json = request.get_json()
     eatery_id = req_json['eatery_id'].strip()
@@ -53,7 +52,7 @@ def get_all_reviews():
     }), 200
 
 @review.post('/add_review')
-@token_required
+@login_required
 def add_review():
     print(f'User authenticated: {g.current_user.is_authenticated}')
 
