@@ -28,7 +28,7 @@ eatery_arr = [
         email='mcds@fake.com',
         latitude=-33.91966242470431,
         longitude=151.22743957038773,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='10 Barker St, Kingsford NSW 2032'
     ),
@@ -37,7 +37,7 @@ eatery_arr = [
         email='rege@fake.com',
         latitude=-33.92094547443076,
         longitude=151.22726800730348,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='416-418 Anzac Parade, Kingsford NSW 2032'
     ),
@@ -46,7 +46,7 @@ eatery_arr = [
         email='churchies@fake.com',
         latitude=-33.92373346017343,
         longitude=151.2282260894706,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='536 Anzac Parade, Kingsford NSW 2032'
     ),
@@ -55,7 +55,7 @@ eatery_arr = [
         email='tft@fake.com',
         latitude=-33.92218351458226,
         longitude=151.2267275092203,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='2/309 Anzac Parade, Kingsford NSW 2032'
     ),
@@ -64,7 +64,7 @@ eatery_arr = [
         email='papahans@fake.com',
         latitude=-33.922582064553424,
         longitude=151.2267606094381,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='323 Anzac Parade, Kingsford NSW 2032'
     ),
@@ -73,7 +73,7 @@ eatery_arr = [
         email='zhoumum@fake.com',
         latitude=-33.920153566605,
         longitude=151.22636714754267,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='243-245 Anzac Parade, Kingsford NSW 2032'
     ),
@@ -82,7 +82,7 @@ eatery_arr = [
         email='oldplace@fake.com',
         latitude=-33.922376810853805,
         longitude=151.22683114334558,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='315 Anzac Parade, Kingsford NSW 2032'
     ),
@@ -91,7 +91,7 @@ eatery_arr = [
         email='tokyosuper@fake.com',
         latitude=-33.92212860007362,
         longitude=151.22671365734158,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='307 Anzac Parade, Kingsford NSW 2032'
     ),
@@ -100,7 +100,7 @@ eatery_arr = [
         email='shalom@fake.com',
         latitude=-33.922013642754635,
         longitude=151.2271671069826,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='2/458 Anzac Parade, Kingsford NSW 2032'
     ),
@@ -110,7 +110,7 @@ eatery_arr = [
         email='coogeepav@fake.com',
         latitude=-33.91854837293536,
         longitude=151.25867325121,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='Ground Floor, 169 Dolphin St, Coogee NSW 2034'
     ),
@@ -119,7 +119,7 @@ eatery_arr = [
         email='ryansbar@fake.com',
         latitude=-33.86505856846632,
         longitude=151.2081175261286,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='264-278 George St, Sydney NSW 2000'
     ),
@@ -128,7 +128,7 @@ eatery_arr = [
         email='unionhotel@fake.com',
         latitude=-33.90376265121743,
         longitude=151.18028962673472,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='576 King St, Newtown NSW 2042'
     ),
@@ -137,7 +137,7 @@ eatery_arr = [
         email='doveolive@fake.com',
         latitude=-33.8869720595346,
         longitude=151.21005833871993,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='156 Devonshire St, Surry Hills NSW 2010'
     ),
@@ -146,7 +146,7 @@ eatery_arr = [
         email='rootyhillrsl@fake.com',
         latitude=-33.77024903871825,
         longitude=150.83422849428325,
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         password='123',
         location='33 Railway St, Rooty Hill NSW 2766'
     ),
@@ -155,7 +155,7 @@ eatery_arr = [
         password='123',
         restaurant_name='Test Eatery',
         location="13 Some Street Kensington 2033 NSW",
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         latitude=-33.896549,
         longitude=151.179962
     ),
@@ -164,7 +164,7 @@ eatery_arr = [
         password='123',
         restaurant_name="McDonald's",
         location="12 Barker Street Kensington 2033 NSW",
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         latitude=-33.890025,
         longitude=151.194498
     ),
@@ -173,7 +173,7 @@ eatery_arr = [
         password='123',
         restaurant_name="Joe's Pizza",
         location="13 Henry Street Kensington 2033 NSW",
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         latitude=-33.690210,
         longitude=151.190208
     ),
@@ -182,7 +182,7 @@ eatery_arr = [
         password='123',
         restaurant_name="Thai Place",
         location="13 John Street Kensington 2033 NSW",
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         latitude=-33.828644,
         longitude=151.245937
     ),
@@ -191,7 +191,7 @@ eatery_arr = [
         password='123',
         restaurant_name="Ambatukam's Indian",
         location="13 George Street Bondi 2033 NSW",
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         latitude=-33.819831,
         longitude=151.231432
     ),
@@ -200,7 +200,7 @@ eatery_arr = [
         password='123',
         restaurant_name="HurryCurry indian",
         location="34 Monash Street Kingsford 2034 NSW",
-        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday", "9am-6pm"}',
+        opening_hours = '{"Monday": "9am-6pm", "Tuesday": "9am-6pm", "Wednesday": "9am-6pm", "Thursday": "9am-6pm", "Friday": "9am-6pm", "Saturday": "9am-6pm", "Sunday": "9am-6pm"}',
         latitude=-33.902479,
         longitude=151.171137
     ),

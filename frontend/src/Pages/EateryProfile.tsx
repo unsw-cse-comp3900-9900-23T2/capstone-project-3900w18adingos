@@ -64,8 +64,8 @@ const EateryProfile: React.FC = () => {
   };
 
   const voucherClaim = async (voucherId: string) => { 
-    if (id) { 
-      const success = await claimVoucher(voucherId, id)
+    if (user) { 
+      const success = await claimVoucher(voucherId, user.id)
       if (success) {
         if (user) { 
           await fetchVouchers(user.id)
@@ -77,7 +77,7 @@ const EateryProfile: React.FC = () => {
     }
     alert("Claim unsuccessful");
   }
-
+  
   return (
     <>
     <div className="profile-wrapper">
@@ -121,6 +121,12 @@ const EateryProfile: React.FC = () => {
       </div>
 
       {currentTab === 'INFO' && <div>Info Content</div>}
+      <div>
+      {eatery && eatery.opening_hours && Object.entries(JSON.parse(eatery.opening_hours)).map(([key, value], index) => ( 
+        <p key={index}> {key}: {value as string}</p>
+      ))}
+
+      </div>
       {currentTab === 'PHOTOS' && <div>Photos Content</div>}
       {currentTab === 'REVIEWS' && (
         <div className="display-reviews">
