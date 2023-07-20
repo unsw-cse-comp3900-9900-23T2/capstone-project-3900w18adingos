@@ -153,3 +153,27 @@ def redeem_voucher():
     db.session.commit()
 
     return jsonify({'vouchers': f'voucher ({voucher_id}) redeemed by customer ({customer_id})'}), 200
+
+@voucher.route('/get_vouchers_wallet', methods=['POST'])
+# @login_required
+def get_vouchers_wallet():
+    customer_id = request.json.get('customer_id')
+    eatery_id = request.json.get('eatery_id')
+
+    eatery_vouchers = Voucher.query.filter(Voucher.eatery == eatery_id).all()
+    has_vouchers = HasVoucher.query.filter((HasVoucher.customer_id==customer_id)).all()
+
+    vouchers = []
+    for has_voucher in has_vouchers:
+        voucher = Voucher.query.filter(Voucher.id==has_voucher.voucher_id).first()
+        if voucher in eatery_vouchers:
+            vouchers.append({
+            'id': voucher.id,
+            'description': voucher.description,
+            'quantity': voucher.quantity,
+            'start': voucher.start,
+            'expiry': voucher.expiry,
+            'eatery_id': voucher.eatery
+            })
+    
+    return jsonify({'vouchers': vouchers}), 200
