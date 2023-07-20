@@ -5,17 +5,19 @@ import { useEffect, useState } from "react";
 import "../styles/EateryProfile.css"
 import { useAuth } from "../hooks/useAuth";
 import { useVoucher } from "../hooks/useVoucher";
+import { Voucher } from "../interface";
 
 const EateryProfile: React.FC = () => { 
   const { id } = useParams<{ id: string }>();
 
   const {fetchEatery, eatery, deleteReview} = useEateryContext();
   const {getUserById, user, fetchUser} = useAuth()
-  const {claimVoucher, fetchVouchersForEatery, eateryVouchers} = useVoucher()
+  const {claimVoucher, fetchVouchersForEatery, eateryVouchers, fetchVouchers, cusomterVouchers} = useVoucher()
 
   const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS' | 'VOUCHERS'>("VOUCHERS");
   const [users, setUsers] = useState<{[key: string]: any}>({});
   const navigate = useNavigate()
+
 
   useEffect(() => {
     if (id){
@@ -27,8 +29,11 @@ const EateryProfile: React.FC = () => {
   useEffect(() => { 
     if(id) { 
       fetchVouchersForEatery(id)
+      if(user) { 
+        fetchVouchers(user.id)
+      }
     }
-  },[fetchVouchersForEatery])
+  },[fetchVouchersForEatery, fetchVouchers])
 
   // get user's name from review[].customer_id
   useEffect(() => {
@@ -59,15 +64,20 @@ const EateryProfile: React.FC = () => {
   };
 
   const voucherClaim = async (voucherId: string) => { 
-    if (id) { 
-      const success = await claimVoucher(voucherId, id)
-      if (success) { 
-        return "Claim successful!"
+    if (user) { 
+      const success = await claimVoucher(voucherId, user.id)
+      if (success) {
+        if (user) { 
+          await fetchVouchers(user.id)
+          console.log(cusomterVouchers)
+        }
+        alert("Claim successful!");
+        return
       }
     }
-    return "Claim unsuccessful L"
+    alert("Claim unsuccessful");
   }
-
+  
   return (
     <>
     <div className="profile-wrapper">
@@ -110,7 +120,10 @@ const EateryProfile: React.FC = () => {
 
       </div>
 
-      {currentTab === 'INFO' && <div>Info Content</div>}
+      {currentTab === 'INFO' && eatery && eatery.opening_hours && Object.entries(JSON.parse(eatery.opening_hours)).map(([key, value], index) => ( 
+          <p key={index}> {key}: {value as string}</p>
+        ))
+      }
       {currentTab === 'PHOTOS' && <div>Photos Content</div>}
       {currentTab === 'REVIEWS' && (
         <div className="display-reviews">
@@ -135,7 +148,7 @@ const EateryProfile: React.FC = () => {
       )}
       {currentTab === 'VOUCHERS' && (
         <div className="display-reviews">
-          {eateryVouchers && eateryVouchers.map((voucher, index) => {
+          {eateryVouchers && eateryVouchers.map((voucher: Voucher, index) => {
             const startDate = new Date(voucher.start);
             const expiryDate = new Date(voucher.expiry);
 
@@ -145,7 +158,12 @@ const EateryProfile: React.FC = () => {
                 <p>Quantity: {voucher.quantity}</p>
                 <p>Start: {startDate.toLocaleDateString()}</p>
                 <p>Expires: {expiryDate.toLocaleDateString()}</p>
-                <button className="claim-voucher" onClick={() => voucherClaim(voucher.id)}>Claim Voucher</button>
+                <button className="claim-voucher" 
+                    onClick={() => voucherClaim(voucher.id)}
+                    // disabled={cusomterVouchers.includes(voucher)} // Disable the button if the voucher has been claimed
+            >
+              Claim Voucher
+            </button>
               </div>
             );
         })}

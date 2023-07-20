@@ -38,7 +38,7 @@ const Home = () => {
     <div className="home">
 
       <Header>
-        <h1>Welcome to EMS - Your Eatery Management System</h1>
+        <h1 style={{"fontSize": "28px", "margin": "0"}}>Welcome to EMS - Your Eatery Management System</h1>
         <p>Enhancing dining experiences through digital innovation.</p>
       </Header>
 

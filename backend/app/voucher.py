@@ -5,7 +5,6 @@ from datetime import datetime
 
 from app.extensions import db
 from app.models.voucher import Voucher
-from app.models.eatery import Eatery
 from app.models.has_voucher import HasVoucher
 
 
