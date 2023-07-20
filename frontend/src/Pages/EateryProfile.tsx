@@ -138,10 +138,8 @@ const EateryProfile: React.FC = () => {
                   </button>
                 )}
               </div>
-
               <div>Review: {review.review_text}</div>
               <div>User: {users[review.customer_id]?.name}</div>
-
             </div>
           ))}
         </div>
@@ -151,6 +149,7 @@ const EateryProfile: React.FC = () => {
           {eateryVouchers && eateryVouchers.map((voucher: Voucher, index) => {
             const startDate = new Date(voucher.start);
             const expiryDate = new Date(voucher.expiry);
+            const isVoucherClaimed = cusomterVouchers.some(customerVoucher => customerVoucher.id === voucher.id);
 
             return (
               <div key={index} className="list-item">
@@ -160,7 +159,7 @@ const EateryProfile: React.FC = () => {
                 <p>Expires: {expiryDate.toLocaleDateString()}</p>
                 <button className="claim-voucher" 
                     onClick={() => voucherClaim(voucher.id)}
-                    // disabled={cusomterVouchers.includes(voucher)} // Disable the button if the voucher has been claimed
+                    disabled={isVoucherClaimed}
             >
               Claim Voucher
             </button>
