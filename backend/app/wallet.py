@@ -14,8 +14,9 @@ wallet = Blueprint('wallet', __name__)
 @wallet.get('/get_short_code')
 @auth_required
 def get_short_code():
+    current_user = current_user()
     
-    if not isinstance(current_user(), Customer):
+    if not isinstance(current_user, Customer):
         return jsonify(success=False), 403
 
     code = generate_short_code()
@@ -23,7 +24,7 @@ def get_short_code():
     while code in code_dict:
         code = generate_short_code()
     
-    code_dict[code] = current_user().id
+    code_dict[code] = current_user.id
         
     return jsonify(code=code), 200
     

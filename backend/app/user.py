@@ -11,24 +11,29 @@ user = Blueprint('user', __name__)
 @user.route('/customer/profile', methods=['GET'])
 @auth_required
 def get_customer():
-    if not isinstance(current_user(), Customer):
+    current_user = current_user()
+    
+    if not isinstance(current_user, Customer):
         return jsonify(success=False), 403
 
-    return customer_schema.dump(current_user())
+    return customer_schema.dump(current_user)
 
 @user.route('/customer/edit-profile', methods=['POST'])
 @auth_required
 def edit_customer():
-    if not isinstance(current_user(), Customer):
+    current_user = current_user()
+
+    if not isinstance(current_user, Customer):
         return jsonify(success=False), 403
 
     data = request.get_json()
     
-    current_user().name = data.get('name', current_user().name)
-    current_user().email = data.get('email', current_user().email)
+    
+    current_user.name = data.get('name', current_user.name)
+    current_user.email = data.get('email', current_user.email)
 
     if 'password' in data:
-        current_user().password_hash - guard.hash_password(data.get('password'))
+        current_user.password_hash - guard.hash_password(data.get('password'))
 
     db.session.commit()
     return jsonify({"message": "Customer updated"}), 200
@@ -36,16 +41,20 @@ def edit_customer():
 @user.route('/eatery/edit-profile', methods=['PUT'])
 @auth_required
 def edit_eatery():
-    if not isinstance(current_user(), Eatery):
+    current_user = current_user()
+    
+    if not isinstance(current_user, Eatery):
         return jsonify(success=False), 403
 
     data = request.get_json()
-    current_user().restaurant_name = data.get('restaurant_name', current_user().restaurant_name)
-    current_user().location = data.get('location', current_user().location)
-    current_user().email = data.get('email', current_user().email)
+    
+    
+    current_user.restaurant_name = data.get('restaurant_name', current_user.restaurant_name)
+    current_user.location = data.get('location', current_user.location)
+    current_user.email = data.get('email', current_user.email)
 
     if 'password' in data:
-        current_user().hash_password(data.get('password'))
+        current_user.hash_password(data.get('password'))
 
     db.session.commit()
     return jsonify({"message": "Eatery updated"}), 200
@@ -53,7 +62,9 @@ def edit_eatery():
 @user.route('/eatery/profile', methods=['GET'])
 @auth_required
 def get_eatery():
-    if not isinstance(current_user(), Eatery):
+    current_user = current_user()
+    
+    if not isinstance(current_user, Eatery):
         return jsonify(success=False), 403
 
     return eatery_schema.dump(current_user), 200
