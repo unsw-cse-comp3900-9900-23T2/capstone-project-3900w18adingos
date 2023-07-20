@@ -70,7 +70,7 @@ def add_review():
     review_text = req_json['review_text'].strip()
     eatery_id = req_json['eatery_id'].strip()
 
-    eatery = Eatery.query.first_or_404(eatery_id)
+    eatery = Eatery.query.get_or_404(eatery_id)
     new_review = Review(rating=rating, review_text=review_text, customer_id=g.current_user.id, eatery_id=eatery.id)
     db.session.add(new_review)
     db.session.commit()
