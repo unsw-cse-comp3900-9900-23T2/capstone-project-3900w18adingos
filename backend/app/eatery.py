@@ -12,7 +12,7 @@ eatery = Blueprint('eatery', __name__)
 
 @eatery.get('/get_image/<int:image_id>')
 def get_eatery_image(image_id):
-    image_obj = Image.query.first_or_404(image_id)
+    image_obj = Image.query.get_or_404(image_id)
     # image_objs has .id, .eatery_id, .filepath fields (def'n in models/image.py)
     return send_file(os.path.join(current_app.config['IMAGE_SAVE_DIRECTORY'], image_obj.filepath), mimetype='image/jpg')
     

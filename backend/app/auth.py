@@ -1,8 +1,11 @@
-from flask import Blueprint, request, jsonify
-from flask_login import current_user, logout_user
+from flask import Blueprint, jsonify, request
+from flask_login import current_user, logout_user, login_required
+
 from app import auth_helper
 from app.auth_helper import validate_google_auth_token_and_send_back_token
-from app.models.customer import Customer
+
+from app.models.customer import Customer, customer_schema
+from app.models.eatery import eatery_schema
 
 auth = Blueprint('auth', __name__)
 
@@ -35,15 +38,9 @@ def register():
         return jsonify({"message": "Invalid role"}), 400
     result = auth_helper.auth_register(email, password, name, role)
     return result
-
-
-@auth.route('/auth/logout', methods=['POST'])
-def logout():
-    token = request.json.get('token')
-    result = auth_helper.auth_logout(token)
-    return result
     
 @auth.route('/auth/logout')
+@login_required
 def logout_get():
     if current_user and current_user.is_authenticated:
         logout_user()
@@ -71,61 +68,41 @@ def forgotpasswordreset_request():
     result = auth_helper.auth_passwordreset_request(email, role)
     return result
 
-@auth.route('/auth/passwordreset/reset/', methods=['POST'])
+@auth.route('/auth/passwordreset/reset', methods=['POST'])
 def passwordreset_reset():
     reset_code = request.json.get('resetCode')
     new_password = request.json.get('newPassword')
     result = auth_helper.auth_passwordreset_reset(reset_code, new_password)
     return result
-
-@auth.route('/auth/me', methods=['GET'])
-def me():
-    token = request.headers.get('Authorization')
-    if not token:
-        return jsonify({"message": "Missing token"}), 400
-
-    token = token.split(" ")[1]  # The Authorization header format is "Bearer <token>"
-    data = Customer.decode_auth_token(token)
-    if not data:
-        return jsonify({"message": "Invalid token"}), 401  # unauthorized
-
-    user = Customer.query.get(data['id'])
-
-    # return the user's data
-    return jsonify({
-        "id": user.id,
-        "name": user.name,
-        "email": user.email,
-        # add any other fields you want to return here
-    }), 200
     
 @auth.route('/auth/whoami', methods=['GET'])
 def whoami():
     if not current_user or not current_user.is_authenticated:
         return jsonify({"message": "Not logged in"}), 401
 
-    # return the user's data
-    return jsonify({
-        "id": current_user.id,
-        "email": current_user.email,
-    }), 200
+    return customer_schema.dump(current_user) if isinstance(current_user, Customer) else eatery_schema.dump(current_user), 200
     
-@auth.route('/user/<int:user_id>', methods=['GET'])
-def get_user(user_id):
-    user = Customer.query.get(user_id)
-    if not user:
-        return jsonify({"message": "User not found"}), 404
+# @auth.route('/user/<int:user_id>', methods=['GET'])
+# @login_required
+# def get_user(user_id):
+#     user = Customer.query.get(user_id)
+#     if not user:
+#         return jsonify({"message": "User not found"}), 404
 
-    # return the user's data
-    return jsonify({
-        "id": user.id,
-        "name": user.name,
-        "email": user.email,
-        # add any other fields you want to return here
-    }), 200
+#     # return the user's data
+#     return jsonify({
+#         "id": user.id,
+#         "name": user.name,
+#         "email": user.email,
+#         # add any other fields you want to return here
+#     }), 200
 
 @auth.route('/auth/validate-google-token', methods=['POST'])
 def validate_google_token():
     code = request.json.get('code')
-    return validate_google_auth_token_and_send_back_token(code)
+    role = 'customer'  # Set role as 'customer' by default
+    result = validate_google_auth_token_and_send_back_token(code, role)
+    return jsonify(result)  # no need to return the token
+
+
 

@@ -1,22 +1,22 @@
-from flask import current_app
-from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
+from werkzeug.security import generate_password_hash
+from marshmallow import fields
 
-from app.extensions import db
+from app.extensions import db, ma
+from app.models.user import User
 
-class Customer(db.Model, UserMixin):
+class Customer(User):
     __tablename__ = 'customer'
-    id = db.Column(db.Integer, primary_key=True)
+    
+    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     name = db.Column(db.String(50))
-    email = db.Column(db.String(120), unique=True)
-    password_hash = db.Column(db.String(128))
-    #registered_on = db.Column(db.DateTime, nullable=False)
-    role = db.Column(db.String(50), default='customer')
-    handle = db.Column(db.String(120), unique=True)
     auth_source = db.Column(db.String(20), default='local')
+    vouchers = db.relationship('HasVoucher', backref='customer')
     # cuisine_preferences = db.relationship('LikesCuisine', backref='customer')
     # profile_pic = db.Column(db.String(120), default='default.jpg')
+
+    __mapper_args__ = {
+        'polymorphic_identity':'customer'
+    }
 
     def __init__(self, **kwargs):
         password = kwargs.pop('password', None)
@@ -24,22 +24,13 @@ class Customer(db.Model, UserMixin):
         if password:
             self.password_hash = generate_password_hash(password)
 
-    def encode_auth_token(self, user_id):
-        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        return s.dumps({'id': self.id, 'role': self.role}, salt='auth')
+class CustomerSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Customer
+    
+    role = fields.Constant('customer')
+    id = ma.auto_field()
+    email = ma.auto_field()
+    name = ma.auto_field()
 
-    @staticmethod
-    def decode_auth_token(token):
-        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token, salt='auth')
-        except (SignatureExpired, BadSignature):
-            return "Token invalid or expired. Please log in again."
-        return {'id': data['id'], 'role': data['role']} if data['role'] == 'customer' else None
-
-
-    def hash_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
+customer_schema = CustomerSchema()

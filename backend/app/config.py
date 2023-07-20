@@ -1,8 +1,14 @@
 import os
+from flask import session
+
+# from app.models.customer import Customer
+# from app.models.eatery import Eatery
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
+
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
     SQLALCHEMY_TRACK_MODIFICATIONS = False

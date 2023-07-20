@@ -15,6 +15,7 @@ export interface Eatery {
     latitude: number,
     longitude: number,
     reviews: Review[],
+    opening_hours: string,
 }
 export interface Images {
     images: Array<any>;

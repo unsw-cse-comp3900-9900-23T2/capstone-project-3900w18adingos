@@ -1,6 +1,7 @@
 .marker-content-wrapper { 
     padding: 0px;
     display: flex;
+    cursor: pointer;
 }
 
 .marker-content-image-wrapper { 
