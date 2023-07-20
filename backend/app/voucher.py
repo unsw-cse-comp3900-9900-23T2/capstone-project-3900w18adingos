@@ -1,11 +1,12 @@
-from flask import Blueprint, jsonify, request
-from flask_login import login_required
+from flask import Blueprint, request
+from flask import jsonify
 from sqlalchemy import and_
-from datetime import datetime
-
 from app.extensions import db
+from datetime import datetime
 from app.models.voucher import Voucher
+from app.models.eatery import Eatery
 from app.models.has_voucher import HasVoucher
+from app.auth_helper import token_required
 
 
 voucher = Blueprint('voucher', __name__)
@@ -14,7 +15,7 @@ date_format = "%H:%M:%S %d/%m/%Y"
 #date_string_example = "12:34:56 06/07/2023"
 
 @voucher.route('/create_voucher', methods=['POST'])
-@login_required
+@token_required
 def create_voucher():
     description = request.json.get('description')
     eatery = request.json.get('eatery_id')
@@ -35,7 +36,7 @@ def create_voucher():
     return jsonify({'message': f'added voucher with id ({voucher_id})'}), 201
 
 @voucher.route('/delete_voucher/<int:voucher_id>', methods=['DELETE'])
-@login_required
+@token_required
 def delete_voucher(voucher_id):
     voucher = Voucher.query.filter(Voucher.id == voucher_id).first()
     if voucher == None:
@@ -47,7 +48,7 @@ def delete_voucher(voucher_id):
 
 
 @voucher.route('/edit_voucher/<int:voucher_id>', methods=['PUT'])
-@login_required
+@token_required
 def edit_voucher(voucher_id):
     voucher = Voucher.query.filter(Voucher.id == voucher_id).first()
     if voucher == None:
@@ -76,7 +77,7 @@ def edit_voucher(voucher_id):
 
 
 @voucher.route('/get_vouchers_eatery/<int:eatery_id>', methods=['GET'])
-@login_required
+@token_required
 def get_vouchers_eatery_id(eatery_id):
     vouchers = Voucher.query.filter(Voucher.eatery == eatery_id).all()
     if vouchers == None:
@@ -96,7 +97,7 @@ def get_vouchers_eatery_id(eatery_id):
     return jsonify({'vouchers': vouchers_list}), 200
 
 @voucher.route('/get_vouchers_customer/<int:customer_id>', methods=['GET'])
-@login_required
+@token_required
 def get_vouchers_customer_id(customer_id):
     has_vouchers = HasVoucher.query.filter((HasVoucher.customer_id==customer_id)).all()
 
@@ -116,7 +117,7 @@ def get_vouchers_customer_id(customer_id):
 
 
 @voucher.route('/claim_voucher', methods=['POST'])
-@login_required
+@token_required
 def claim_voucher():
     voucher_id = request.json.get('voucher_id')
     customer_id = request.json.get('customer_id')
@@ -142,7 +143,7 @@ def claim_voucher():
     return jsonify({'vouchers': f'voucher ({voucher_id}) claimed by customer ({customer_id})'}), 200
 
 @voucher.route('/redeem_voucher', methods=['POST'])
-@login_required
+@token_required
 def redeem_voucher():
     voucher_id = request.json.get('voucher_id')
     customer_id = request.json.get('customer_id')

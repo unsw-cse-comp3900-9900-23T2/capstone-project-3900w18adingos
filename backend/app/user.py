@@ -1,27 +1,42 @@
 from flask import Blueprint, request, jsonify
 from flask_login import current_user, login_required
-from app.models.customer import Customer, customer_schema
-from app.models.eatery import Eatery, eatery_schema
-from app.models.user import User
+from app.models.customer import Customer
+from app.models.eatery import Eatery
 from app.extensions import db
+from app.auth_helper import user_is_eatery
+from app.auth_helper import token_required
+
 
 user = Blueprint('user', __name__)
 
-@login_required
-@user.route('/customer/profile', methods=['GET'])
+@token_required
+@user.route('/customer/profile/', methods=['GET'])
 def get_customer():
-    if not isinstance(current_user, Customer):
-        return jsonify(success=False), 403
+    token = request.args['token']
+    customer_id = Customer.decode_auth_token(token)
+    if isinstance(customer_id, str):  # Check if it's an error message
+        return jsonify({"message": customer_id}), 400 
 
-    return customer_schema.dump(current_user)
+    customer = Customer.query.get(customer_id['id'])
+    customer_data = {
+        'id': customer.id,
+        'name': customer.name,
+        'email': customer.email,
+        'handle': customer.handle,
+        #'profile_pic': customer.profile_pic
+    }
 
-@login_required
-@user.route('/customer/edit-profile', methods=['POST'])
+    return jsonify(customer_data)
+
+@token_required
+@user.route('/customer/edit-profile/', methods=['POST'])
 def edit_customer():
-    if not isinstance(current_user, Customer):
-        return jsonify(success=False), 403
+    token = request.json.get('token')
+    customer_id = Customer.decode_auth_token(token)
+    if isinstance(customer_id, str):  # Check if it's an error message
+        return jsonify({"message": customer_id}), 400 
 
-    customer = User.query.get_or_404(current_user.id)
+    customer = Customer.query.get(customer_id['id'])
     data = request.get_json()
     customer.name = data.get('name', customer.name)
     customer.email = data.get('email', customer.email)
@@ -29,30 +44,47 @@ def edit_customer():
     if 'password' in data:
         customer.hash_password(data.get('password'))
 
+    customer.handle = data.get('handle', customer.handle)
+    #customer.profile_pic = data.get('profile_pic', customer.profile_pic)
+
     db.session.commit()
     return jsonify({"message": "Customer updated"}), 200
 
-@login_required
-@user.route('/eatery/edit-profile', methods=['PUT'])
+@token_required
+@user.route('/eatery/edit-profile/', methods=['PUT'])
 def edit_eatery():
-    if not isinstance(current_user, Eatery):
-        return jsonify(success=False), 403
+    token = request.json.get('token')
+    eatery_id = Eatery.decode_auth_token(token)
+    if isinstance(eatery_id, str):  # Check if it's an error message
+        return jsonify({"message": eatery_id}), 400 
 
+    eatery = Customer.query.get(eatery_id['id'])
     data = request.get_json()
-    current_user.restaurant_name = data.get('restaurant_name', current_user.restaurant_name)
-    current_user.location = data.get('location', current_user.location)
-    current_user.email = data.get('email', current_user.email)
+    eatery.restaurant_name = data.get('restaurant_name', eatery.restaurant_name)
+    eatery.location = data.get('location', eatery.location)
+    eatery.email = data.get('email', eatery.email)
 
     if 'password' in data:
-        current_user.hash_password(data.get('password'))
+        eatery.hash_password(data.get('password'))
 
     db.session.commit()
     return jsonify({"message": "Eatery updated"}), 200
 
-@login_required
-@user.route('/eatery/profile', methods=['GET'])
+@token_required
+@user.route('/eatery/profile/', methods=['GET'])
 def get_eatery():
-    if not isinstance(current_user, Eatery):
-        return jsonify(success=False), 403
+    token = request.args['token']
+    eatery_id = Eatery.decode_auth_token(token)
+    if isinstance(eatery_id, str):  # Check if it's an error message
+        return jsonify({"message": eatery_id}), 400 
 
-    return eatery_schema.dump(current_user), 200
+    eatery = Customer.query.get(eatery_id['id'])
+    eatery_data = {
+        'id': eatery.id,
+        'restaurant_name': eatery.restaurant_name,
+        'location': eatery.location,
+        'email': eatery.email,
+        'cuisine': eatery.cuisine
+    }
+
+    return jsonify(eatery_data)
