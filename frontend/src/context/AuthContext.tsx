@@ -10,37 +10,45 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     const [token, setToken] = useState<string | null>(checkToken ? checkToken : null);
     const [user, setUser] = useState<User | null>(null);
     const api = axios.create({
-        baseURL: 'http://127.0.0.1:5000',
-        withCredentials: true
+        baseURL: 'http://127.0.0.1:5000'
     });
 
-    const login = useCallback(async (email: string, password: string, role: string) => {
-        try {
-            const response = await api.post('/auth/login', { email, password, role });
-            setUser(response.data);
-            return true;
-        } catch (error) {
-            console.error(error);
-            return false;
-        }
-    }, []);
+  const login = useCallback(async (email: string, password: string, role: string) => {
+    try {
+      const response = await api.post('/auth/login', { email, password, role });
+      const { token } = response.data;
+      debugger
+      localStorage.setItem('token', token)
+      setToken(token);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }, []);
 
-    const googleLogin = useCallback(async (code: string) => {
-      try {
-        const response = await api.post('/auth/validate-google-token', { code });
-        setUser(response.data.user);
-        return true;
-      } catch (error) {
-        console.error(error);
-        return false;
-      }
-    }, []);
+  const googleLogin = useCallback(async (code: string) => {
+    try {
+      const response = await api.post('/auth/validate-google-token', { code });
+      console.log(response)
+      const { token } = response.data;
+      localStorage.setItem('token', token)
+      setToken(token);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }, []);
 
 
-const register = useCallback(async (email: string, password: string, name: string, role: string) => {
+  const register = useCallback(async (email: string, password: string, name: string, role: string) => {
     try {
       const response = await api.post('/auth/register', { email, password, name, role });
-      setUser(response.data);
+      const { token } = response.data;
+      console.log(response)
+      localStorage.setItem('token', token)
+      setToken(token);
       return true;
     } catch (error) {
       console.error(error);
@@ -48,16 +56,18 @@ const register = useCallback(async (email: string, password: string, name: strin
     }
   }, []);
 
-const logout = useCallback(async () => {
+  const logout = useCallback(async () => {
     try {
-      await api.get('/auth/logout');
-      setUser(null);
+      await api.post('/auth/logout', { token });
+      localStorage.clear()
+      setToken(null);
       return true;
     } catch (error) {
       console.error(error);
       return false;
     }
-  }, []);
+  }, [token]);
+
   const passwordResetRequest = useCallback(async (email: string, role: string) => {
       try {
         await api.post('/auth/passwordreset/request', { email, role });  // include role here
@@ -71,13 +81,13 @@ const logout = useCallback(async () => {
 
   const updateProfile = useCallback(async (name: string, email: string) => {
     try {
-      const response = await api.post('/customer/edit-profile', { email, name });
+      const response = await api.post('/customer/edit-profile/', { email, name, token });
       return response.data;
     } catch (error) {
       console.error(error);
       return false;
     }
-  }, []);
+  }, [token]);
 
 
 
@@ -93,14 +103,18 @@ const logout = useCallback(async () => {
 
   const isAuthenticated = () => Boolean(token);
 
-    const fetchUser = useCallback(async () => {
-        try {
-            const response = await api.get('/auth/whoami');
-            setUser(response.data);
-        } catch (error) {
-            console.error(error);
-        }
-    }, []);
+  const fetchUser = useCallback(async () => {
+    try {
+      const response = await api.get('/auth/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUser(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [token]);
 
   const getAllReviews = useCallback(async (eateryId: string) => {
     try {
