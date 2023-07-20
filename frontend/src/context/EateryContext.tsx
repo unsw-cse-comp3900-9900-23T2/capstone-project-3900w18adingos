@@ -109,7 +109,11 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
   
     const deleteReview = useCallback(async (reviewId: string) => {
       try {
-        const response = await api.delete(`/delete_review/${reviewId}`);
+        const response = await api.delete(`/delete_review/${reviewId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        });
         return response.data.success; // return the success status
       } catch (error) {
         console.error(error + " ASSS");
