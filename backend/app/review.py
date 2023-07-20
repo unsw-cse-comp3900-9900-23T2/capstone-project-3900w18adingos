@@ -54,15 +54,15 @@ def get_all_reviews():
 @review.post('/add_review')
 @login_required
 def add_review():
-    print(f'User authenticated: {g.current_user.is_authenticated}')
+    print(f'User authenticated: {current_user.is_authenticated}')
 
-        # Check if a token is included in the Authorization header
-    auth_header = request.headers.get('Authorization')
-    if auth_header:
-        token = auth_header.split(" ")[1]
-        print(f'Authorization token: {token}')
-    else:
-        print('No Authorization header')
+    # Check if a token is included in the Authorization header
+    # auth_header = request.headers.get('Authorization')
+    # if auth_header:
+    #     token = auth_header.split(" ")[1]
+    #     print(f'Authorization token: {token}')
+    # else:
+    #     print('No Authorization header')
 
     req_json = request.get_json()
     rating = req_json['rating'].strip()
@@ -70,7 +70,7 @@ def add_review():
     eatery_id = req_json['eatery_id'].strip()
 
     eatery = Eatery.query.first_or_404(eatery_id)
-    new_review = Review(rating=rating, review_text=review_text, customer_id=g.current_user.id, eatery_id=eatery.id)
+    new_review = Review(rating=rating, review_text=review_text, customer_id=current_user.id, eatery_id=eatery.id)
     db.session.add(new_review)
     db.session.commit()
 
