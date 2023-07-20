@@ -1,66 +1,127 @@
-from flask import jsonify, current_app, session
+from flask import jsonify, current_app, url_for, session, request, g
 from flask_mail import Mail, Message
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, login_required, current_user
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
-from werkzeug.security import check_password_hash
 import requests
+from functools import wraps
 
 from app.extensions import db
-from app.models.user import User
 from app.models.customer import Customer
 from app.models.eatery import Eatery
 
 mail = Mail(current_app)
 
-# def auth_logout(token):
-#     user_id_or_error = Customer.decode_auth_token(token)
-#     if isinstance(user_id_or_error, str):  # an error message was returned
-#         user_id_or_error = Eatery.decode_auth_token(token)
-#     if isinstance(user_id_or_error, str):  # an error message was returned
-#         return jsonify({"message": user_id_or_error}), 400
+def user_is_eatery():
+    if not current_user.is_authenticated:
+        return False
+    return isinstance(current_user._get_current_object(), Eatery)
 
-#     logout_user()
-#     return jsonify({'message': 'Logged out successfully'}), 200
+def get_user_model(role):
+    if role == 'customer':
+        return Customer
+    elif role == 'eatery':
+        return Eatery
+    else:
+        return None
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization'].split(" ")[1]
+            print(f'Token received: {token}')  # Print received token
+        else:
+            print('No token found in the headers')  # Print message if no token found
+
+        if not token:
+            return jsonify({'message' : 'Token is missing!'}), 401
+
+        try:
+            # Try decoding the token with Customer model
+            data = Customer.decode_auth_token(token)
+            if isinstance(data, str): 
+                # Try decoding the token with Eatery model
+                data = Eatery.decode_auth_token(token)
+            if isinstance(data, str):
+                return jsonify({'message' : 'Token is invalid!'}), 401
+            print(f'Decoded data from token: {data}')  # Print the decoded data from the token
+            user = Customer.query.filter_by(id=data['id']).first() if data['role'] == 'customer' else Eatery.query.filter_by(id=data['id']).first()
+            if not user:
+                return jsonify({'message': 'User not found!'}), 401
+            else:
+                g.current_user = user
+        except:
+            return jsonify({'message' : 'Token is invalid!'}), 401
+
+        return f(*args, **kwargs)
+
+    return decorated
+
+
+def auth_logout(token):
+    user_id_or_error = Customer.decode_auth_token(token)
+    if isinstance(user_id_or_error, str):  # an error message was returned
+        user_id_or_error = Eatery.decode_auth_token(token)
+    if isinstance(user_id_or_error, str):  # an error message was returned
+        return jsonify({"message": user_id_or_error}), 400
+
+    logout_user()
+    return jsonify({'message': 'Logged out successfully'}), 200
+
 
 def auth_login(email, password, role):
-   
-    user = User.query.filter_by(email=email).first_or_404()
-    
-    if not check_password_hash(user.password_hash, password):
-        return jsonify(success=False), 401
-    
+    if not email or not password or not role:
+        print('Missing email, password, or role')
+        return jsonify({"message": "Missing email, password, or role"}), 400
+
+    UserModel = get_user_model(role)
+    if not UserModel:
+        print(f'Invalid role: {role}')
+        return jsonify({"message": "Invalid role"}), 400
+
+    user = UserModel.query.filter_by(email=email).first()
+    if not user:
+        print(f'No user found with email: {email}')
+        return jsonify({"message": "Invalid credentials"}), 400
+
+    if not user.verify_password(password):
+        print('Invalid password')
+        return jsonify({"message": "Invalid credentials"}), 400
+
     login_user(user, remember=True)
-    
-    role='eatery'
-    if isinstance(user, Customer):
-        role='customer'
-    
+    session['user_type'] = role
+
     return jsonify(
         {
+            'token': user.encode_auth_token(user.id), 
             'user': user.name if role == 'customer' else user.restaurant_name,
             'role': role
         }
     )
 
 def auth_register(email, password, name, role):
-    
-    if role not in ['customer', 'eatery']:
+    UserModel = get_user_model(role)
+    if not UserModel:
         return jsonify({"message": "Invalid role"}), 400
 
-    if User.query.filter_by(email=email).first():
-        return jsonify({"message": "user with that email already exists"}), 400
+    if UserModel.query.filter_by(email=email).first() is not None:
+        return jsonify({"message": f"{role.title()} with that email already exists"}), 400
 
     if role == 'customer':
-        user = Customer(email=email, name=name, password=password)
+        user = UserModel(email=email, name=name, password=password)
     elif role == 'eatery':
-        user = Eatery(email=email, restaurant_name=name, password=password)
+        user = UserModel(email=email, restaurant_name=name, password=password)
 
+    user.hash_password(password)
     db.session.add(user)
     db.session.commit()
 
     login_user(user, remember=True)
+    session['user_type'] = role  # add this line
 
-    return jsonify({'user': name, 'role': role})
+    return jsonify({'token': user.encode_auth_token(user.id), 'user': name, 'role': role})
 
 def auth_passwordreset_reset(token, password):
     s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
@@ -72,11 +133,11 @@ def auth_passwordreset_reset(token, password):
         return jsonify({"message": "Invalid token"}), 400
 
     role = data['role']
-    
-    if role not in ['customer', 'eatery']:
+    UserModel = get_user_model(role)
+    if not UserModel:
         return jsonify({"message": "Invalid role"}), 400
 
-    user = User.query.filter_by(email=data['email']).first()
+    user = UserModel.query.filter_by(email=data['email']).first()
     if not user:
         return jsonify({"message": "This email does not exist"}), 400
 
@@ -92,10 +153,11 @@ def send_reset_email(email, reset_url):
 
 
 def auth_passwordreset_request(email, role):
-    if role not in ['customer', 'eatery']:
+    UserModel = get_user_model(role)
+    if not UserModel:
         return jsonify({"message": "Invalid role"}), 400
 
-    if User.query.filter_by(email=email).first() is None:
+    if UserModel.query.filter_by(email=email).first() is None:
         return jsonify({"message": "We are not able to find this email address"}), 400
 
     s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
@@ -109,7 +171,7 @@ def auth_passwordreset_request(email, role):
     return jsonify({'message': 'Check your email for the instructions to reset your password'})
 
 
-def validate_google_auth_token_and_send_back_token(code, role):
+def validate_google_auth_token_and_send_back_token(code):
     client_id = '397558360733-au1inv2shr9v7cqdrkghl31t5pfh9qfp.apps.googleusercontent.com'
     client_secret = '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'
     redirect_uri = 'http://localhost:5173'
@@ -137,19 +199,14 @@ def validate_google_auth_token_and_send_back_token(code, role):
             email = userinfo_json['email'].lower().strip()
             name = userinfo_json['name']
 
-            user = User.query.filter_by(email=email).first()
+            user = Customer.query.filter_by(email=email).first()
             if user:
-                role = 'customer' if isinstance(user, Customer) else 'eatery'
-                return jsonify({'token': user.encode_auth_token(user.id, "Customer"), 'user': name, 'role': role})
-
-            if role == 'customer':
-                user = Customer(email=email, name=name, auth_source='google')
-            else: # role == 'eatery'
-                user = Eatery(email=email, restaurant_name=name, auth_source='google')
-
+                return jsonify({'token': user.encode_auth_token(user.id), 'user': name, 'role': 'customer'})
+            user = Customer(email=email, name=name, auth_source='google')
             db.session.add(user)
             db.session.commit()
             login_user(user, remember=True)
-            return jsonify({'token': user.encode_auth_token(user.id, "Customer"), 'user': name, 'role': role})
+            return jsonify({'token': user.encode_auth_token(user.id), 'user': name, 'role': 'customer'})
 
     return jsonify({"message": "Failed to validate token"}), 400
+
