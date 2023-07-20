@@ -140,7 +140,7 @@ def validate_google_auth_token_and_send_back_token(code, role):
             user = User.query.filter_by(email=email).first()
             if user:
                 role = 'customer' if isinstance(user, Customer) else 'eatery'
-                return {'user': name, 'role': role}
+                return jsonify({'token': user.encode_auth_token(user.id, "Customer"), 'user': name, 'role': role})
 
             if role == 'customer':
                 user = Customer(email=email, name=name, auth_source='google')
@@ -150,6 +150,6 @@ def validate_google_auth_token_and_send_back_token(code, role):
             db.session.add(user)
             db.session.commit()
             login_user(user, remember=True)
-            return {'user': name, 'role': role}
+            return jsonify({'token': user.encode_auth_token(user.id, "Customer"), 'user': name, 'role': role})
 
     return jsonify({"message": "Failed to validate token"}), 400
