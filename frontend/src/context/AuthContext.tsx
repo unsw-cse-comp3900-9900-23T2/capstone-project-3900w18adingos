@@ -10,45 +10,37 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     const [token, setToken] = useState<string | null>(checkToken ? checkToken : null);
     const [user, setUser] = useState<User | null>(null);
     const api = axios.create({
-        baseURL: 'http://127.0.0.1:5000'
+        baseURL: 'http://127.0.0.1:5000',
+        withCredentials: true
     });
 
-  const login = useCallback(async (email: string, password: string, role: string) => {
-    try {
-      const response = await api.post('/auth/login', { email, password, role });
-      const { token } = response.data;
-      debugger
-      localStorage.setItem('token', token)
-      setToken(token);
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  }, []);
+    const login = useCallback(async (email: string, password: string, role: string) => {
+        try {
+            const response = await api.post('/auth/login', { email, password, role });
+            setUser(response.data);
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    }, []);
 
-  const googleLogin = useCallback(async (code: string) => {
-    try {
-      const response = await api.post('/auth/validate-google-token', { code });
-      console.log(response)
-      const { token } = response.data;
-      localStorage.setItem('token', token)
-      setToken(token);
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  }, []);
+    const googleLogin = useCallback(async (code: string) => {
+      try {
+        const response = await api.post('/auth/validate-google-token', { code });
+        setUser(response.data.user);
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    }, []);
 
 
-  const register = useCallback(async (email: string, password: string, name: string, role: string) => {
+const register = useCallback(async (email: string, password: string, name: string, role: string) => {
     try {
       const response = await api.post('/auth/register', { email, password, name, role });
-      const { token } = response.data;
-      console.log(response)
-      localStorage.setItem('token', token)
-      setToken(token);
+      setUser(response.data);
       return true;
     } catch (error) {
       console.error(error);
@@ -56,18 +48,16 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     }
   }, []);
 
-  const logout = useCallback(async () => {
+const logout = useCallback(async () => {
     try {
-      await api.post('/auth/logout', { token });
-      localStorage.clear()
-      setToken(null);
+      await api.get('/auth/logout');
+      setUser(null);
       return true;
     } catch (error) {
       console.error(error);
       return false;
     }
-  }, [token]);
-
+  }, []);
   const passwordResetRequest = useCallback(async (email: string, role: string) => {
       try {
         await api.post('/auth/passwordreset/request', { email, role });  // include role here
@@ -81,13 +71,13 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const updateProfile = useCallback(async (name: string, email: string) => {
     try {
-      const response = await api.post('/customer/edit-profile/', { email, name, token });
+      const response = await api.post('/customer/edit-profile', { email, name });
       return response.data;
     } catch (error) {
       console.error(error);
       return false;
     }
-  }, [token]);
+  }, []);
 
 
 
@@ -103,18 +93,14 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const isAuthenticated = () => Boolean(token);
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const response = await api.get('/auth/me', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setUser(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [token]);
+    const fetchUser = useCallback(async () => {
+        try {
+            const response = await api.get('/auth/whoami');
+            setUser(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
 
   const getAllReviews = useCallback(async (eateryId: string) => {
     try {

@@ -101,6 +101,8 @@ def whoami():
 def validate_google_token():
     code = request.json.get('code')
     role = 'customer'  # Set role as 'customer' by default
-    return validate_google_auth_token_and_send_back_token(code, role)
+    result = validate_google_auth_token_and_send_back_token(code, role)
+    return jsonify(result)  # no need to return the token
+
 
 
