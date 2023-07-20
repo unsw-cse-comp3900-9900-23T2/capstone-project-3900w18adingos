@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, send_file
 from flask import request, current_app
-from flask_login import login_required, current_user
+from flask_praetorian import current_user, auth_required
 import os
 
 from app.extensions import db
@@ -18,9 +18,9 @@ def get_eatery_image(image_id):
     
 
 @eatery.post('/add_image')
-@login_required
+@auth_required
 def add_image():
-    if not isinstance(current_user, Eatery):
+    if not isinstance(current_user(), Eatery):
         return jsonify(success=False), 403
         
     # save image on disk
@@ -29,20 +29,20 @@ def add_image():
     f.save(os.path.join(current_app.config['IMAGE_SAVE_DIRECTORY'], filename))
 
     # new Image instance to database
-    new_image = Image(filepath=filename, eatery_id=current_user.id)
+    new_image = Image(filepath=filename, eatery_id=current_user().id)
     db.session.add(new_image)
     db.session.commit()
 
     return jsonify(success=True), 201
 
 @eatery.delete('/delete_image')
-@login_required
+@auth_required
 def delete_image():
     req_json = request.get_json()
     img_id = req_json['image_id'].strip()
 
     # given image id, find image filepath from db 
-    image_obj = Image.query.first_or_404(id=img_id, eatery_id=current_user.id)
+    image_obj = Image.query.filter_by(id=img_id, eatery_id=current_user().id).first_or_404()
 
     try:
         # delete image from disk
@@ -56,12 +56,12 @@ def delete_image():
 
     return jsonify(success=True), 200
 
-@eatery.route('/eatery', methods=['GET'])
+@eatery.get('/eatery')
 def get_all_eateries():
     eateries = Eatery.query.all()
     return eatery_schema_list.dump(eateries), 200
 
-@eatery.route('/eatery/<int:id>', methods=['GET'])
+@eatery.get('/eatery/<int:id>')
 def get_eatery_by_id(id):
     eatery = Eatery.query.get_or_404(id)
 

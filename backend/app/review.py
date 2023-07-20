@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, g
-from flask_login import login_required, current_user 
+from flask_praetorian import auth_required, current_user
 
 from app.models.eatery import Eatery
 from app.models.review import Review
@@ -10,13 +10,13 @@ review = Blueprint('review', __name__)
 
 # get the current_user 's review
 @review.post('/get_review')
-@login_required
+@auth_required
 def get_review():
     req_json = request.get_json()
     eatery_id = req_json['eatery_id'].strip()
     # ensure eatery id valid
-    Eatery.query.first_or_404(eatery_id)
-    review = Review.query.filter_by(eatery_id = eatery_id, customer_id = current_user.id).first()
+    Eatery.query.get_or_404(eatery_id)
+    review = Review.query.filter_by(eatery_id = eatery_id, customer_id = current_user().id).first()
     if not review:
         return '', 204
 
@@ -30,7 +30,7 @@ def get_review():
 
 # get all public reviews given a restaurant
 @review.post('/get_all_reviews')
-# @login_required
+@auth_required
 def get_all_reviews():
     req_json = request.get_json()
     eatery_id = req_json['eatery_id']
@@ -52,25 +52,15 @@ def get_all_reviews():
     }), 200
 
 @review.post('/add_review')
-@login_required
+@auth_required
 def add_review():
-    print(f'User authenticated: {current_user.is_authenticated}')
-
-    # Check if a token is included in the Authorization header
-    # auth_header = request.headers.get('Authorization')
-    # if auth_header:
-    #     token = auth_header.split(" ")[1]
-    #     print(f'Authorization token: {token}')
-    # else:
-    #     print('No Authorization header')
-
     req_json = request.get_json()
     rating = req_json['rating'].strip()
     review_text = req_json['review_text'].strip()
     eatery_id = req_json['eatery_id'].strip()
 
-    eatery = Eatery.query.first_or_404(eatery_id)
-    new_review = Review(rating=rating, review_text=review_text, customer_id=current_user.id, eatery_id=eatery.id)
+    eatery = Eatery.query.get_or_404(eatery_id)
+    new_review = Review(rating=rating, review_text=review_text, customer_id=current_user().id, eatery_id=eatery.id)
     db.session.add(new_review)
     db.session.commit()
 

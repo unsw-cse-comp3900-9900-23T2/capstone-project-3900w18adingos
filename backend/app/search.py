@@ -1,11 +1,11 @@
 from flask import Blueprint, request
 from app import search_helper
-from flask_login import login_required
+from flask_praetorian import auth_required
 
 search_bp = Blueprint('search', __name__)
 
-@login_required
 @search_bp.route('/search', methods=['POST'])
+@auth_required
 def search_by_name():
     search_term = request.json.get('search_term')
     qty = request.json.get('qty')
@@ -15,8 +15,8 @@ def search_by_name():
         return search_helper.eatery_search(search_term)
 
 #max_distance in km
-@login_required
 @search_bp.route('/searchDistance', methods=['POST'])
+@auth_required
 def search_by_distance():
     search_term = request.json.get('search_term')
     # token = request.json.get('token')

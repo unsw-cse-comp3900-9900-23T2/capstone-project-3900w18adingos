@@ -1,10 +1,9 @@
-from werkzeug.security import generate_password_hash
 import math
 from sqlalchemy import func
 from sqlalchemy.ext.hybrid import hybrid_method
 from marshmallow import fields
 
-from app.extensions import db, ma
+from app.extensions import db, guard, ma
 from app.models.user import User
 from app.models.review import ReviewSchema
 from app.models.cooks_cuisine import CooksCuisineSchema
@@ -28,14 +27,14 @@ class Eatery(User):
     def __init__(self, restaurant_name, email, password):
         self.restaurant_name = restaurant_name
         self.email = email
-        self.password_hash = generate_password_hash(password)
+        self.password_hash = guard.hash_password(password)
 
     def __init__(self, longitude, latitude, location, password, **kwargs):
         super(Eatery, self).__init__(**kwargs)
         self.longitude = longitude
         self.latitude = latitude
         self.location = location
-        self.password_hash = generate_password_hash(password)
+        self.password_hash = guard.hash_password(password)
     
     @hybrid_method
     def distance(self, user_lat, user_long, max_distance):

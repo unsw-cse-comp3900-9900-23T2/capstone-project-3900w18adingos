@@ -1,5 +1,3 @@
-from marshmallow import fields
-
 from app.extensions import db, ma
 
 class Voucher(db.Model):

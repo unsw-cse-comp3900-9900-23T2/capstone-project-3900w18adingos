@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_login import login_required, current_user
+from flask_praetorian import auth_required, current_user
 
 from app.extensions import db
 from app.models.eatery import Eatery
@@ -12,10 +12,10 @@ from app.wallet_helper import code_dict, generate_short_code
 wallet = Blueprint('wallet', __name__)
 
 @wallet.get('/get_short_code')
-@login_required
+@auth_required
 def get_short_code():
     
-    if not isinstance(current_user, Customer):
+    if not isinstance(current_user(), Customer):
         return jsonify(success=False), 403
 
     code = generate_short_code()
@@ -23,15 +23,15 @@ def get_short_code():
     while code in code_dict:
         code = generate_short_code()
     
-    code_dict[code] = current_user.id
+    code_dict[code] = current_user().id
         
     return jsonify(code=code), 200
     
 @wallet.post('/get_user_vouchers')
-@login_required
+@auth_required
 def get_user_vouchers():
     
-    if not isinstance(current_user, Eatery):
+    if not isinstance(current_user(), Eatery):
         return jsonify(success=False), 403
 
     code = request.json.get('code').upper()    

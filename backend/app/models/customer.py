@@ -1,7 +1,6 @@
-from werkzeug.security import generate_password_hash
 from marshmallow import fields
 
-from app.extensions import db, ma
+from app.extensions import db, guard, ma
 from app.models.user import User
 
 class Customer(User):
@@ -22,7 +21,7 @@ class Customer(User):
         password = kwargs.pop('password', None)
         super(Customer, self).__init__(**kwargs)
         if password:
-            self.password_hash = generate_password_hash(password)
+            self.password_hash = guard.hash_password(password)
 
 class CustomerSchema(ma.SQLAlchemySchema):
     class Meta:

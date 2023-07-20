@@ -2,9 +2,9 @@ from flask import Flask
 from flask_cors import CORS
 from flask.sessions import SecureCookieSessionInterface, SessionMixin
 
-from app.extensions import db, ma, login_manager
-from app.mail import init_mail
+from app.extensions import db, ma, guard, init_mail
 from app.config import config
+
 from app.wallet_helper import code_dict
 
 def create_app(config_name='default'):
@@ -15,19 +15,21 @@ def create_app(config_name='default'):
         
     CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 
+    # disable flask session cookie
     class CustomSessionInterface(SecureCookieSessionInterface):
         def should_set_cookie(self, app: "Flask", session: SessionMixin) -> bool:
             return False
     
     app.session_interface = CustomSessionInterface()
 
-    login_manager.login_view = 'auth.login'
-    login_manager.init_app(app)
-
     init_mail(app)
-
+    
+    from app.models.user import User
+    
     db.init_app(app)
+    guard.init_app(app, User)
     ma.init_app(app)
+    
 
     from app.models.has_voucher import HasVoucher
     from app.models.voucher import Voucher

@@ -1,16 +1,10 @@
-from flask import jsonify, current_app, session
-from flask_mail import Mail, Message
-from flask_login import login_user, logout_user, current_user
-from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
-from werkzeug.security import check_password_hash
+from flask import jsonify, current_app
 import requests
 
-from app.extensions import db
+from app.extensions import db, guard
 from app.models.user import User
 from app.models.customer import Customer
 from app.models.eatery import Eatery
-
-mail = Mail(current_app)
 
 # def auth_logout(token):
 #     user_id_or_error = Customer.decode_auth_token(token)
@@ -22,33 +16,33 @@ mail = Mail(current_app)
 #     logout_user()
 #     return jsonify({'message': 'Logged out successfully'}), 200
 
+def check_role(role):
+    return role in ['customer', 'eatery']
+
 def auth_login(email, password, role):
-   
-    user = User.query.filter_by(email=email).first_or_404()
     
-    if not check_password_hash(user.password_hash, password):
+    user = guard.authenticate(email, password)
+    
+    if not user:
         return jsonify(success=False), 401
     
-    login_user(user, remember=True)
-    
-    role='eatery'
-    if isinstance(user, Customer):
-        role='customer'
+    role = 'eatery' if isinstance(user, Eatery) else 'customer'
     
     return jsonify(
         {
+            'token': guard.encode_jwt_token(user),
             'user': user.name if role == 'customer' else user.restaurant_name,
             'role': role
         }
-    )
+    ), 200
 
 def auth_register(email, password, name, role):
     
-    if role not in ['customer', 'eatery']:
+    if not check_role(role):
         return jsonify({"message": "Invalid role"}), 400
 
-    if User.query.filter_by(email=email).first():
-        return jsonify({"message": "user with that email already exists"}), 400
+    if User.lookup(email=email):
+        return jsonify({"message": "user with that email already exists"}), 409
 
     if role == 'customer':
         user = Customer(email=email, name=name, password=password)
@@ -58,55 +52,37 @@ def auth_register(email, password, name, role):
     db.session.add(user)
     db.session.commit()
 
-    login_user(user, remember=True)
+    return jsonify({'token': user.guard.encode_jwt_token(user), 'user': name, 'role': role}), 200
 
-    return jsonify({'user': name, 'role': role})
+# def auth_passwordreset_reset(token, password):
 
-def auth_passwordreset_reset(token, password):
-    s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-    try:
-        data = s.loads(token, salt='password-reset-key', max_age=3600)
-    except SignatureExpired:
-        return jsonify({"message": "Token expired"}), 400
-    except BadSignature:
-        return jsonify({"message": "Invalid token"}), 400
-
-    role = data['role']
+#     role = data['role']
     
-    if role not in ['customer', 'eatery']:
-        return jsonify({"message": "Invalid role"}), 400
+#     if role not in ['customer', 'eatery']:
+#         return jsonify({"message": "Invalid role"}), 400
 
-    user = User.query.filter_by(email=data['email']).first()
-    if not user:
-        return jsonify({"message": "This email does not exist"}), 400
+#     user = User.query.filter_by(email=data['email']).first()
+#     if not user:
+#         return jsonify({"message": "This email does not exist"}), 400
 
-    user.hash_password(password)
-    db.session.commit()
-    return jsonify({'message': 'Password reset successfully'})
-
-
-def send_reset_email(email, reset_url):
-    msg = Message('Password Reset Request', sender='', recipients=[email])
-    msg.body = f"Reset your password by clicking on the following link: {reset_url}"
-    mail.send(msg)
+#     user.hash_password(password)
+#     db.session.commit()
+#     return jsonify({'message': 'Password reset successfully'})
 
 
 def auth_passwordreset_request(email, role):
-    if role not in ['customer', 'eatery']:
+    if not check_role(role):
         return jsonify({"message": "Invalid role"}), 400
 
-    if User.query.filter_by(email=email).first() is None:
+    user = User.query.filter_by(email=email).first()
+    if user is None:
         return jsonify({"message": "We are not able to find this email address"}), 400
 
-    s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-    token = s.dumps({'email': email, 'role': role}, salt='password-reset-key')
-    reset_url = 'http://localhost:5173/auth/reset-password/' + str(token) + '/'
-    try:
-        send_reset_email(email, reset_url)
-    except Exception as e:
-        pass
-    print(reset_url)
-    return jsonify({'message': 'Check your email for the instructions to reset your password'})
+    reset_url = f"http://localhost:5173/auth/passwordreset/reset/{guard.encode_jwt_token(user)}"
+    
+    guard.send_reset_email(email, reset_url=reset_url, subject='Password Reset Request')
+    
+    return jsonify({'message': 'Check your email for the instructions to reset your password'}), 200
 
 
 def validate_google_auth_token_and_send_back_token(code, role):
@@ -140,7 +116,7 @@ def validate_google_auth_token_and_send_back_token(code, role):
             user = User.query.filter_by(email=email).first()
             if user:
                 role = 'customer' if isinstance(user, Customer) else 'eatery'
-                return jsonify({'token': user.encode_auth_token(user.id, "Customer"), 'user': name, 'role': role})
+                return jsonify({'token': guard.encode_jwt_token(user), 'user': name, 'role': role})
 
             if role == 'customer':
                 user = Customer(email=email, name=name, auth_source='google')
@@ -149,7 +125,6 @@ def validate_google_auth_token_and_send_back_token(code, role):
 
             db.session.add(user)
             db.session.commit()
-            login_user(user, remember=True)
-            return jsonify({'token': user.encode_auth_token(user.id, "Customer"), 'user': name, 'role': role})
+            return jsonify({'token': guard.encode_jwt_token(user), 'user': name, 'role': role})
 
     return jsonify({"message": "Failed to validate token"}), 400
