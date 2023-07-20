@@ -10,9 +10,7 @@ from app.models.eatery import eatery_schema
 auth = Blueprint('auth', __name__)
 
 def check_role(role):
-    if role not in ['customer', 'eatery']:
-        return False
-    return True
+    return role in ['customer', 'eatery']
 
 
 @auth.route('/auth/login', methods=['POST'])
