@@ -12,6 +12,7 @@ class Customer(User):
     vouchers = db.relationship('HasVoucher', backref='customer')
     # cuisine_preferences = db.relationship('LikesCuisine', backref='customer')
     # profile_pic = db.Column(db.String(120), default='default.jpg')
+    points = db.Column(db.Integer, default=0)
 
     __mapper_args__ = {
         'polymorphic_identity':'customer'
