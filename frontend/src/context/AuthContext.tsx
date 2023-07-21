@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      await api.get('/auth/logout', { headers: { Authorization: `Bearer ${token}` } });
+      await api.get('api/auth/logout', { headers: { Authorization: `Bearer ${token}` } });
       localStorage.clear()
       setToken(null);
       return true;
@@ -110,7 +110,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await api.get('/auth/whoami', {
+      const response = await api.get('api/auth/whoami', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
