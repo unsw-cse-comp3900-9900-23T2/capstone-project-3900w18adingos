@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Button, Collapse, ListGroup, Badge } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import "../styles/Wallet.css";
-import qrCode from "../assets/qr-code.png";
+// import qrCode from "../assets/qr-code.png";
 import Footer from '../components/Footer/Footer';
 import Header from "../components/Header/Header";
 import { useVoucher } from '../hooks/useVoucher';
@@ -38,6 +38,17 @@ const Wallet: React.FC = () => {
     }
   }, [fetchVouchers, user]);
 
+  const { fetchQRCode } = useVoucher(); // get fetchQRCode from the VoucherContext
+  const [qrCode, setQrCode] = useState('');
+  // Fetch the QR code when the component is mounted
+  useEffect(() => {
+    const getQRCode = async () => {
+      const qrCode = await fetchQRCode();
+      setQrCode(qrCode);
+    };
+
+    getQRCode();
+  }, [fetchQRCode]);
   
   type VoucherWithEatery = { voucher: Voucher, open: boolean, eatery: Eatery | null };
   const [vouchersState, setVouchersState] = useState<VoucherWithEatery[]>([]);
@@ -79,7 +90,8 @@ const Wallet: React.FC = () => {
       </Header>
       <div className="wallet">
         <div className="qr-code-img">
-          <img src={qrCode} alt="qr code" />
+          {/* Display the QR code */}
+          <img src={`data:image/png;base64,${qrCode}`} alt="qr code" />
         </div>
         <div className="wallet-accordian">
           {vouchersState.map((item, index) => (
