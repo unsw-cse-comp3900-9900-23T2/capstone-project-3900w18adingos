@@ -33,7 +33,7 @@ export const CuisineForm: React.FC = () => {
       baseURL: 'http://127.0.0.1:5000'
     });
     
-    api.post('/add_preferences', {
+    api.post('/api/add_preferences', {
       cuisines: selectedCuisines,
     })
     .then(response => console.log(response))
