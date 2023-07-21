@@ -54,7 +54,7 @@ const deleteImage = useCallback(async (imageId: string) => {
 
   const getEateryImage = useCallback(async (imageId: string) => {
     try {
-      const response = await api.get(`/get_image/${imageId}`, {responseType: 'blob'});
+      const response = await api.get(`/api/get_image/${imageId}`, {responseType: 'blob'});
       const blob = new Blob([response.data], {type: 'image/jpeg'});
       const imageUrl = window.URL.createObjectURL(blob);
       return imageUrl;
