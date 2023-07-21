@@ -112,7 +112,7 @@ def auth_passwordreset_request(email, role):
 def validate_google_auth_token_and_send_back_token(code, role):
     client_id = '397558360733-au1inv2shr9v7cqdrkghl31t5pfh9qfp.apps.googleusercontent.com'
     client_secret = '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'
-    redirect_uri = 'http://localhost:5173'
+    redirect_uri = 'http://localhost:5000'
 
     token_url = 'https://oauth2.googleapis.com/token'
     token_payload = {
@@ -152,4 +152,4 @@ def validate_google_auth_token_and_send_back_token(code, role):
             login_user(user, remember=True)
             return {'user': name, 'role': role}
 
-    return jsonify({"message": "Failed to validate token"}), 400
+    return {"message": "Failed to validate token"}

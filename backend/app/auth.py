@@ -82,26 +82,28 @@ def whoami():
 
     return customer_schema.dump(current_user) if isinstance(current_user, Customer) else eatery_schema.dump(current_user), 200
     
-# @auth.route('/user/<int:user_id>', methods=['GET'])
-# @login_required
-# def get_user(user_id):
-#     user = Customer.query.get(user_id)
-#     if not user:
-#         return jsonify({"message": "User not found"}), 404
+@auth.route('/user/<int:user_id>', methods=['GET'])
+@login_required
+def get_user(user_id):
+    user = Customer.query.get(user_id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
 
-#     # return the user's data
-#     return jsonify({
-#         "id": user.id,
-#         "name": user.name,
-#         "email": user.email,
-#         # add any other fields you want to return here
-#     }), 200
+    # return the user's data
+    return jsonify({
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        # add any other fields you want to return here
+    }), 200
 
 @auth.route('/auth/validate-google-token', methods=['POST'])
 def validate_google_token():
     code = request.json.get('code')
     role = 'customer'  # Set role as 'customer' by default
     result = validate_google_auth_token_and_send_back_token(code, role)
+    if 'message' in result:
+        return jsonify(result), 400
     return jsonify(result)  # no need to return the token
 
 

@@ -5,7 +5,6 @@ import React, { createContext, useState, useCallback} from "react";
 
 import { Eatery, EateryContextProps, Images, Props, Review } from "../interface";
 import { useAuth } from "../hooks/useAuth";
-import { linkWithCredential } from "@firebase/auth";
 
 export const EateryContext = createContext<EateryContextProps | undefined>(undefined);
 

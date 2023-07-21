@@ -28,7 +28,9 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     const googleLogin = useCallback(async (code: string) => {
       try {
         const response = await api.post('/auth/validate-google-token', { code });
-        setUser(response.data.user);
+        const { user } = response.data;
+        // Ensure the role is 'customer'
+        setUser({ ...user, role: 'customer' });
         return true;
       } catch (error) {
         console.error(error);

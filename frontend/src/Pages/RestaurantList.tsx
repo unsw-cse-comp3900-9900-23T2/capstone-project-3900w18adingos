@@ -9,24 +9,10 @@ const RestaurantList = () => {
   const { eateries, fetchEateries} = useEateryContext();
   const navigate = useNavigate()
 
-  const checkToken = localStorage.getItem('token')
-  if (!checkToken){
-    navigate("/")
-  }
+
   useEffect(() => {
     fetchEateries();
   }, [fetchEateries]);
-
-  useEffect(() => {
-    if (!checkToken) {
-      navigate('/');
-    }
-  }, [checkToken, navigate]);
-
-  if (!checkToken) {
-    return null;
-  }
-  
 
   return ( 
     <>

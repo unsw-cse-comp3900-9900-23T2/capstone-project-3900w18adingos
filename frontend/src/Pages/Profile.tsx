@@ -21,18 +21,6 @@ const Profile: React.FC = () => {
     fetchUser();
   }, [fetchUser]);
 
-  
-  const checkToken = localStorage.getItem('token')
-  useEffect(() => {
-    if (!checkToken) {
-      navigate('/');
-    }
-  }, [checkToken, navigate]);
-
-  if (!checkToken) {
-    return null;
-  }
-
 
   const [currentUser, setCurrentUser] = useState({name: user?.name, email: user?.email});
 

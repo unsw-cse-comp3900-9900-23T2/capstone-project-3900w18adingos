@@ -11,18 +11,6 @@ import { Eatery, Voucher } from '../interface';
 import { useEateryContext } from '../hooks/useEateryContext';
 
 const Wallet: React.FC = () => {
-  const navigate = useNavigate();
-  const checkToken = localStorage.getItem('token');
-
-  useEffect(() => {
-    if (!checkToken) {
-      navigate('/');
-    }
-  }, [checkToken, navigate]);
-
-  if (!checkToken) {
-    return null;
-  }
 
   const { cusomterVouchers, fetchVouchers } = useVoucher();
   const { user, fetchUser } = useAuth();
