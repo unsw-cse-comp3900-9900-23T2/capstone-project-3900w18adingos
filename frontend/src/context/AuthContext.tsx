@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      await api.get('/auth/logout', { headers: { Authorization: `Bearer ${token}` } });
+      await api.get('api/auth/logout', { headers: { Authorization: `Bearer ${token}` } });
       localStorage.clear()
       setToken(null);
       return true;
@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const updateProfile = useCallback(async (name: string, email: string) => {
     try {
-      const response = await api.post('/customer/edit-profile', { email, name }, {
+      const response = await api.post('api/customer/edit-profile', { email, name }, {
           headers: {
             Authorization: `Bearer ${token}`,
           }
@@ -110,7 +110,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await api.get('/auth/whoami', {
+      const response = await api.get('api/auth/whoami', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -123,7 +123,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const getAllReviews = useCallback(async (eateryId: string) => {
     try {
-      const response = await api.post('/get_all_reviews', { eatery_id: eateryId }, {
+      const response = await api.post('api/get_all_reviews', { eatery_id: eateryId }, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
