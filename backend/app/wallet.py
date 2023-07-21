@@ -52,3 +52,74 @@ def get_user_vouchers():
     customer=Customer.query.get_or_404(customer_id)
     
     return has_voucher_schema_list.dump(customer.vouchers), 200
+
+@wallet.route('/add_points/<customer_id>', methods=['POST'])
+@auth_required
+def add_points(customer_id):
+    points_to_add = request.json.get('points')
+    customer = Customer.query.get_or_404(customer_id)
+
+    customer.points += points_to_add
+    db.session.commit()
+
+    return jsonify({'message': f'Added {points_to_add} points to customer {customer_id}. They now have {customer.points} points.'}), 200
+
+@wallet.route('/subtract_points/<customer_id>', methods=['POST'])
+@auth_required
+def subtract_points(customer_id):
+    
+    points_to_subtract = request.json.get('points')
+    customer = Customer.query.get_or_404(customer_id)
+
+    if customer.points < points_to_subtract:
+        return jsonify({'message': f'Error: customer {customer_id} only has {customer.points} points, but you tried to subtract {points_to_subtract}.'}), 400
+
+    customer.points -= points_to_subtract
+    db.session.commit()
+
+    return jsonify({'message': f'Subtracted {points_to_subtract} points from customer {customer_id}. They now have {customer.points} points.'}), 200
+
+
+def get_customer_vouchers_for_eatery(customer_id, eatery_id):
+    eatery_vouchers = Voucher.query.filter(Voucher.eatery == eatery_id).all()
+    has_vouchers = HasVoucher.query.filter((HasVoucher.customer_id == customer_id)).all()
+
+    vouchers = []
+    for has_voucher in has_vouchers:
+        voucher = Voucher.query.filter(Voucher.id == has_voucher.voucher_id).first()
+        if voucher in eatery_vouchers:
+            vouchers.append({
+                'id': voucher.id,
+                'description': voucher.description,
+                'quantity': voucher.quantity,
+                'start': voucher.start,
+                'expiry': voucher.expiry,
+                'eatery_id': voucher.eatery
+            })
+
+    return vouchers
+
+@wallet.get('/get_customer_info/<customer_id>')
+@auth_required
+def get_customer_info(customer_id):
+    customer = Customer.query.get_or_404(customer_id)
+    eatery_id = ... 
+
+    points = customer.points
+    vouchers = get_customer_vouchers_for_eatery(customer_id, eatery_id)
+
+    return jsonify({
+        'name': customer.name,
+        'points': points,
+        'vouchers': vouchers,
+    }), 200
+
+
+@wallet.route('/get_vouchers_eatery_scan', methods=['POST'])
+@auth_required
+def get_vouchers_eatery_scan():
+    customer_id = request.json.get('customer_id')
+    eatery_id = request.json.get('eatery_id')
+    vouchers = get_customer_vouchers_for_eatery(customer_id, eatery_id)
+
+    return jsonify({'vouchers': vouchers}), 200
