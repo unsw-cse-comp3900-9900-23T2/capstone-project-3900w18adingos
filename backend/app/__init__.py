@@ -40,6 +40,7 @@ def create_app(config_name='default'):
     from app.models.eatery import Eatery
     from app.models.likes_cuisine import LikesCuisine
     from app.models.customer import Customer
+    from app.models.has_loyalty import HasLoyalty
 
 
     with app.app_context():
