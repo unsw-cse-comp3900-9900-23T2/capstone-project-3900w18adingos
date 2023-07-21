@@ -30,7 +30,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
           'Authorization': `Bearer ${token}`
         }
       };
-      const response = await api.post('/add_image', formData, config);
+      const response = await api.post('/api/add_image', formData, config);
       return response.data.success; // return the success status
     } catch (error) {
       console.error(error);
@@ -45,7 +45,7 @@ const deleteImage = useCallback(async (imageId: string) => {
         },
         data: { image_id: imageId }
       };
-      const response = await api.delete('/delete_image', config);
+      const response = await api.delete('/api/delete_image', config);
       return response.data.success; // return the success status
     } catch (error) {
       console.error(error);
@@ -152,7 +152,7 @@ const deleteImage = useCallback(async (imageId: string) => {
   
     const deleteReview = useCallback(async (reviewId: string) => {
       try {
-        const response = await api.delete(`/delete_review/${reviewId}`, {
+        const response = await api.delete(`/api/delete_review/${reviewId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           }
