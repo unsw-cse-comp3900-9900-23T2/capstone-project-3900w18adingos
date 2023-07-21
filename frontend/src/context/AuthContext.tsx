@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      await api.post('/auth/logout', { token });
+      await api.get('/auth/logout', { headers: { Authorization: `Bearer ${token}` } });
       localStorage.clear()
       setToken(null);
       return true;
