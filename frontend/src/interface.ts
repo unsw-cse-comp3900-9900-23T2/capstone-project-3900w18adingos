@@ -39,7 +39,6 @@ export interface User {
     id: string;
     name: string;
     email: string;
-    handle: string;
     profile_pic: string;
     role: string;
 }

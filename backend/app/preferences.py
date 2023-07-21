@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_login import login_required, current_user
+from flask_praetorian import auth_required, current_user
 from sqlalchemy import and_ 
 
 from app.models.cuisine import Cuisine
@@ -10,7 +10,7 @@ preferences = Blueprint('preferences', __name__)
 
 #this is only for the first time (when user registers)
 @preferences.route('/add_preferences', methods=['POST'])
-@login_required
+@auth_required
 def add_preferences():
     customer_id = request.json.get('customer_id')
     cuisines_picked = request.json.get('cuisines')
@@ -39,17 +39,14 @@ def add_preferences():
     return jsonify({'message': f'preferences for customer ({customer_id}) added'}), 200
 
 @preferences.route('/get_preferences/<int:customer_id>', methods=['GET'])
-@login_required
+@auth_required
 def get_customer_preferences(customer_id):
     preferences = LikesCuisine.query.filter(and_(LikesCuisine.customer_id==customer_id,LikesCuisine.specified==True)).all()
 
     return likes_cuisine_schema_list.dump(preferences), 200
 
-
-
-
 # @preferences.route('/edit_preferences/<int:customer_id>', methods=['PUT'])
-# @login_required
+# @auth_required
 # def edit_preferences(customer_id):
 #     cuisines_picked = request.json.get('cuisines')
 
@@ -60,12 +57,3 @@ def get_customer_preferences(customer_id):
 #         likes_cuisine = LikesCuisine.query.filter(and_(LikesCuisine.customer_id==customer_id,LikesCuisine.cuisine_id==preferences.cuisine_id)).first()
 #         likes_cuisine.affinity = 0.85
 #         db.session.commit()
-
-
-
-    
-    
-
-        
-
-
