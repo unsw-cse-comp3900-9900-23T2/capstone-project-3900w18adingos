@@ -92,6 +92,50 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
       console.error(error + " ASSS");
     }
   }, []);
+
+  const addImage = useCallback(async (imageFile: File) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', imageFile);
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      };
+      const response = await api.post('/add_image', formData, config);
+      return response.data.success; // return the success status
+    } catch (error) {
+      console.error(error);
+    }
+  }, [token]);
+
+const deleteImage = useCallback(async (imageId: string) => {
+    try {
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        data: { image_id: imageId }
+      };
+      const response = await api.delete('/delete_image', config);
+      return response.data.success; // return the success status
+    } catch (error) {
+      console.error(error);
+    }
+  }, [token]);
+
+  const getEateryImage = useCallback(async (imageId: string) => {
+    try {
+      const response = await api.get(`/get_image/${imageId}`, {responseType: 'blob'});
+      const blob = new Blob([response.data], {type: 'image/jpeg'});
+      const imageUrl = window.URL.createObjectURL(blob);
+      return imageUrl;
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  
     
     return (
       <EateryContext.Provider value={{
@@ -108,6 +152,9 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
         getAllReviews,
         addReview,
         deleteReview,
+        addImage,
+        getEateryImage,
+        deleteImage
       }}>
         {children}
       </EateryContext.Provider>

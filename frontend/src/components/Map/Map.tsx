@@ -6,7 +6,7 @@ import { getMapStyle } from './MapStyle';
 import { createMarker } from '../Marker/Marker';
 import { setUpLocation } from '../../utils/locations';
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Map: React.FC = () => {
   const libraries: ("places" | "drawing" | "geometry" | "localContext" | "visualization")[] = ["places"];
@@ -20,9 +20,10 @@ const Map: React.FC = () => {
   const mapRef = useRef<google.maps.Map | null>(null);
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [loadingPosition, setLoadingPosition] = useState(true);
-  const { eateries, fetchEateries, getAllReviews, fetchEateryImages, eateryImages } = useEateryContext();
+  const { eateries, fetchEateries, getAllReviews } = useEateryContext();
   const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
   const navigate = useNavigate();
+  const location = useLocation();
   
   useEffect(() => {
     setUpLocation(setUserLocation, setLoadingPosition, mapRef);
@@ -31,10 +32,6 @@ const Map: React.FC = () => {
   useEffect(() => { 
     fetchEateries()
   },[fetchEateries])
-
-  // useEffect(() => { 
-  //   fetchEateryImages("1")
-  // }, [fetchEateryImages])
 
   const initialize = async () => {
     if (!loadingPosition && isLoaded) {
@@ -60,6 +57,13 @@ const Map: React.FC = () => {
   useEffect(() => {
     initialize();
   }, [loadingPosition, isLoaded]);
+  
+  useEffect(() => {
+    if (location.state?.eatery && mapRef.current) {
+      const eatery = location.state.eatery;
+      mapRef.current.setCenter(new google.maps.LatLng(eatery.latitude, eatery.longitude));
+    }
+  }, [location, isLoaded, loadingPosition]);
 
   return (
     <>

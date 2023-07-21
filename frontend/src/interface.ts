@@ -1,21 +1,28 @@
 import { ReactNode } from "react";
 
-export interface Cuisine { 
-    cuisine_name: string,
-    cuisine_id: string
-}
+interface Cuisine {
+    cuisine_name: string;
+  }
+  
+  interface CooksCuisine {
+    cuisine: Cuisine;
+    cuisine_id: number;
+    eatery_id: number;
+    id: number;
+  }
 
 export interface Eatery {
     id: string,
     email: string,
     restaurant_name: string,
     location: string,
-    cuisines: Cuisine[],
+    cuisines: CooksCuisine[],
     role: string,
     latitude: number,
     longitude: number,
     reviews: Review[],
     opening_hours: string,
+    eatery_image: Array<string>
 }
 export interface Images {
     images: Array<any>;
@@ -62,6 +69,9 @@ export interface EateryContextProps {
     eateryImages: Images | null;
     review: Review | null;
     allReviews: Array<Review>;
+    addImage: (imageFile: File) => Promise<boolean>;
+    deleteImage: (imageId: string) => Promise<boolean>;
+    getEateryImage: (imageId: string) => Promise<string | undefined>;
 }
 export interface AuthContextType {
     token: string | null;
@@ -134,3 +144,6 @@ export interface ClusterProps {
     count: number;
     position: google.maps.LatLng | google.maps.LatLngLiteral;
   }
+  export interface MapProps {
+    findLocation: Eatery | null;
+}
