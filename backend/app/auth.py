@@ -87,4 +87,3 @@ def validate_google_token():
     role = 'customer'  # Set role as 'customer' by default
     return validate_google_auth_token_and_send_back_token(code, role)
 
-

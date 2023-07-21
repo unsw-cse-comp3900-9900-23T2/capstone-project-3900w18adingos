@@ -5,17 +5,22 @@ import { useEffect, useState } from "react";
 import "../styles/EateryProfile.css"
 import { useAuth } from "../hooks/useAuth";
 import { useVoucher } from "../hooks/useVoucher";
+import { Voucher } from "../interface";
 
 const EateryProfile: React.FC = () => { 
   const { id } = useParams<{ id: string }>();
 
-  const {fetchEatery, eatery, deleteReview} = useEateryContext();
+  const {fetchEatery, eatery, deleteReview, getEateryImage} = useEateryContext();
   const {getUserById, user, fetchUser} = useAuth()
-  const {claimVoucher, fetchVouchersForEatery, eateryVouchers} = useVoucher()
+  const {claimVoucher, fetchVouchersForEatery, eateryVouchers, fetchVouchers, cusomterVouchers} = useVoucher()
 
-  const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS' | 'VOUCHERS'>("VOUCHERS");
+  const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS' | 'VOUCHERS'>("INFO");
   const [users, setUsers] = useState<{[key: string]: any}>({});
   const navigate = useNavigate()
+
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [coverImage, setcoverImage] = useState<string>("");
+
 
   useEffect(() => {
     if (id){
@@ -27,8 +32,32 @@ const EateryProfile: React.FC = () => {
   useEffect(() => { 
     if(id) { 
       fetchVouchersForEatery(id)
+      if(user) { 
+        fetchVouchers(user.id)
+      }
     }
-  },[fetchVouchersForEatery])
+  },[fetchVouchersForEatery, fetchVouchers])
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const urls: string[] = [];
+      if (eatery && eatery.eatery_image) {
+        for (const imageId of eatery.eatery_image) {
+          try {
+            const url = await getEateryImage(imageId);
+            if (url) {
+              urls.push(url);
+            }
+          } catch (error) {
+            console.error(`Failed to fetch image with ID ${imageId}: `, error);
+          }
+        }
+      }
+      setImageUrls(urls);
+      setcoverImage(urls[0])
+    };
+    fetchImages();
+}, [getEateryImage, eatery?.eatery_image]);
 
   // get user's name from review[].customer_id
   useEffect(() => {
@@ -59,59 +88,86 @@ const EateryProfile: React.FC = () => {
   };
 
   const voucherClaim = async (voucherId: string) => { 
-    if (id) { 
-      const success = await claimVoucher(voucherId, id)
-      if (success) { 
-        return "Claim successful!"
+    if (user) { 
+      const success = await claimVoucher(voucherId, user.id)
+      if (success) {
+        await fetchVouchers(user.id)
+        console.log(cusomterVouchers)
+        alert("Claim successful!");
+        return
       }
     }
-    return "Claim unsuccessful L"
+    alert("Claim unsuccessful");
   }
+
 
   return (
     <>
     <div className="profile-wrapper">
-      <div className="profile-header">
-        <p>image </p>
-      </div>
+      {coverImage ? (
+        <img src={coverImage} alt="Cover image" className="cover-image"/>
+      ) : (
+        <div className="image-header">
+          <i className="glyphicon glyphicon-picture" style={{"opacity": "40%"}}/>
+        </div>
+      )}
+
       <div className="eatery-content">
         <div className="title-rating-container">
           <h3>{eatery?.restaurant_name}</h3>
           <p className="rating">{averageRating ? averageRating: ""}</p>
         </div>
-        <p>Cusinies: {eatery && eatery.cuisines.map(cuisine => cuisine.cuisine_name).join(", ")}</p>
+        <p>Cusinies: {eatery && eatery.cuisines.map(cuisine => cuisine.cuisine.cuisine_name).join(", ")}</p>
         <p>price in $$$$</p>
-
-        <div className="title-rating-container" style={{"height": "40px"}}>
-          <p style={{"color":"green"}}>Open Now?</p>
-          {currentTab === 'REVIEWS' && (
-            <button className="add-review" onClick={() => navigate(`/add-review/${id}`)}>Add Review</button>
-          )}
-        </div>
+        <p style={{"color": "green"}}>Open now</p>
 
         <div className="info-photos-reviews-button-container">
-          <button className="button" onClick={() => setCurrentTab('INFO')}>
+          <button className="content-button" onClick={() => setCurrentTab('INFO')}>
             <i className="glyphicon glyphicon-info-sign gl" />
             <p>info</p>
           </button>
-          <button className="button" onClick={() => setCurrentTab('PHOTOS')}>
+          <button className="content-button" onClick={() => setCurrentTab('PHOTOS')}>
             <i className="glyphicon glyphicon-picture gl" />
             <p>photos</p>
           </button>
-          <button className="button" onClick={() => setCurrentTab('REVIEWS')}>
+          <button className="content-button" onClick={() => setCurrentTab('REVIEWS')}>
             <i className="glyphicon glyphicon-comment gl" />
             <p>reviews</p>
           </button>
-          <button className="button" onClick={() => setCurrentTab('VOUCHERS')}>
+          <button className="content-button" onClick={() => setCurrentTab('VOUCHERS')}>
             <i className="glyphicon glyphicon-credit-card	gl"></i>
             <p>vouchers</p>
           </button>
         </div>
 
-      </div>
+      
+      {currentTab === 'INFO' && eatery && eatery.opening_hours && 
+        <div className="info">
 
-      {currentTab === 'INFO' && <div>Info Content</div>}
-      {currentTab === 'PHOTOS' && <div>Photos Content</div>}
+          <hr />
+
+          <h4><strong>Address</strong></h4>
+          <p>{eatery.location}</p>
+          <button className="show-eatery" onClick={() => navigate('/auth/home', { state: { eatery } })}>Show eatery on map</button>
+
+          <hr />
+
+          <h4><strong>Opening Hours</strong></h4>
+          <div className="opening-hours">
+            {Object.entries(JSON.parse(eatery.opening_hours)).map(([key, value], index) => ( 
+              <p key={index}> <strong>{key}:</strong> {value as string}</p>
+            ))}
+          </div>
+
+        </div>
+      }
+      {currentTab === 'PHOTOS' && 
+        <div className="image-grid">
+        {imageUrls.map((url, index) => (
+            <img key={index} src={url} alt={`Eatery ${index}`} />
+        ))}
+        </div>
+      }
       {currentTab === 'REVIEWS' && (
         <div className="display-reviews">
           {eatery?.reviews.map((review, index) => (
@@ -125,33 +181,41 @@ const EateryProfile: React.FC = () => {
                   </button>
                 )}
               </div>
-
               <div>Review: {review.review_text}</div>
               <div>User: {users[review.customer_id]?.name}</div>
-
             </div>
           ))}
+          
+          <button className="add-review" onClick={() => navigate(`/add-review/${id}`)}>Add Review</button>
+        
         </div>
       )}
       {currentTab === 'VOUCHERS' && (
         <div className="display-reviews">
-          {eateryVouchers && eateryVouchers.map((voucher, index) => {
+          {eateryVouchers && eateryVouchers.map((voucher: Voucher, index) => {
             const startDate = new Date(voucher.start);
             const expiryDate = new Date(voucher.expiry);
-
+            const isVoucherClaimed = cusomterVouchers.some(customerVoucher => customerVoucher.id === voucher.id);
+            
             return (
               <div key={index} className="list-item">
                 <p>Description: {voucher.description}</p>
                 <p>Quantity: {voucher.quantity}</p>
                 <p>Start: {startDate.toLocaleDateString()}</p>
                 <p>Expires: {expiryDate.toLocaleDateString()}</p>
-                <button className="claim-voucher" onClick={() => voucherClaim(voucher.id)}>Claim Voucher</button>
+                <button className="claim-voucher" 
+                    onClick={() => voucherClaim(voucher.id)}
+                    disabled={isVoucherClaimed}
+            >
+              Claim Voucher
+            </button>
               </div>
             );
         })}
         </div>
         )}
 
+        </div>
     </div>
       <Footer />
     </>

@@ -4,6 +4,10 @@ import "../styles/CuisineForm.css"
 import Header from '../components/Header/Header';
 import { useNavigate } from 'react-router-dom';
 
+
+// Select 5 
+
+
 const commonCuisines: string[] = [
   'Italian', 'Chinese', 'Indian', 'Mexican', 'French', 
   'Japanese', 'Spanish', 'Greek', 'Lebanese', 'Brazilian',
@@ -14,11 +18,12 @@ const commonCuisines: string[] = [
 export const CuisineForm: React.FC = () => {
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
   const navigate = useNavigate()
+  
   const handleButtonClick = (value: string) => {
-    setSelectedCuisines(prevCuisines =>
-      prevCuisines.includes(value) 
-        ? prevCuisines.filter(cuisine => cuisine !== value) 
-        : [...prevCuisines, value]
+    setSelectedCuisines(prevCuisines => 
+      prevCuisines.includes(value)
+        ? prevCuisines.filter(cuisine => cuisine !== value)
+        : prevCuisines.length < 5 ? [...prevCuisines, value] : prevCuisines
     );
   };
 
@@ -28,7 +33,7 @@ export const CuisineForm: React.FC = () => {
       baseURL: 'http://127.0.0.1:5000'
     });
     
-    api.post('/add_preferences', {
+    api.post('/api/add_preferences', {
       cuisines: selectedCuisines,
     })
     .then(response => console.log(response))
@@ -40,7 +45,7 @@ export const CuisineForm: React.FC = () => {
   return (
     <>
       <Header>
-        <h2>Select Prefered Cuisines</h2>
+        <h2>Select 5 Prefered Cuisines</h2>
       </Header>
       <div>
         <form onSubmit={handleSubmit} className='cuisine-form'>

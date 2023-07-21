@@ -15,7 +15,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const login = useCallback(async (email: string, password: string, role: string) => {
     try {
-      const response = await api.post('/auth/login', { email, password, role });
+      const response = await api.post('/api/auth/login', { email, password, role });
       const { token } = response.data;
       debugger
       localStorage.setItem('token', token)
@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const googleLogin = useCallback(async (code: string) => {
     try {
-      const response = await api.post('/auth/validate-google-token', { code });
+      const response = await api.post('/api/auth/validate-google-token', { code });
       console.log(response)
       const { token } = response.data;
       localStorage.setItem('token', token)
@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const register = useCallback(async (email: string, password: string, name: string, role: string) => {
     try {
-      const response = await api.post('/auth/register', { email, password, name, role });
+      const response = await api.post('/api/auth/register', { email, password, name, role });
       const { token } = response.data;
       console.log(response)
       localStorage.setItem('token', token)
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const passwordResetRequest = useCallback(async (email: string, role: string) => {
       try {
-        await api.post('/auth/passwordreset/request', { email, role });  // include role here
+        await api.post('/api/auth/passwordreset/request', { email, role });  // include role here
         return true;
       } catch (error) {
         console.error(error);
@@ -98,7 +98,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const passwordReset = useCallback(async (resetCode: any, newPassword: any) => {
     try {
-      await api.post('/auth/passwordreset/reset', { resetCode, newPassword });
+      await api.post('/api/auth/passwordreset/reset', { resetCode, newPassword });
       return true;
     } catch (error) {
       console.error(error);
@@ -136,7 +136,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const getUserById = useCallback(async (id: string) => {
     try {
-      const response = await api.get(`/user/${id}`)
+      const response = await api.get(`/api/user/${id}`)
       return response.data
     } catch (error) {
       console.error(error);

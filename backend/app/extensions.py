@@ -17,4 +17,3 @@ def init_mail(app):
     app.config['MAIL_USE_TLS'] = False
     app.config['MAIL_USE_SSL'] = True
     mail.init_app(app)
-
