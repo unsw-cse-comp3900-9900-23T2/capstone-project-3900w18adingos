@@ -442,11 +442,19 @@ if __name__ == '__main__':
 
         images_arr=[
             Image(
-                filepath='thezucc.jpg',
+                filepath='mcdonalds1.jpg',
                 eatery_id=1
             ),
             Image(
-                filepath='themusk.jpg',
+                filepath='mcdonalds2.jpg',
+                eatery_id=1
+            ),
+            Image(
+                filepath='mcdonalds3.jpg',
+                eatery_id=1
+            ),
+            Image(
+                filepath='mcdonalds4.jpg',
                 eatery_id=1
             )
         ]
