@@ -118,8 +118,14 @@ def get_customer_info(customer_id):
 @wallet.route('/get_vouchers_eatery_scan', methods=['POST'])
 @auth_required
 def get_vouchers_eatery_scan():
-    customer_id = request.json.get('customer_id')
-    eatery_id = request.json.get('eatery_id')
+    if not isinstance(current_user(), Customer):
+        return jsonify(success=False), 403
+
+    code = request.json.get('code').upper() 
+    eatery_id = request.json.get('eatery_id')   
+    customer_id = code_dict.get(code)
+    if not customer_id:
+        return jsonify(success=False), 404
     vouchers = get_customer_vouchers_for_eatery(customer_id, eatery_id)
 
     return jsonify({'vouchers': vouchers}), 200
