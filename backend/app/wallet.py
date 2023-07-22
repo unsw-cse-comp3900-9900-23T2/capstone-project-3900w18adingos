@@ -115,9 +115,9 @@ def get_customer_info(customer_id):
     }), 200
 
 
-@wallet.route('/get_vouchers_eatery_scan', methods=['POST'])
+@wallet.route('/get_vouchers_customer_wallet', methods=['POST'])
 @auth_required
-def get_vouchers_eatery_scan():
+def get_vouchers_customer_wallet():
     if not isinstance(current_user(), Customer):
         return jsonify(success=False), 403
 
