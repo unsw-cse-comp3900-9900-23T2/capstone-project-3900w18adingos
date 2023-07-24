@@ -77,19 +77,10 @@ const EateryProfile: React.FC = () => {
           </button>
         </div>
 
-        {/* {eatery && user && (
-          <>
-            {currentTab === 'INFO' && <EateryInfo eatery={eatery}/>}
-            {currentTab === 'PHOTOS' && <EateryPhotos eatery={eatery} />}
-            {currentTab === 'REVIEWS' && <EateryReviews eatery={eatery} user={user} />}
-            {currentTab === 'VOUCHERS' && <EateryVouchers eatery={eatery} user={user} />}
-          </>
-        )} */}
-
-            {/* {currentTab === 'INFO' && eatery && <EateryInfo eatery={eatery}/>} */}
-            {currentTab === 'PHOTOS' && eatery && <EateryPhotos eatery={eatery} />}
-            {currentTab === 'REVIEWS' && eatery && user && <EateryReviews eatery={eatery} user={user} />}
-            {/* {currentTab === 'VOUCHERS' && <EateryVouchers eatery={eatery} user={user} />} */}
+          {currentTab === 'INFO' && eatery && <EateryInfo eatery={eatery}/>}
+          {currentTab === 'PHOTOS' && eatery && <EateryPhotos eatery={eatery} />}
+          {currentTab === 'REVIEWS' && eatery && user && <EateryReviews eatery={eatery} user={user} />}
+          {currentTab === 'VOUCHERS' && eatery && user && <EateryVouchers eatery={eatery} user={user} />}
 
         </div>
     </div>

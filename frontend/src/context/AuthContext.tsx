@@ -110,7 +110,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await api.get('api/auth/whoami', {
+      const response = await api.get('api/whoami', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
