@@ -46,7 +46,7 @@ export const EateryReviews: React.FC<EateryProfileProps> = ({ eatery, user }) =>
         </div>
       ))}
       {user && user.role == "customer" && (<button className="add-review" 
-        onClick={() => navigate(`add-review/${eatery.id}`)}>Add Review</button>)}
+        onClick={() => navigate(`/add-review/${eatery.id}`)}>Add Review</button>)}
     </div>
   </>
   )
