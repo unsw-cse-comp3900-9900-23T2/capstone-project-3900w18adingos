@@ -1,9 +1,10 @@
-import Header from "../components/Header/Header";
-import { useEateryContext } from "../hooks/useEateryContext";
+import Header from "../../components/Header/Header";
+import { useEateryContext } from "../../hooks/useEateryContext";
 import { useEffect} from 'react';
-import "../styles/RestaurantList.css"
-import Footer from "../components/Footer/Footer";
+import "../../styles/RestaurantList.css"
+import Footer from "../../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
+import { getCuisines } from "../../utils/rating";
 
 const RestaurantList = () => { 
   const { eateries, fetchEateries} = useEateryContext();
@@ -50,7 +51,7 @@ const RestaurantList = () => {
             </div>
           </div>
 
-          <p>Cuisines: {eatery.cuisines.map(cuisine => cuisine.cuisine_name).join(", ")}</p>
+          <p>Cuisines: {getCuisines(eatery)}</p>
           <p>Email: {eatery.email}</p>
           {/* <img src={eatery.image} alt={eatery.name}/> */}
           <p>Address: {eatery.location}</p>

@@ -1,22 +1,22 @@
 
-import SignUp from "./Pages/SignUp";
-import AuthHome from "./Pages/AuthHome"
-import Profile from "./Pages/Profile"
+import SignUp from "./Pages/Auth/SignUp";
+import AuthHome from "./Pages/App/AuthHome"
+import Profile from "./Pages/App/Profile"
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import { AuthProvider } from "./context/AuthContext";
-import SignIn from "./Pages/SignIn";
-import Home from "./Pages/Home";
+import SignIn from "./Pages/Auth/SignIn";
+import Home from "./Pages/Auth/Home";
 import { EateryProvider } from "./context/EateryContext";
 import { VoucherProvider } from "./context/VoucherContext";
 
-import RestaurantList from "./Pages/RestaurantList";
-import EateryProfile from "./Pages/EateryProfile";
-import ForgotPassword from "./Pages/ForgotPassword";
-import ResetPassword from "./Pages/ResetPassword";
-import AddReview from "./Pages/AddReview";
-import Wallet from './Pages/Wallet';
-import VoucherDetails from './Pages/VoucherDetails';
-import { CuisineForm } from "./Pages/CuisineForm";
+import RestaurantList from "./Pages/App/RestaurantList";
+import EateryProfile from "./Pages/App/EateryProfile/EateryProfile";
+import ForgotPassword from "./Pages/Auth/ForgotPassword";
+import ResetPassword from "./Pages/Auth/ResetPassword";
+import AddReview from "./Pages/App/EateryProfile/AddReview";
+import Wallet from './Pages/App/Wallet/Wallet';
+import VoucherDetails from './Pages/App/Wallet/VoucherDetails';
+import { CuisineForm } from "./Pages/Auth/CuisineForm";
 
 
 const App = () => { 

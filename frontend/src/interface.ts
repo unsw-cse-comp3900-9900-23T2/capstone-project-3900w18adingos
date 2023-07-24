@@ -147,3 +147,8 @@ export interface ClusterProps {
   export interface MapProps {
     findLocation: Eatery | null;
 }
+
+export interface EateryProfileProps {
+    eatery: Eatery;
+    user?: User
+  }

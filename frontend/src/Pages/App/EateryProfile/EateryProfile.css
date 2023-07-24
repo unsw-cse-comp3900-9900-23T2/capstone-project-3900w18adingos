@@ -52,7 +52,7 @@ h3 {
     background-color: #FEC8C9;
     border-radius: 5px;
     font-weight: bold;
-    margin-top: 15px;
+    margin: 0;
 }
 
 .display-reviews { 
@@ -90,6 +90,7 @@ h3 {
     height: 130px;
     object-fit: cover;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 .image-header { 
@@ -101,6 +102,7 @@ h3 {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 10px;
 }
 
 .eatery-content { 
@@ -115,6 +117,7 @@ h3 {
 .cover-image { 
     max-width: 100%;
     height: auto;
+    margin-bottom: 10px;
 }
 
 .opening-hours { 
@@ -133,4 +136,24 @@ hr {
 .show-eatery { 
     color: green;
     padding: 0;
+}
+
+.mod { 
+top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    background: rgba(0, 0, 0, 0.7);
+    width: inherit;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    position:absolute;
+}
+
+.mod img { 
+    width: 100%;
+    height: auto;
+    object-fit: cover;
 }

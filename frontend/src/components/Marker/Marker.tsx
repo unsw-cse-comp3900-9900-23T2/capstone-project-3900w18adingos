@@ -8,22 +8,21 @@ interface MarkerProps {
   map: google.maps.Map, 
   infoWindow: google.maps.InfoWindow, 
   navigate: ReturnType<typeof useNavigate>, 
-  getAllReviews: Function,
 }
 
 export async function createMarker(props: MarkerProps) {
-  const { eatery, map, infoWindow, navigate, getAllReviews } = props;
+  const { eatery, map, infoWindow, navigate } = props;
   const marker = new google.maps.Marker({
     map,
     position: { lat: eatery.latitude, lng: eatery.longitude },
   });
 
-  const reviews = await getAllReviews(eatery.id);
+  const reviews = eatery.reviews
   const contentString = 
     `<div id="content" class="marker-content-wrapper"> 
       <div class="marker-content-description">
         <h3 id="firstHeading" class="firstHeading">${eatery.restaurant_name}</h3>
-        <p>Cusine</p>
+        <p>Cusines</p>
         <div class="star-rating">
           <p>${reviews ? getStarRating(reviews): null}</p>
         </div>

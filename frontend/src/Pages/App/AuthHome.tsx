@@ -1,12 +1,12 @@
 // AuthHome component
 import React from 'react';
-import Header from "../components/Header/Header";
-import Map from "../components/Map/Map";
-import SearchBar from "../components/SearchBar/SearchBar";
+import Header from "../../components/Header/Header";
+import Map from "../../components/Map/Map";
+import SearchBar from "../../components/SearchBar/SearchBar";
 import { useEffect} from 'react';
 
 import "@react-google-maps/api";
-import Footer from '../components/Footer/Footer';
+import Footer from '../../components/Footer/Footer';
 import { useNavigate } from 'react-router-dom';  // Import useHistory
 
 

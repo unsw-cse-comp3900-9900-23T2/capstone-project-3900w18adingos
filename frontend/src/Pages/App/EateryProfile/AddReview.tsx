@@ -1,8 +1,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEateryContext } from "../hooks/useEateryContext";
-import "../styles/addReview.css"
-import { useAuth } from "../hooks/useAuth";
+import { useEateryContext } from "../../../hooks/useEateryContext";
+import "../../../styles/addReview.css"
+import { useAuth } from "../../../hooks/useAuth";
 const AddReview: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { addReview } = useEateryContext();
