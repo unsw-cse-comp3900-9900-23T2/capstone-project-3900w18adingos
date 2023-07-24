@@ -1,9 +1,9 @@
 import { Link, useNavigate, useSearchParams, } from 'react-router-dom';
-import '../styles/Home.css';
-import Header from '../components/Header/Header';
+import '../../styles/Home.css';
+import Header from '../../components/Header/Header';
 
 import { useEffect, useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 
 const Home = () => {
   const { googleLogin } = useAuth();

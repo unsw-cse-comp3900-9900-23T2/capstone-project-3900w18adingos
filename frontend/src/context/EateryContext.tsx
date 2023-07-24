@@ -3,7 +3,7 @@
 import axios from "axios";
 import React, { createContext, useState, useCallback} from "react";
 
-import { Eatery, EateryContextProps, Images, Props, Review } from "../interface";
+import { Eatery, EateryContextProps, Image, Props, Review } from "../interface";
 import { useAuth } from "../hooks/useAuth";
 
 export const EateryContext = createContext<EateryContextProps | undefined>(undefined);
@@ -13,7 +13,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
     const [eatery, setEatery] = useState<Eatery | null>(null);
     const [review, setReview] = useState<Review | null>(null);
     const [allReviews, setallReviews] = useState<Array<Review>>([]);
-    const [eateryImages, setEateryImages] = useState<Images | null>(null);
+    const [eateryImages, setEateryImages] = useState<Array<Image> | null>(null);
     const { token } = useAuth()
 
     const api = axios.create({

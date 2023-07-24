@@ -11,7 +11,7 @@ button {
 
 .add-review { 
     padding: 10px 15px 10px 15px;
-
+    width: 100%;
     background-color: black;
     color: white;
     border-radius: 10px;
@@ -52,13 +52,12 @@ h3 {
     background-color: #FEC8C9;
     border-radius: 5px;
     font-weight: bold;
-    margin-top: 15px;
+    margin: 0;
 }
 
 .display-reviews { 
     display: flex;
     flex-direction: column;
-    padding: 10px;
     overflow:scroll;
     overflow-x: hidden;
     height: 60%;
@@ -90,6 +89,7 @@ h3 {
     height: 130px;
     object-fit: cover;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 .image-header { 
@@ -101,6 +101,7 @@ h3 {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 10px;
 }
 
 .eatery-content { 
@@ -115,6 +116,7 @@ h3 {
 .cover-image { 
     max-width: 100%;
     height: auto;
+    margin-bottom: 10px;
 }
 
 .opening-hours { 
@@ -133,4 +135,63 @@ hr {
 .show-eatery { 
     color: green;
     padding: 0;
+}
+
+.mod { 
+top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    background: rgba(0, 0, 0, 0.7);
+    width: inherit;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    position:absolute;
+}
+
+.mod img { 
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.add-image { 
+    display: flex;
+}
+
+.manage-images { 
+    width: 100%;
+    background-color: black;
+    border-radius: 10px;
+    margin-top: 10px;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.add-image { 
+    background-color: grey;
+    border-radius: 10px;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    font-size: xx-large;
+}
+
+.delete-image { 
+    opacity: 30%;
+}
+
+.bi-x-circle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: xx-large;
+    cursor: pointer;
+}
+
+.image-container { 
+    position: relative;
 }
