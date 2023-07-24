@@ -20,6 +20,7 @@ class Eatery(User):
     reviews = db.relationship('Review', backref='eatery')
     eatery_image = db.relationship('Image', backref='eatery')
     cuisines = db.relationship('CooksCuisine', backref='eatery')
+    opening_hours = db.Column(db.Text)
 
     __mapper_args__ = {
         'polymorphic_identity':'eatery'
@@ -94,6 +95,8 @@ class EaterySchema(ma.SQLAlchemySchema):
     reviews = fields.Nested(ReviewSchema, many=True)
     eatery_image = ma.auto_field()
     cuisines = fields.Nested(CooksCuisineSchema, many=True)
+    opening_hours = ma.auto_field()
+
 
 eatery_schema = EaterySchema()
 eatery_schema_list = EaterySchema(many=True)

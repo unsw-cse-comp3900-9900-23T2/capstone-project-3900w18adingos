@@ -148,6 +148,12 @@ export interface ClusterProps {
     findLocation: Eatery | null;
 }
 
+export interface MarkerProps {
+    eatery: Eatery, 
+    map: google.maps.Map, 
+    infoWindow: google.maps.InfoWindow, 
+  }
+
 export interface EateryProfileProps {
     eatery: Eatery;
     user?: User
