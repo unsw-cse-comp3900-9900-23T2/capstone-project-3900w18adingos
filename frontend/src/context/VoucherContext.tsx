@@ -75,6 +75,62 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
   }, [token]);
 
 
+const createVoucher = useCallback(async (voucherDetails: {
+  description: string, 
+  eatery_id: number, 
+  quantity: number, 
+  start: string, 
+  expiry: string
+}) => {
+  try {
+      const response = await api.post(`/voucher/create_voucher`, voucherDetails, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      return response.data;
+  } catch (error) {
+      console.error(error);
+      throw error;
+  }
+}, [token]);
+
+const deleteVoucher = useCallback(async (voucherId: number) => {
+  try {
+      const response = await api.delete(`/voucher/delete_voucher/${voucherId}`, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      return response.data;
+  } catch (error) {
+      console.error(error);
+      throw error;
+  }
+}, [token]);
+
+const editVoucher = useCallback(async (voucherId: number, voucherDetails: {
+  description?: string, 
+  eatery_id?: number, 
+  quantity?: number, 
+  start?: string, 
+  expiry?: string
+}) => {
+  try {
+      const response = await api.put(`/voucher/edit_voucher/${voucherId}`, voucherDetails, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      return response.data;
+  } catch (error) {
+      console.error(error);
+      throw error;
+  }
+}, [token]);
+
+
+
   return (
     <VoucherContext.Provider value={{ 
         cusomterVouchers, 
@@ -82,7 +138,10 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
         claimVoucher, 
         fetchVouchersForEatery,
         eateryVouchers,
-        fetchQRCode // Newly added
+        fetchQRCode,
+        createVoucher, 
+        editVoucher, 
+        deleteVoucher
       }}>
       {children}
     </VoucherContext.Provider>

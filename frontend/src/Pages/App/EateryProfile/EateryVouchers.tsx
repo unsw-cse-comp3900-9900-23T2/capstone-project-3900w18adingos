@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { EateryProfileProps } from "../../../interface";
 import { useVoucher } from "../../../hooks/useVoucher";
+import { useNavigate } from "react-router-dom";
 
 
 export const EateryVouchers: React.FC<EateryProfileProps> = ({ eatery, user }) => { 
   const {claimVoucher, fetchVouchersForEatery, eateryVouchers, fetchVouchers, cusomterVouchers} = useVoucher()
+  const navigate = useNavigate()
 
   useEffect(() => { 
       fetchVouchersForEatery(eatery.id)
@@ -41,6 +43,9 @@ export const EateryVouchers: React.FC<EateryProfileProps> = ({ eatery, user }) =
         </button>
       </div>
     ))}
+    {user && user.role == "eatery" && (<button className="add-review" 
+      onClick={() => navigate(`add-voucher/${eatery.id}`)}>Add Voucher</button>)}
+    
   </div>
   )
 }

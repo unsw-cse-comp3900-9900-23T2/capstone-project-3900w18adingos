@@ -24,9 +24,10 @@ export interface Eatery {
     opening_hours: string,
     eatery_image: Array<string>
 }
-export interface Images {
-    images: Array<any>;
-    image_ids: Array<any>;
+export interface Image {
+    id: string,
+    filepath: string,
+    eatery_id: string,
 }
 export interface Review {
     rating: number;
@@ -65,7 +66,7 @@ export interface EateryContextProps {
     fetchEatery: (id: string) => Promise<Eatery | null>;
     eatery: Eatery | null;
     eateries: Array<Eatery>;
-    eateryImages: Images | null;
+    eateryImages: Array<Image> | null;
     review: Review | null;
     allReviews: Array<Review>;
     addImage: (imageFile: File) => Promise<boolean>;
@@ -94,7 +95,25 @@ export interface VoucherContextProps {
   fetchVouchers: (customerId: string) => Promise<void>;
   claimVoucher: (voucherId: string, customerId: string) => Promise<any>
   fetchVouchersForEatery: (eateryId: string) => Promise<void>
-  fetchQRCode: () => Promise<string>;  // New addition
+  fetchQRCode: () => Promise<string>;
+
+  createVoucher: (voucherDetails: {
+    description: string,
+    eatery_id: number,
+    quantity: number,
+    start: string,
+    expiry: string
+}) => Promise<{message: string, status: number}>;
+
+deleteVoucher: (voucherId: number) => Promise<{message: string, status: number}>;
+
+editVoucher: (voucherId: number, voucherDetails: {
+    description?: string,
+    eatery_id?: number,
+    quantity?: number,
+    start?: string,
+    expiry?: string
+}) => Promise<{message: string, status: number}>;
 }
 
 

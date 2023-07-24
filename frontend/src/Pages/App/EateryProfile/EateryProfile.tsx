@@ -24,19 +24,31 @@ const EateryProfile: React.FC = () => {
       fetchEatery(id);
     }
     fetchUser()
-  }, [fetchEatery, fetchUser, user]);
+  }, [fetchEatery, fetchUser]);
 
+  useEffect(() => { 
+
+  })
+  
+  // load cover image
   useEffect(() => {
-    let image;
-    const getCover = async () => { 
-      const firstImage = "1" 
-      image = await getEateryImage(firstImage)
-    }
-
-    getCover()
-    if (image) setcoverImage(image)
-    
-  }, [eatery])
+    const fetchCoverImage = async () => {
+      let coverImageUrl = '';
+      if (eatery && eatery.eatery_image && eatery.eatery_image.length > 0) {
+        const coverImageId = eatery.eatery_image[0];
+        try {
+          const url = await getEateryImage(coverImageId);
+          if (url) {
+            coverImageUrl = url;
+          }
+        } catch (error) {
+          console.error(`Failed to fetch cover image with ID ${coverImageId}: `, error);
+        }
+      }
+      setcoverImage(coverImageUrl);
+    };
+    fetchCoverImage();
+  }, [getEateryImage, eatery]);
 
   return (
     <>
@@ -78,9 +90,9 @@ const EateryProfile: React.FC = () => {
         </div>
 
           {currentTab === 'INFO' && eatery && <EateryInfo eatery={eatery}/>}
-          {currentTab === 'PHOTOS' && eatery && <EateryPhotos eatery={eatery} />}
-          {currentTab === 'REVIEWS' && eatery && user && <EateryReviews eatery={eatery} user={user} />}
-          {currentTab === 'VOUCHERS' && eatery && user && <EateryVouchers eatery={eatery} user={user} />}
+          {currentTab === 'PHOTOS' && eatery && user && <EateryPhotos eatery={eatery} user={user}/>}
+          {currentTab === 'REVIEWS' && eatery && user && <EateryReviews eatery={eatery} user={user}/>}
+          {currentTab === 'VOUCHERS' && eatery && user && <EateryVouchers eatery={eatery} user={user}/>}
 
         </div>
     </div>

@@ -40,13 +40,12 @@ def add_image():
 def delete_image():
     req_json = request.get_json()
     img_id = req_json['image_id'].strip()
-
     # given image id, find image filepath from db 
     image_obj = Image.query.filter_by(id=img_id, eatery_id=current_user().id).first_or_404()
 
     try:
         # delete image from disk
-        os.remove(image_obj.filepath)
+        # os.remove(image_obj.filepath)
 
         # delete image from db
         db.session.delete(image_obj)

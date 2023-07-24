@@ -11,7 +11,7 @@ button {
 
 .add-review { 
     padding: 10px 15px 10px 15px;
-
+    width: 100%;
     background-color: black;
     color: white;
     border-radius: 10px;
@@ -58,7 +58,6 @@ h3 {
 .display-reviews { 
     display: flex;
     flex-direction: column;
-    padding: 10px;
     overflow:scroll;
     overflow-x: hidden;
     height: 60%;
@@ -156,4 +155,43 @@ top: 0;
     width: 100%;
     height: auto;
     object-fit: cover;
+}
+
+.add-image { 
+    display: flex;
+}
+
+.manage-images { 
+    width: 100%;
+    background-color: black;
+    border-radius: 10px;
+    margin-top: 10px;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.add-image { 
+    background-color: grey;
+    border-radius: 10px;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    font-size: xx-large;
+}
+
+.delete-image { 
+    opacity: 30%;
+}
+
+.bi-x-circle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: xx-large;
+    cursor: pointer;
+}
+
+.image-container { 
+    position: relative;
 }
