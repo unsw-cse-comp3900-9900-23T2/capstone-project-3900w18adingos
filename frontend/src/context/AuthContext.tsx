@@ -16,9 +16,9 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
   const login = useCallback(async (email: string, password: string, role: string) => {
     try {
       const response = await api.post('/api/auth/login', { email, password, role });
-      const { token } = response.data;
-      debugger
+      const { token, role:userRole } = response.data;
       localStorage.setItem('token', token)
+      localStorage.setItem('role', userRole)
       setToken(token);
       return true;
     } catch (error) {
@@ -94,7 +94,22 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     }
   }, [token]);
 
+  const updateEateryUser = useCallback(async (restaurant_name: string, email: string) => {
+    try {
+      const response = await api.put('api/eatery/edit-profile', { email, restaurant_name }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }, [token]);
 
+  
 
   const passwordReset = useCallback(async (resetCode: any, newPassword: any) => {
     try {
@@ -110,7 +125,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await api.get('api/whoami', {
+      const response = await api.get('api/auth/whoami', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -147,6 +162,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         <AuthContext.Provider 
           value={{
             updateProfile, 
+            updateEateryUser,
             googleLogin, 
             getUserById, 
             getAllReviews, 

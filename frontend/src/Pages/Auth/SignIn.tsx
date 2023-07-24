@@ -20,7 +20,12 @@ const SignIn: React.FC = () => {
       const success = await login(email, password, role);
       if (success) { 
         setMessage("success"); 
-        navigate("/auth/home"); 
+        const loggedInUserRole = localStorage.getItem('role');
+        if(loggedInUserRole === "eatery"){
+          navigate("/eatery/detail"); 
+        }else{
+          navigate("/restaurant/map"); 
+        }
       } else { 
         setMessage("failure"); 
       }

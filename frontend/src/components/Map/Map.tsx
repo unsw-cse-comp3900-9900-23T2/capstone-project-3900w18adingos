@@ -6,7 +6,7 @@ import { getMapStyle } from './MapStyle';
 import { createMarker } from '../Marker/Marker';
 import { setUpLocation } from '../../utils/locations';
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Map: React.FC = () => {
   const libraries: ("places" | "drawing" | "geometry" | "localContext" | "visualization")[] = ["places"];
@@ -20,8 +20,9 @@ const Map: React.FC = () => {
   const mapRef = useRef<google.maps.Map | null>(null);
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [loadingPosition, setLoadingPosition] = useState(true);
-  const { eateries, fetchEateries} = useEateryContext();
+  const { eateries, fetchEateries, getAllReviews } = useEateryContext();
   const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
+  const navigate = useNavigate();
   const location = useLocation();
   
   useEffect(() => {
@@ -45,7 +46,7 @@ const Map: React.FC = () => {
       const map = mapRef.current;
       const infoWindow = infoWindowRef.current
       const markers = await Promise.all(eateries.map(async eatery => { 
-        const marker = await createMarker({eatery, map, infoWindow});
+        const marker = await createMarker({eatery, map, infoWindow, navigate, getAllReviews});
         return marker;
       }));
 

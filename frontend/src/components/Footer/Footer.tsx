@@ -4,24 +4,44 @@ import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const Footer: React.FC = () => {
+  const userRole = localStorage.getItem('role')
   return (
     <div className="footer">
-      <Link to="/auth/home" className="footer-button">
-        <i className="glyphicon glyphicon-home" />
-        <span>Map</span>
-      </Link>
-      <Link to="/auth/list" className="footer-button">
-        <i className="glyphicon glyphicon-list" />
-        <span>List</span>
-      </Link>
-      <Link to="/auth/wallet" className="footer-button">
-        <i className="glyphicon glyphicon-usd" />
-        <span>Wallet</span>
-      </Link>
-      <Link to="/auth/profile" className="footer-button">
+      {userRole === 'eatery' ?
+        <>
+          <Link to="/customer/wallet" className="footer-button">
+            <i className="glyphicon glyphicon-qrcode" />
+            <span>Scan QR</span>
+          </Link>
+          <Link to="/eatery/detail" className="footer-button">
+            <i className="glyphicon glyphicon-cutlery" />
+            <span>Menu</span>
+          </Link>
+          <Link to="/eatery/user/profile" className="footer-button">
+            <i className="glyphicon glyphicon-user" />
+            <span>Profile</span>
+        </Link>
+        </>
+      :
+      <>
+        <Link to="/restaurant/map" className="footer-button">
+            <i className="glyphicon glyphicon-home" />
+            <span>Map</span>
+          </Link>
+          <Link to="/restaurants" className="footer-button">
+            <i className="glyphicon glyphicon-list" />
+            <span>List</span>
+          </Link>
+          <Link to="/customer/wallet" className="footer-button">
+            <i className="glyphicon glyphicon-usd" />
+            <span>Wallet</span>
+          </Link>
+          <Link to="/profile" className="footer-button">
         <i className="glyphicon glyphicon-user" />
         <span>Profile</span>
       </Link>
+      </>
+  }
     </div>
   );
 };
