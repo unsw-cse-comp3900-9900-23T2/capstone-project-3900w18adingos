@@ -9,6 +9,8 @@ import { Voucher } from "../../interface";
 
 const EateryProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [modalImage, setModalImage] = useState<string>("");
 
   const { fetchEatery, eatery, deleteReview, getEateryImage } =
     useEateryContext();
@@ -227,11 +229,27 @@ const EateryProfile: React.FC = () => {
             </div>
           )}
           {currentTab === "PHOTOS" && (
-            <div className="image-grid">
-              {imageUrls.map((url, index) => (
-                <img key={index} src={url} alt={`Eatery ${index}`} />
-              ))}
-            </div>
+            <>
+              <div className="image-grid">
+                {imageUrls.map((url, index) => (
+                  <img key={index} src={url} alt={`Eatery ${index}`} 
+                  onClick={() => { 
+                    setModalImage(url);
+                    setModalVisible(true);
+                  }}
+              />
+                ))}
+              </div>
+
+              {isModalVisible && (
+                <div 
+                  className="mod" 
+                  onClick={() => setModalVisible(false)}
+                >
+                  <img src={modalImage} alt="Modal view" />
+                </div>
+               )}
+            </>
           )}
           {currentTab === "REVIEWS" && (
             <div className="display-reviews">
