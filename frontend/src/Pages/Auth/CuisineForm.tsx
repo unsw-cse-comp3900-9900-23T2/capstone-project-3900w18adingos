@@ -39,7 +39,7 @@ export const CuisineForm: React.FC = () => {
     .then(response => console.log(response))
     .catch(error => console.error(error));
 
-    navigate("/auth/home");
+    navigate("/restaurant/map");
   };
 
   return (

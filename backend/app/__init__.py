@@ -41,6 +41,7 @@ def create_app(config_name='default'):
     from app.models.likes_cuisine import LikesCuisine
     from app.models.customer import Customer
     from app.models.has_loyalty import HasLoyalty
+    from app.models.eatery import OpeningHours
 
 
     with app.app_context():
@@ -72,5 +73,8 @@ def create_app(config_name='default'):
         
         from app.wallet import wallet as wallet_blueprint
         app.register_blueprint(wallet_blueprint, url_prefix="/api")
+
+        from app.cuisine import cuisine as cuisine_blueprint
+        app.register_blueprint(cuisine_blueprint, url_prefix="/api")
     
     return app
