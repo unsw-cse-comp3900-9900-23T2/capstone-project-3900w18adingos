@@ -58,7 +58,7 @@ export interface User {
   name: string;
   email: string;
   profile_pic: string;
-  role: string;
+  role: UserRole;
   restaurant_name: string; //Eatery User
 }
 
@@ -131,7 +131,7 @@ export interface AuthContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 export interface VoucherContextProps {
-  cusomterVouchers: Array<Voucher>;
+  customerVouchers: Array<Voucher>;
   eateryVouchers: Array<Voucher>;
   fetchVouchers: (customerId: string) => Promise<void>;
   claimVoucher: (voucherId: string, customerId: string) => Promise<any>;
@@ -193,4 +193,15 @@ export interface ClusterProps {
 }
 export interface MapProps {
   findLocation: Eatery | null;
+}
+
+export interface TabProps {
+  eatery: Eatery;
+  user: User;
+}
+
+export enum UserRole {
+  EATERY = 'eatery',
+  CUSTOMER = 'customer',
+  // add more if you have
 }

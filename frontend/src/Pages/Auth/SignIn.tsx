@@ -21,8 +21,9 @@ const SignIn: React.FC = () => {
       if (success) { 
         setMessage("success"); 
         const loggedInUserRole = localStorage.getItem('role');
+        const id = localStorage.getItem('id');
         if(loggedInUserRole === "eatery"){
-          navigate("/eatery/detail"); 
+          navigate(`/restaurant/${id}`); 
         }else{
           navigate("/restaurant/map"); 
         }

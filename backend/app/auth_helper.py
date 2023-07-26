@@ -32,7 +32,8 @@ def auth_login(email, password, role):
         {
             'token': guard.encode_jwt_token(user),
             'user': user.name if role == 'customer' else user.restaurant_name,
-            'role': role
+            'role': role,
+            'id': user.id
         }
     ), 200
 

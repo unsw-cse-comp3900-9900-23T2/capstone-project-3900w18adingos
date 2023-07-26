@@ -9,7 +9,7 @@ export const VoucherContext = createContext<VoucherContextProps | undefined>(
 );
 
 export const VoucherProvider: React.FC<Props> = ({ children }) => {
-  const [cusomterVouchers, setCusomterVouchers] = useState<Array<Voucher>>([]);
+  const [customerVouchers, setCustomerVouchers] = useState<Array<Voucher>>([]);
   const [eateryVouchers, setEateryVouchers] = useState<Array<Voucher>>([]);
   const { token } = useAuth();
 
@@ -41,7 +41,7 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
             },
           }
         );
-        setCusomterVouchers(response.data.vouchers);
+        setCustomerVouchers(response.data.vouchers);
       } catch (error) {
         console.error(error);
       }
@@ -126,7 +126,7 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
   return (
     <VoucherContext.Provider
       value={{
-        cusomterVouchers,
+        customerVouchers,
         fetchVouchers,
         claimVoucher,
         fetchVouchersForEatery,

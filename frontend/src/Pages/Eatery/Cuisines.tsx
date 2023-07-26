@@ -37,7 +37,7 @@ const MenuCuisines: React.FC = () => {
     if (filteredSelectedCuisines) {
       const success = await addMenuCuisines(filteredSelectedCuisines || []);
       if (success) {
-        navigate("/eatery/detail");
+        navigate(-1);
       } else {
         console.error("Failed to add review");
       }

@@ -16,9 +16,10 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
   const login = useCallback(async (email: string, password: string, role: string) => {
     try {
       const response = await api.post('/api/auth/login', { email, password, role });
-      const { token, role:userRole } = response.data;
+      const { token, role:userRole, id } = response.data;
       localStorage.setItem('token', token)
       localStorage.setItem('role', userRole)
+      localStorage.setItem('id', id)
       setToken(token);
       return true;
     } catch (error) {

@@ -59,7 +59,7 @@ def delete_image():
             current_app.config['IMAGE_SAVE_DIRECTORY'], filename)
 
         # delete image from disk
-        os.remove(file_path)
+        # os.remove(file_path)
 
         # delete image from db
         db.session.delete(image_obj)

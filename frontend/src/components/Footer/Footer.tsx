@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
             <i className="glyphicon glyphicon-qrcode" />
             <span>Scan QR</span>
           </Link>
-          <Link to="/eatery/detail" className="footer-button">
+          <Link to="/restuarant/1" className="footer-button">
             <i className="glyphicon glyphicon-cutlery" />
             <span>Menu</span>
           </Link>
