@@ -190,7 +190,20 @@ if __name__ == '__main__':
             Cuisine(cuisine_name="American"),
             Cuisine(cuisine_name="Italian"),
             Cuisine(cuisine_name="Thai"),
-            Cuisine(cuisine_name="Indian")
+            Cuisine(cuisine_name="Indian"),
+            Cuisine(cuisine_name="Mexican"),
+            Cuisine(cuisine_name="French"),
+            Cuisine(cuisine_name="Japanese"),
+            Cuisine(cuisine_name="Spanish"),
+            Cuisine(cuisine_name="Greek"),
+            Cuisine(cuisine_name="Lebanese"),
+            Cuisine(cuisine_name="Brazilian"),
+            Cuisine(cuisine_name="Vietnamese"),
+            Cuisine(cuisine_name="Moroccan"),
+            Cuisine(cuisine_name="Korean"),
+            Cuisine(cuisine_name="Turkish"),
+            Cuisine(cuisine_name="Russian"),
+            Cuisine(cuisine_name="Mediterranean"),
         ]
 
         cooks_cuisine_arr=[

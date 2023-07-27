@@ -12,10 +12,11 @@ preferences = Blueprint('preferences', __name__)
 @preferences.route('/add_preferences', methods=['POST'])
 @auth_required
 def add_preferences():
-    customer_id = request.json.get('customer_id')
+    # customer_id = request.json.get('customer_id')
+    curr_user_obj = current_user()
     cuisines_picked = request.json.get('cuisines')
 
-    preferences = LikesCuisine.query.filter(LikesCuisine.customer_id==customer_id).all()
+    preferences = LikesCuisine.query.filter(LikesCuisine.customer_id==curr_user_obj.id).all()
     if len(preferences) != 0:
         for preference in preferences:
             db.session.delete(preference)
@@ -24,9 +25,9 @@ def add_preferences():
     all_cuisines = Cuisine.query.all()
     for cuisine in all_cuisines:
         if cuisine.cuisine_name in cuisines_picked:
-            likes_cuisine = LikesCuisine(customer_id=customer_id, cuisine_id=cuisine.id, affinity=0.85, specified=True)
+            likes_cuisine = LikesCuisine(customer_id=curr_user_obj.id, cuisine_id=cuisine.id, affinity=0.85, specified=True)
         else:  
-            likes_cuisine = LikesCuisine(customer_id=customer_id, cuisine_id=cuisine.id, affinity=0.5, specified=False)
+            likes_cuisine = LikesCuisine(customer_id=curr_user_obj.id, cuisine_id=cuisine.id, affinity=0.5, specified=False)
         db.session.add(likes_cuisine)
         db.session.commit()
 
@@ -36,7 +37,7 @@ def add_preferences():
     #     likes_cuisine.affinity = 0.85
     #     db.session.commit()
 
-    return jsonify({'message': f'preferences for customer ({customer_id}) added'}), 200
+    return jsonify({'message': f'preferences for customer ({curr_user_obj.id}) added'}), 200
 
 @preferences.route('/get_preferences/<int:customer_id>', methods=['GET'])
 @auth_required
