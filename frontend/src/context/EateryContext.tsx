@@ -9,7 +9,8 @@ import {
   Props,
   Review,
   Cuisine,
-  CreateOpeningHours
+  CreateOpeningHours,
+  UpdateLoyaltyPoints,
 } from "../interface";
 import { useAuth } from "../hooks/useAuth";
 
@@ -268,6 +269,25 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
     [token]
   );
 
+  // Add or Deduct Customer loyality points from scanned screen
+  const updateLoyaltyPoints = useCallback(
+    async (formData: UpdateLoyaltyPoints) => {
+      try {
+        const response = await api.post(`/api/loyalty/points`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+    [token]
+  );
+
   return (
     <EateryContext.Provider
       value={{
@@ -290,7 +310,8 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
         getAllCuisines,
         allCuisines,
         addMenuCuisines,
-        addOpenHours
+        addOpenHours,
+        updateLoyaltyPoints,
       }}
     >
       {children}

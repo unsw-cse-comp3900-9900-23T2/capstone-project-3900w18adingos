@@ -10,6 +10,7 @@ const MenuCuisines: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const q = queryParams.get("q")?.split(",").map(Number);
+  const userId = localStorage.getItem("id");
 
   const [selectedCuisines, setSelectedCuisines] = useState<number[]>(q ?? []);
 
@@ -37,7 +38,7 @@ const MenuCuisines: React.FC = () => {
     if (filteredSelectedCuisines) {
       const success = await addMenuCuisines(filteredSelectedCuisines || []);
       if (success) {
-        navigate(-1);
+        navigate(`/restaurant/${userId}`);
       } else {
         console.error("Failed to add review");
       }

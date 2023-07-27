@@ -1,30 +1,39 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-
-import './Footer.css';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import ScanQR from "../../Pages/Eatery/ScannerPopup";
+import "./Footer.css";
 
 const Footer: React.FC = () => {
-  const userRole = localStorage.getItem('role')
+  const userRole = localStorage.getItem("role");
+  const userId = localStorage.getItem("id");
+
+  const [showScannerPopup, setShowScannerPopup] = useState(false);
+
+  const togglePopup = () => {
+    setShowScannerPopup((prevState) => !prevState);
+  };
+
   return (
     <div className="footer">
-      {userRole === 'eatery' ?
+      {userRole === "eatery" ? (
         <>
-          <Link to="/customer/wallet" className="footer-button">
+          <button onClick={togglePopup} className="footer-button">
             <i className="glyphicon glyphicon-qrcode" />
             <span>Scan QR</span>
-          </Link>
-          <Link to="/restuarant/1" className="footer-button">
+          </button>
+
+          <Link to={`/restaurant/${userId}`} className="footer-button">
             <i className="glyphicon glyphicon-cutlery" />
             <span>Menu</span>
           </Link>
           <Link to="/eatery/user/profile" className="footer-button">
             <i className="glyphicon glyphicon-user" />
             <span>Profile</span>
-        </Link>
+          </Link>
         </>
-      :
-      <>
-        <Link to="/restaurant/map" className="footer-button">
+      ) : (
+        <>
+          <Link to="/restaurant/map" className="footer-button">
             <i className="glyphicon glyphicon-home" />
             <span>Map</span>
           </Link>
@@ -37,11 +46,16 @@ const Footer: React.FC = () => {
             <span>Wallet</span>
           </Link>
           <Link to="/profile" className="footer-button">
-        <i className="glyphicon glyphicon-user" />
-        <span>Profile</span>
-      </Link>
-      </>
-  }
+            <i className="glyphicon glyphicon-user" />
+            <span>Profile</span>
+          </Link>
+        </>
+      )}
+
+      {/* Scanner Popup */}
+      {showScannerPopup && (
+        <ScanQR isOpen={showScannerPopup} onClose={togglePopup} />
+      )}
     </div>
   );
 };

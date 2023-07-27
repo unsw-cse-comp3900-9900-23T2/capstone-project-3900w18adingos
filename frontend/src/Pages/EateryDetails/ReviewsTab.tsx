@@ -39,7 +39,7 @@ const ReviewsTab: React.FC<TabProps> = ({ eatery, user }) => {
         <div key={index} className="list-item">
           <div className="title-rating-container">
             <div>Rating: {review.rating}</div>
-            {user?.id === review.customer_id && user.role === "eatery" && (
+            {user?.id === review.customer_id && user.role === "customer" && (
               <button onClick={() => handleDeleteReview(review.id)}>
                 <i
                   className="bi bi-trash gl"
@@ -54,7 +54,7 @@ const ReviewsTab: React.FC<TabProps> = ({ eatery, user }) => {
       ))}
       {user.role === UserRole.CUSTOMER && (<button
         className="add-review"
-        onClick={() => navigate(`add-review/${eatery.id}`)}
+        onClick={() => navigate(`/add-review/${eatery.id}`)}
       >
         Add Review
       </button>)}

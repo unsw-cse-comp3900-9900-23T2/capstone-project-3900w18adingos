@@ -1,4 +1,4 @@
-import { SetUpLocation } from '../interface';
+import { SetUpLocation } from "../interface";
 
 export const setUpLocation: SetUpLocation = (setUserLocation, setLoadingPosition, mapRef) => {
     if (navigator.geolocation) {
@@ -8,7 +8,7 @@ export const setUpLocation: SetUpLocation = (setUserLocation, setLoadingPosition
           lng: position.coords.longitude,
         };
         setUserLocation(userPosition);
-
+        
         // For demo
         const lat = -33.9217416169076
         const lng = 151.22720259038303
@@ -16,7 +16,7 @@ export const setUpLocation: SetUpLocation = (setUserLocation, setLoadingPosition
 
         // Create a marker for the user's location
         const userLocationIcon = {
-          url: "/src/assets/player-icon.png",
+          url: "/src/icons/player-icon.png",
           scaledSize: new google.maps.Size(30, 30),
         };
   
@@ -28,7 +28,6 @@ export const setUpLocation: SetUpLocation = (setUserLocation, setLoadingPosition
         });
   
         setLoadingPosition(false);
-        return userPosition;
       });
     } else {
       console.log('Geolocation is not supported by this browser.');

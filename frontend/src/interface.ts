@@ -58,7 +58,7 @@ export interface User {
   name: string;
   email: string;
   profile_pic: string;
-  role: UserRole;
+  role: string;
   restaurant_name: string; //Eatery User
 }
 
@@ -69,6 +69,7 @@ export interface Voucher {
   quantity: number;
   start: Date;
   expiry: Date;
+  loyalty_points: number | null;
 }
 
 export interface AddVoucher {
@@ -79,6 +80,12 @@ export interface AddVoucher {
   expiry: string;
 }
 
+export interface UpdateLoyaltyPoints {
+  eatery_id: number | null;
+  customer_id: string | undefined;
+  action: string;
+  points: number;
+}
 // CONTEXT
 
 export interface EateryContextProps {
@@ -105,8 +112,13 @@ export interface EateryContextProps {
   getAllCuisines: () => Promise<Array<Cuisine> | void>;
   allCuisines: Array<Cuisine>;
   addMenuCuisines: (cuisineIds: Array<number>) => Promise<number | null>;
-  addOpenHours: (formDate: Array<CreateOpeningHours>) => Promise<CreateOpeningHours | void>;
-
+  addOpenHours: (
+    formDate: Array<CreateOpeningHours>
+  ) => Promise<CreateOpeningHours | void>;
+  // Add or Deduct Customer points
+  updateLoyaltyPoints: (
+    formDate: UpdateLoyaltyPoints
+  ) => Promise<UpdateLoyaltyPoints | void>;
 }
 export interface AuthContextType {
   token: string | null;
@@ -131,7 +143,7 @@ export interface AuthContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 export interface VoucherContextProps {
-  customerVouchers: Array<Voucher>;
+  cusomterVouchers: Array<Voucher>;
   eateryVouchers: Array<Voucher>;
   fetchVouchers: (customerId: string) => Promise<void>;
   claimVoucher: (voucherId: string, customerId: string) => Promise<any>;
@@ -201,7 +213,7 @@ export interface TabProps {
 }
 
 export enum UserRole {
-  EATERY = 'eatery',
-  CUSTOMER = 'customer',
+  EATERY = "eatery",
+  CUSTOMER = "customer",
   // add more if you have
 }
