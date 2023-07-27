@@ -18,7 +18,7 @@ const ResetPassword: React.FC = () => {
         const success = await passwordReset(code, newPassword);
         if (success) {
           setMessage("Password reset successful");
-          navigate("/auth/home");
+          navigate("/restaurant/map");
         } else {
           setMessage("Failed to reset password");
         }

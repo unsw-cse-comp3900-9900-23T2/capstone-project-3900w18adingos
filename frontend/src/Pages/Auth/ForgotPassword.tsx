@@ -19,7 +19,7 @@ const ForgotPassword: React.FC = () => {
       const success = await passwordResetRequest(email, role);
       if (success) {
         setMessage("success");
-        navigate("/auth/home");
+        navigate("/restaurant/map");
       } else {
         setMessage("failure");
       }

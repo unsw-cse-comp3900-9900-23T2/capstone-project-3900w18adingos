@@ -13,3 +13,4 @@ class CuisineSchema(ma.SQLAlchemySchema):
     cuisine_name = ma.auto_field()
 
 cuisine_schema = CuisineSchema()
+cuisine_schema_list = CuisineSchema(many=True)

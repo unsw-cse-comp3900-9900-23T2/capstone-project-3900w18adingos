@@ -1,16 +1,17 @@
-import Footer from "../../../components/Footer/Footer";
-import { useParams } from 'react-router-dom';
-import { useEateryContext } from "../../../hooks/useEateryContext";
+import Footer from "../../components/Footer/Footer";
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEateryContext } from "../../hooks/useEateryContext";
+import { useAuth } from '../../hooks/useAuth';
 import { useEffect, useState } from "react";
-import "./EateryProfile.css"
-import { useAuth } from "../../../hooks/useAuth";
-import { getRating } from "../../../utils/rating";
-import { EateryPhotos } from './EateryPhotos';
-import { EateryReviews } from "./EateryReviews";
-import { EateryVouchers } from "./EateryVouchers";
-import { EateryInfo } from "./EateryInfo";
+import "../../styles/EateryProfile.css";
+import { getRating } from '../../utils/rating';
+import InfoTab from "./InfoTab";
+import PhotosTab from "./PhotosTab";
+import ReviewsTab from "./ReviewsTab";
+import VouchersTab from "./VouchersTab";
+import { UserRole } from "../../interface";
 
-const EateryProfile: React.FC = () => { 
+const EateryDetails: React.FC = () => { 
   const { id } = useParams<{ id: string }>();
 
   const {fetchEatery, eatery} = useEateryContext();
@@ -18,6 +19,7 @@ const EateryProfile: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<'INFO' | 'PHOTOS' | 'REVIEWS' | 'VOUCHERS'>("INFO");
   const [coverImage, setcoverImage] = useState<string>("");
   const { getEateryImage} = useEateryContext();
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (id){
@@ -25,10 +27,6 @@ const EateryProfile: React.FC = () => {
     }
     fetchUser()
   }, [fetchEatery, fetchUser]);
-
-  useEffect(() => { 
-
-  })
   
   // load cover image
   useEffect(() => {
@@ -50,23 +48,50 @@ const EateryProfile: React.FC = () => {
     fetchCoverImage();
   }, [getEateryImage, eatery]);
 
+  const openCuisine = () => {
+    // Pass current selected cuisinesIds
+    navigate(
+      `/eatery/cuisines?q=${
+        eatery &&
+        eatery.cuisines.map((cuisine) => cuisine.cuisine?.id).join(",")
+      }`
+    );
+  };
+
   return (
     <>
     <div className="profile-wrapper">
+    <div className="image-header">
       {coverImage ? (
-        <img src={coverImage} alt="Cover image" className="cover-image"/>
+
+        // Used a div rather than img to set object-fit:cover at a specific height (180px)
+        <div
+          className="cover-image"
+          style={{backgroundImage: `url(${coverImage})`}} // assuming 'coverImage' is your image URL
+        />
       ) : (
-        <div className="image-header">
           <i className="glyphicon glyphicon-picture" style={{"opacity": "40%"}}/>
-        </div>
       )}
+      </div>
 
       <div className="eatery-content">
         <div className="title-rating-container">
           <h3>{eatery?.restaurant_name}</h3>
           <p className="rating">{eatery && eatery.reviews ? getRating(eatery.reviews): ""}</p>
         </div>
-        <p>Cusinies: {eatery && eatery.cuisines.map(cuisine => cuisine.cuisine.cuisine_name).join(", ")}</p>
+        <p>
+            Cusinies:{" "}
+            {eatery &&
+              eatery.cuisines
+                .map((cuisine) => cuisine.cuisine?.cuisine_name)
+                .join(", ")} {" "}
+            {user && user.role === UserRole.EATERY && (<i
+              className="glyphicon glyphicon-edit"
+              style={{ cursor: "pointer" }}
+              title="Add/Remove Cuisines"
+              onClick={openCuisine}
+            />)}
+          </p>
         <p>price in $$$$</p>
         <p style={{"color": "green"}}>Open now</p>
 
@@ -89,10 +114,10 @@ const EateryProfile: React.FC = () => {
           </button>
         </div>
 
-          {currentTab === 'INFO' && eatery && <EateryInfo eatery={eatery}/>}
-          {currentTab === 'PHOTOS' && eatery && user && <EateryPhotos eatery={eatery} user={user}/>}
-          {currentTab === 'REVIEWS' && eatery && user && <EateryReviews eatery={eatery} user={user}/>}
-          {currentTab === 'VOUCHERS' && eatery && user && <EateryVouchers eatery={eatery} user={user}/>}
+          {currentTab === 'INFO' && eatery && user && <InfoTab user={user} eatery={eatery}/>}
+          {currentTab === 'PHOTOS' && eatery && user && <PhotosTab eatery={eatery} user={user}/>}
+          {currentTab === 'REVIEWS' && eatery && user && <ReviewsTab eatery={eatery} user={user}/>}
+          {currentTab === 'VOUCHERS' && eatery && user && <VouchersTab eatery={eatery} user={user}/>}
 
         </div>
     </div>
@@ -101,4 +126,4 @@ const EateryProfile: React.FC = () => {
   );
 }
 
-export default EateryProfile
+export default EateryDetails

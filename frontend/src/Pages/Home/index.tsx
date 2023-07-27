@@ -20,7 +20,7 @@ const Home = () => {
         googleLogin(code).then(res => {
           if (res) {
             setMessage("success");
-            navigate("/auth/home");
+            navigate("/restaurant/map");
           } else {
             setMessage("failure");
           }

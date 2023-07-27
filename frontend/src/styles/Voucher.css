@@ -1,0 +1,60 @@
+.add-voucher-container { 
+    display: flex;
+    background-color: #FFF7EC;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .add-voucher-form { 
+    margin-left: 10px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .voucher-back-step { 
+    background-color: #FEC9C9;
+    display: flex;
+    font-size: large;
+    padding: 10px;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .voucher-title { 
+    margin-left: 30px;
+  }
+  
+  .voucher-text-container,
+  .voucher-text { 
+    /* height: 100px; */
+    width: 100%;
+  }
+  
+  .voucher-text { 
+    border-radius: 10px;
+  }
+  
+  .display-user { 
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    font-size: large;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .bi-person-circle { 
+    font-size: xx-large;
+  }
+
+  .react-datepicker-wrapper {
+    width: 100%;
+  }
+
+  .react-datepicker {
+    font-size: 1.1rem;
+  }

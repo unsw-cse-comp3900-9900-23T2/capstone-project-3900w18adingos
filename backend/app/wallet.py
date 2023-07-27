@@ -19,7 +19,7 @@ wallet = Blueprint('wallet', __name__)
 @auth_required
 def get_short_code():
     current_user_obj = current_user()
-    
+
     if not isinstance(current_user_obj, Customer):
         return jsonify(success=False), 403
 
@@ -27,30 +27,33 @@ def get_short_code():
     # regenerate if collision
     while code in code_dict:
         code = generate_short_code()
-    
+
     code_dict[code] = current_user_obj.id
 
-    img = qrcode.make(code)
+    # img = qrcode.make(code)
+    img = qrcode.make({'customerId':  current_user_obj.id,
+                      'customerName': "Test Customer", "code": code})
     buffered = BytesIO()
     img.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode()
-        
+
     return jsonify(code=code, qr_code=img_str), 200
-    
+
+
 @wallet.post('/get_user_vouchers')
 @auth_required
 def get_user_vouchers():
-    
+
     if not isinstance(current_user(), Eatery):
         return jsonify(success=False), 403
 
-    code = request.json.get('code').upper()    
+    code = request.json.get('code').upper()
     customer_id = code_dict.get(code)
     if not customer_id:
         return jsonify(success=False), 404
-        
-    customer=Customer.query.get_or_404(customer_id)
-    
+
+    customer = Customer.query.get_or_404(customer_id)
+
     return has_voucher_schema_list.dump(customer.vouchers), 200
 
 @wallet.route('/add_points/<customer_id>', methods=['POST'])
@@ -67,7 +70,6 @@ def add_points(customer_id):
 @wallet.route('/subtract_points/<customer_id>', methods=['POST'])
 @auth_required
 def subtract_points(customer_id):
-    
     points_to_subtract = request.json.get('points')
     customer = Customer.query.get_or_404(customer_id)
 
@@ -82,11 +84,13 @@ def subtract_points(customer_id):
 
 def get_customer_vouchers_for_eatery(customer_id, eatery_id):
     eatery_vouchers = Voucher.query.filter(Voucher.eatery == eatery_id).all()
-    has_vouchers = HasVoucher.query.filter((HasVoucher.customer_id == customer_id)).all()
+    has_vouchers = HasVoucher.query.filter(
+        (HasVoucher.customer_id == customer_id)).all()
 
     vouchers = []
     for has_voucher in has_vouchers:
-        voucher = Voucher.query.filter(Voucher.id == has_voucher.voucher_id).first()
+        voucher = Voucher.query.filter(
+            Voucher.id == has_voucher.voucher_id).first()
         if voucher in eatery_vouchers:
             vouchers.append({
                 'id': voucher.id,
@@ -103,7 +107,7 @@ def get_customer_vouchers_for_eatery(customer_id, eatery_id):
 @auth_required
 def get_customer_info(customer_id):
     customer = Customer.query.get_or_404(customer_id)
-    eatery_id = ... 
+    eatery_id = ...
 
     points = customer.points
     vouchers = get_customer_vouchers_for_eatery(customer_id, eatery_id)
@@ -121,8 +125,8 @@ def get_vouchers_customer_wallet():
     if not isinstance(current_user(), Customer):
         return jsonify(success=False), 403
 
-    code = request.json.get('code').upper() 
-    eatery_id = request.json.get('eatery_id')   
+    code = request.json.get('code').upper()
+    eatery_id = request.json.get('eatery_id')
     customer_id = code_dict.get(code)
     if not customer_id:
         return jsonify(success=False), 404
