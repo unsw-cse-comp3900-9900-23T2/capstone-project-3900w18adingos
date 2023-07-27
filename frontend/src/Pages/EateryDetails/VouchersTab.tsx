@@ -3,12 +3,16 @@ import { TabProps, UserRole } from "../../interface";
 import { useEateryContext } from "../../hooks/useEateryContext";
 
 import { useVoucher } from "../../hooks/useVoucher";
+import { useEffect } from "react";
 
 const VouchersTab: React.FC<TabProps> = ({ eatery, user }) => {
   const navigate = useNavigate();
-  const { deleteVoucher, claimVoucher, fetchVouchers, eateryVouchers, customerVouchers } = useVoucher();
+  const { deleteVoucher, claimVoucher, fetchVouchers, fetchVouchersForEatery,eateryVouchers, customerVouchers } = useVoucher();
   const { fetchEatery } = useEateryContext();
 
+  useEffect(() => { 
+    fetchVouchersForEatery(eatery.id)
+  }, [fetchVouchers])
 
   const handleDeleteVoucher = async (voucherId: string) => {
     await deleteVoucher(voucherId);
@@ -18,15 +22,15 @@ const VouchersTab: React.FC<TabProps> = ({ eatery, user }) => {
   };
 
   const voucherClaim = async (voucherId: string) => {
+    let result = "failed";
     if (user) {
-      const success = await claimVoucher(voucherId, user.id);
-      if (success) {
+      result = await claimVoucher(voucherId, user.id);
+      if (result) {
         await fetchVouchers(user.id);
         alert("Claim successful!");
         return;
       }
     }
-    alert("Claim unsuccessful");
   };
 
   return (

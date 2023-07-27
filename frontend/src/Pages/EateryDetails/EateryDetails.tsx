@@ -67,7 +67,7 @@ const EateryDetails: React.FC = () => {
         // Used a div rather than img to set object-fit:cover at a specific height (180px)
         <div
           className="cover-image"
-          style={{backgroundImage: `url(${coverImage})`}} // assuming 'coverImage' is your image URL
+          style={{backgroundImage: `url(${coverImage})`}}
         />
       ) : (
           <i className="glyphicon glyphicon-picture" style={{"opacity": "40%"}}/>

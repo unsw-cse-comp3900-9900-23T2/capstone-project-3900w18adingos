@@ -8,6 +8,14 @@ export const VoucherContext = createContext<VoucherContextProps | undefined>(
   undefined
 );
 
+interface ErrorResponse {
+  response?: {
+    data?: {
+      vouchers?: string;
+    }
+  };
+}
+
 export const VoucherProvider: React.FC<Props> = ({ children }) => {
   const [customerVouchers, setCustomerVouchers] = useState<Array<Voucher>>([]);
   const [eateryVouchers, setEateryVouchers] = useState<Array<Voucher>>([]);
@@ -68,8 +76,13 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
         // Refresh vouchers after a successful claim
         fetchVouchers(customerId);
         return response.data;
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        const error = err as ErrorResponse
+        if (error.response && error.response.data) {
+          alert(error.response.data.vouchers);
+        } else {
+          alert("An error occurred while claiming voucher.");
+        }
         throw error;
       }
     },

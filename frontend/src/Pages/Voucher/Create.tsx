@@ -35,7 +35,7 @@ const App: React.FC = () => {
     if (id) {
       const success = await addVoucher(formData);
       if (success) {
-        navigate(`/eatery/detail`);
+        navigate(-1);
       } else {
         console.error("Failed to add voucher");
       }
