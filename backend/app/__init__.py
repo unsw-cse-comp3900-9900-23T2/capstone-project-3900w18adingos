@@ -76,5 +76,8 @@ def create_app(config_name='default'):
 
         from app.cuisine import cuisine as cuisine_blueprint
         app.register_blueprint(cuisine_blueprint, url_prefix="/api")
+
+        from app.has_loyalty import has_loyalty as has_loyalty_blueprint
+        app.register_blueprint(has_loyalty_blueprint, url_prefix="/api")
     
     return app

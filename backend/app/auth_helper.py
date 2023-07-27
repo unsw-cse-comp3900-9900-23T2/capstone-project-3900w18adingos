@@ -16,18 +16,20 @@ from app.models.eatery import Eatery
 #     logout_user()
 #     return jsonify({'message': 'Logged out successfully'}), 200
 
+
 def check_role(role):
     return role in ['customer', 'eatery']
 
+
 def auth_login(email, password, role):
-    
+
     user = guard.authenticate(email, password)
-    
+
     if not user:
         return jsonify(success=False), 401
-    
+
     role = 'eatery' if isinstance(user, Eatery) else 'customer'
-    
+
     return jsonify(
         {
             'token': guard.encode_jwt_token(user),
@@ -37,8 +39,9 @@ def auth_login(email, password, role):
         }
     ), 200
 
+
 def auth_register(email, password, name, role):
-    
+
     if not check_role(role):
         return jsonify({"message": "Invalid role"}), 400
 
@@ -53,12 +56,12 @@ def auth_register(email, password, name, role):
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({'token': guard.encode_jwt_token(user), 'user': name, 'role': role}), 200
+    return jsonify({'token': user.guard.encode_jwt_token(user), 'user': name, 'role': role}), 200
 
 # def auth_passwordreset_reset(token, password):
 
 #     role = data['role']
-    
+
 #     if role not in ['customer', 'eatery']:
 #         return jsonify({"message": "Invalid role"}), 400
 
@@ -80,9 +83,10 @@ def auth_passwordreset_request(email, role):
         return jsonify({"message": "We are not able to find this email address"}), 400
 
     reset_url = f"http://localhost:5173/auth/passwordreset/reset/{guard.encode_jwt_token(user)}"
-    
-    guard.send_reset_email(email, reset_url=reset_url, subject='Password Reset Request')
-    
+
+    guard.send_reset_email(email, reset_url=reset_url,
+                           subject='Password Reset Request')
+
     return jsonify({'message': 'Check your email for the instructions to reset your password'}), 200
 
 
@@ -121,8 +125,9 @@ def validate_google_auth_token_and_send_back_token(code, role):
 
             if role == 'customer':
                 user = Customer(email=email, name=name, auth_source='google')
-            else: # role == 'eatery'
-                user = Eatery(email=email, restaurant_name=name, auth_source='google')
+            else:  # role == 'eatery'
+                user = Eatery(email=email, restaurant_name=name,
+                              auth_source='google')
 
             db.session.add(user)
             db.session.commit()
