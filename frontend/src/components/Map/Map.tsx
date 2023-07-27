@@ -22,11 +22,11 @@ const Map: React.FC = () => {
   const mapRef = useRef<google.maps.Map | null>(null);
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
   const [loadingPosition, setLoadingPosition] = useState(true);
-  const { eateries, fetchEateries, getAllReviews } = useEateryContext();
+  const { eateries, fetchEateries, getEateryImage } = useEateryContext();
   const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   useEffect(() => {
     setUpLocation(setUserLocation, setLoadingPosition, mapRef);
   }, []);
@@ -34,6 +34,27 @@ const Map: React.FC = () => {
   useEffect(() => { 
     fetchEateries()
   },[fetchEateries])
+
+  // custom clusterer 
+  const renderer = {
+    render: ({ count, position }: { count: number, position: google.maps.LatLng }) => {
+        const color = "#FF9502";
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="${color}" width="50" height="50">
+          <circle cx="16" cy="16" r="10" fill="${color}"/>
+          <text x="16" y="22" font-size="12pt" font-family="Arial" font-weight="bold" text-anchor="middle" fill="white">${count}</text>
+        </svg>`;
+
+        const clusterOptions = {
+            position,
+            icon: {
+                url: `data:image/svg+xml,${encodeURIComponent(svg)}`,
+                scaledSize: new google.maps.Size(50, 50),
+                anchor: new google.maps.Point(25, 25)
+            },
+        };
+        return new google.maps.Marker(clusterOptions);
+    }
+};
 
   const initialize = async () => {
     if (!loadingPosition && isLoaded) {
