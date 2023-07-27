@@ -32,16 +32,10 @@ export const CuisineForm: React.FC = () => {
     const api = axios.create({
       baseURL: 'http://127.0.0.1:5000'
     });
-    const token = localStorage.getItem('token');
-    api.post('/api/add_preferences', {
-      cuisines: selectedCuisines
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
     
+    api.post('/api/add_preferences', {
+      cuisines: selectedCuisines,
+    })
     .then(response => console.log(response))
     .catch(error => console.error(error));
 
