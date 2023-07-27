@@ -9,9 +9,9 @@ import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { useLocation, useNavigate } from 'react-router-dom';
 import getDistance from 'geolib/es/getDistance';
 
+const libraries: ("places" | "drawing" | "geometry" | "localContext" | "visualization")[] = ["places"];
 
 const Map: React.FC = () => {
-  const libraries: ("places" | "drawing" | "geometry" | "localContext" | "visualization")[] = ["places"];
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -68,10 +68,25 @@ const Map: React.FC = () => {
 
       const map = mapRef.current;
       const infoWindow = infoWindowRef.current
-      const markers = await Promise.all(eateries.map(async eatery => { 
+
+    map.addListener('bounds_changed', async function() {
+      const bounds = map.getBounds();
+      if (!bounds) { 
+        return
+      }
+      const visibleEateries = eateries.filter(eatery => 
+        bounds.contains({ lat: eatery.latitude, lng: eatery.longitude })
+      );
+
+
+      const markers = await Promise.all(visibleEateries.map(async eatery => { 
         
         let distance = getDistance(userLocation, {lat: eatery.latitude, lng: eatery.longitude}, 100)
-        const image = await getEateryImage(eatery.eatery_image[0])
+        
+        let image = null;
+        if (eatery.eatery_image && eatery.eatery_image[0]) {
+          image = await getEateryImage(eatery.eatery_image[0]);
+        }
 
         let measurementUnit = "m"
         if (distance >= 1000) { 
@@ -84,8 +99,9 @@ const Map: React.FC = () => {
       }));
 
       new MarkerClusterer({map, markers, renderer})
-    }
-  };
+    });
+  }
+};
 
   useEffect(() => {
     initialize();
