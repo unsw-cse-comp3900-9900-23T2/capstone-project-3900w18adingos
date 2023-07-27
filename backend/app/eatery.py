@@ -59,7 +59,7 @@ def delete_image():
             current_app.config['IMAGE_SAVE_DIRECTORY'], filename)
 
         # delete image from disk
-        # os.remove(file_path)
+        os.remove(file_path)
 
         # delete image from db
         db.session.delete(image_obj)
@@ -89,14 +89,15 @@ def get_eatery_by_id(id):
 def opening_hours():
 
     if request.method == 'POST':
+
+        eatery_id = current_user().id
+        
         data = request.json
 
         if not data or not isinstance(data, list):
             return jsonify({"success": False, "message": "Invalid data format. Expected a list of opening hours."}), 400
 
         try:
-            # Assuming all entries have the same eatery_id
-            eatery_id = data[0].get('eatery_id')
 
             # Delete existing opening hours for the eatery_id
             OpeningHours.query.filter_by(eatery_id=eatery_id).delete()
@@ -125,6 +126,5 @@ def opening_hours():
             db.session.rollback()
             return jsonify({"message": f"Error occurred: {str(e)}"}), 500
 
-    eatery_id = current_user().id
-    eatery_open_hours = OpeningHours.query.filter_by(eatery_id=eatery_id)
+    eatery_open_hours = current_user().opening_hours
     return open_hours_schema_list.dump(eatery_open_hours), 200
