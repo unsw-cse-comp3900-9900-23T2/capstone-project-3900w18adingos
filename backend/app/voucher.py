@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from flask_praetorian import auth_required
+from flask_praetorian import auth_required, current_user
 from sqlalchemy import and_
 from datetime import datetime
 
@@ -120,7 +120,7 @@ def get_vouchers_customer_id(customer_id):
 def claim_voucher():
     voucher_id = request.json.get('voucher_id')
     customer_id = request.json.get('customer_id')
-
+    
     voucher = Voucher.query.filter(Voucher.id==voucher_id).first()
     if voucher == None:
         return jsonify({'vouchers': f'voucher ({voucher_id}) doesnt exist'}), 400
