@@ -1,10 +1,10 @@
 // ForgotPassword.tsx
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import "../styles/SignUp.css";
-import { useAuth } from '../hooks/useAuth';
+import "../../styles/SignUp.css";
+import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { RegisterFormInputs } from '../interface';
+import { RegisterFormInputs } from '../../interface';
 
 const ForgotPassword: React.FC = () => {
   const { register, handleSubmit } = useForm<RegisterFormInputs>();
@@ -19,7 +19,7 @@ const ForgotPassword: React.FC = () => {
       const success = await passwordResetRequest(email, role);
       if (success) {
         setMessage("success");
-        navigate("/auth/home");
+        navigate("/restaurant/map");
       } else {
         setMessage("failure");
       }

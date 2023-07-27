@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import "../styles/SignUp.css";
-import { useAuth } from '../hooks/useAuth';
+import "../../styles/SignUp.css";
+import { useAuth } from '../../hooks/useAuth';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ResetPassword } from '../interface';
+import { ResetPassword } from '../../interface';
 
 const ResetPassword: React.FC = () => {
   const { register, handleSubmit } = useForm<ResetPassword>();
@@ -18,7 +18,7 @@ const ResetPassword: React.FC = () => {
         const success = await passwordReset(code, newPassword);
         if (success) {
           setMessage("Password reset successful");
-          navigate("/auth/home");
+          navigate("/restaurant/map");
         } else {
           setMessage("Failed to reset password");
         }

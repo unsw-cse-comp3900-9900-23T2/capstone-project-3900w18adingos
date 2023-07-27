@@ -126,11 +126,11 @@ def claim_voucher():
         return jsonify({'vouchers': f'voucher ({voucher_id}) doesnt exist'}), 400
     
     if voucher.quantity == 0:
-        return jsonify({'vouchers': f'voucher ({voucher_id}) quantity exhausted'}), 400
+        return jsonify({'vouchers': f'voucher ({voucher_id}) quantity exhausted'}), 401
 
     has_voucher = HasVoucher.query.filter(and_(HasVoucher.customer_id==customer_id,HasVoucher.voucher_id==voucher_id)).first()
     if has_voucher != None:
-        return jsonify({'vouchers': f'voucher ({voucher_id}) already claimed by customer ({customer_id})'}), 400
+        return jsonify({'vouchers': f'voucher ({voucher_id}) already claimed by customer ({customer_id})'}), 402
     else:
         has_voucher = HasVoucher(voucher_id=voucher_id, customer_id=customer_id)
        

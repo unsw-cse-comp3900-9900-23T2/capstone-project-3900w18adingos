@@ -32,7 +32,8 @@ def auth_login(email, password, role):
         {
             'token': guard.encode_jwt_token(user),
             'user': user.name if role == 'customer' else user.restaurant_name,
-            'role': role
+            'role': role,
+            'id': user.id
         }
     ), 200
 
@@ -52,7 +53,7 @@ def auth_register(email, password, name, role):
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({'token': user.guard.encode_jwt_token(user), 'user': name, 'role': role}), 200
+    return jsonify({'token': guard.encode_jwt_token(user), 'user': name, 'role': role}), 200
 
 # def auth_passwordreset_reset(token, password):
 

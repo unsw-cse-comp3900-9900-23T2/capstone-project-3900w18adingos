@@ -1,10 +1,10 @@
 // SignIn.tsx
 import React, {useState} from 'react';
 import { useForm } from 'react-hook-form';
-import "../styles/SignUp.css"
-import { useAuth } from '../hooks/useAuth';
+import "../../styles/SignUp.css"
+import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { SignInFormInputs } from '../interface';
+import { SignInFormInputs } from '../../interface';
 
 const SignIn: React.FC = () => {
   const { register, handleSubmit } = useForm<SignInFormInputs>();
@@ -20,7 +20,13 @@ const SignIn: React.FC = () => {
       const success = await login(email, password, role);
       if (success) { 
         setMessage("success"); 
-        navigate("/auth/home"); 
+        const loggedInUserRole = localStorage.getItem('role');
+        const id = localStorage.getItem('id');
+        if(loggedInUserRole === "eatery"){
+          navigate(`/restaurant/${id}`); 
+        }else{
+          navigate("/restaurant/map"); 
+        }
       } else { 
         setMessage("failure"); 
       }

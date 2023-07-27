@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Footer from '../components/Footer/Footer';
-import Header from '../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Header/Header';
 
 // import API method for fetching voucher details
 // Update the import based on your actual method
 // import { getVoucherDetails } from '../api';  
-import { Voucher } from '../interface';
+import { Voucher } from '../../interface';
 // import { useVoucher } from '../hooks/useVoucher';
 
 const VoucherDetails: React.FC = () => {

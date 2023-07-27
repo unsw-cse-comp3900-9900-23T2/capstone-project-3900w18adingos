@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Collapse, ListGroup, Badge } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import "../styles/Wallet.css";
+import "../../styles/Wallet.css";
 // import qrCode from "../assets/qr-code.png";
-import Footer from '../components/Footer/Footer';
-import Header from "../components/Header/Header";
-import { useVoucher } from '../hooks/useVoucher';
-import { useAuth } from '../hooks/useAuth';
-import { Eatery, Voucher } from '../interface';
-import { useEateryContext } from '../hooks/useEateryContext';
+import Footer from '../../components/Footer/Footer';
+import Header from "../../components/Header/Header";
+import { useVoucher } from '../../hooks/useVoucher';
+import { useAuth } from '../../hooks/useAuth';
+import { Eatery, Voucher } from '../../interface';
+import { useEateryContext } from '../../hooks/useEateryContext';
 
 const Wallet: React.FC = () => {
   const navigate = useNavigate();

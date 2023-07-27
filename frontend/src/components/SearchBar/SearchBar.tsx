@@ -26,7 +26,7 @@ const SearchBar: React.FC = () => {
   }, [searchTerm, eateries]);
 
   const handleSelect = (eatery: Eatery) => {
-    navigate(`/eatery/${eatery.id}`)
+    navigate(`/restaurant/${eatery.id}`)
     setSearchTerm("");
     setResults([]);
   }

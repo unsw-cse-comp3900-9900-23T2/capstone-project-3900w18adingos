@@ -1,4 +1,4 @@
-import { Review } from "../interface";
+import { Eatery, Review } from "../interface";
 
 export const getStarRating = (reviews: Review[]) =>  {
     let totalRating = 0;
@@ -29,3 +29,15 @@ export const getStarRating = (reviews: Review[]) =>  {
     
     return stars;
   };
+
+export const getRating = (reviews: Review[]) => { 
+  let totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+  let averageRating = (totalRating / reviews.length);
+  averageRating = Math.round(averageRating * 10) / 10;
+
+  return averageRating;
+}
+
+export const getCuisines = (eatery: Eatery) => { 
+  return eatery.cuisines.map(cuisine => cuisine.cuisine.cuisine_name).join(", "); 
+}

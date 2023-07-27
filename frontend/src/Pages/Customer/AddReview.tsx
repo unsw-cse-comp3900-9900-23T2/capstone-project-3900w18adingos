@@ -1,8 +1,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEateryContext } from "../hooks/useEateryContext";
-import "../styles/addReview.css"
-import { useAuth } from "../hooks/useAuth";
+import { useEateryContext } from "../../hooks/useEateryContext";
+import "../../styles/addReview.css"
+import { useAuth } from "../../hooks/useAuth";
 const AddReview: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { addReview } = useEateryContext();
@@ -21,7 +21,7 @@ const AddReview: React.FC = () => {
     if (id) { 
       const success = await addReview(id, String(rating), reviewText);
       if (success) {
-        navigate(`/eatery/${id}`);
+        navigate(`/restaurant/${id}`);
       } else {
         console.error("Failed to add review");
       }
