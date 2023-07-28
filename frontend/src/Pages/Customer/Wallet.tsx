@@ -24,7 +24,7 @@ const Wallet: React.FC = () => {
     return null;
   }
 
-  const { cusomterVouchers, fetchVouchers } = useVoucher();
+  const { customerVouchers, fetchVouchers } = useVoucher();
   const { user, fetchUser } = useAuth();
   const {fetchEatery} = useEateryContext()
 
@@ -56,7 +56,7 @@ const Wallet: React.FC = () => {
   useEffect(() => {
     if (user) {
       fetchVouchers(user.id)
-      const vouchersWithEatery = cusomterVouchers.map(voucher => ({ voucher, open: false, eatery: null }));
+      const vouchersWithEatery = customerVouchers.map(voucher => ({ voucher, open: false, eatery: null }));
       setVouchersState(vouchersWithEatery);
     };
   }, [fetchVouchers, user]);
@@ -64,7 +64,7 @@ const Wallet: React.FC = () => {
   useEffect(() => {
     const updateVouchersWithEateries = async () => {
       const vouchersWithEateries = await Promise.all(
-        cusomterVouchers.map(async voucher => {
+        customerVouchers.map(async voucher => {
           const eatery = await fetchEatery((voucher.eatery_id));
           return { voucher, open: false, eatery };
         })
@@ -72,7 +72,7 @@ const Wallet: React.FC = () => {
       setVouchersState(vouchersWithEateries);
     };
     updateVouchersWithEateries();
-  }, [cusomterVouchers, fetchEatery]);
+  }, [customerVouchers, fetchEatery]);
 
   // Function to handle opening/closing of a voucher
   const handleVoucherToggle = (index: number) => {

@@ -12,7 +12,8 @@ const VouchersTab: React.FC<TabProps> = ({ eatery, user }) => {
 
   useEffect(() => { 
     fetchVouchersForEatery(eatery.id)
-  }, [fetchVouchers])
+    fetchVouchers(user.id)
+  }, [fetchVouchersForEatery, fetchVouchers])
 
   const handleDeleteVoucher = async (voucherId: string) => {
     await deleteVoucher(voucherId);
