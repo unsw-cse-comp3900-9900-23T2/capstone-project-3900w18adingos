@@ -6,6 +6,7 @@ from datetime import datetime
 from app.extensions import db
 from app.models.voucher import Voucher
 from app.models.has_voucher import HasVoucher
+from app.models.has_loyalty import HasLoyalty
 
 
 voucher = Blueprint('voucher', __name__)
@@ -103,14 +104,19 @@ def get_vouchers_customer_id(customer_id):
     vouchers = []
     for has_voucher in has_vouchers:
         voucher = Voucher.query.filter(Voucher.id==has_voucher.voucher_id).first()
-        vouchers.append({
-            'id': voucher.id,
-            'description': voucher.description,
-            'quantity': voucher.quantity,
-            'start': voucher.start,
-            'expiry': voucher.expiry,
-            'eatery_id': voucher.eatery
-        })
+        if voucher:
+             # HasLoyalty
+            loyalty = HasLoyalty.query.filter(
+                HasLoyalty.eatery_id == voucher.eatery, HasLoyalty.customer_id == customer_id).first()
+            vouchers.append({
+                'id': voucher.id,
+                'description': voucher.description,
+                'quantity': voucher.quantity,
+                'start': voucher.start,
+                'expiry': voucher.expiry,
+                'eatery_id': voucher.eatery,
+                'loyalty_points': loyalty.points if loyalty else 0
+            })
     
     return jsonify({'vouchers': vouchers}), 200
 

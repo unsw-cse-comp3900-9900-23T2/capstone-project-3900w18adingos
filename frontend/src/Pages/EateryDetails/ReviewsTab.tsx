@@ -54,7 +54,7 @@ const ReviewsTab: React.FC<TabProps> = ({ eatery, user }) => {
       ))}
       {user.role === UserRole.CUSTOMER && (<button
         className="add-review"
-        onClick={() => navigate(`add-review/${eatery.id}`)}
+        onClick={() => navigate(`/add-review/${eatery.id}`)}
       >
         Add Review
       </button>)}

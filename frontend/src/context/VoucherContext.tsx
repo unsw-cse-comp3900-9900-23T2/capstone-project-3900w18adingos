@@ -125,12 +125,12 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
 
   const deleteVoucher = useCallback(async (voucherId: string) => {
     try {
-      const response = await api.delete(`/api/delete_voucher/${voucherId}`, {
+      await api.delete(`/api/delete_voucher/${voucherId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         }
       });
-      return response.data.success; // return the success status
+      return true; // return the success status
     } catch (error) {
       console.error(error + " ASSS");
     }
