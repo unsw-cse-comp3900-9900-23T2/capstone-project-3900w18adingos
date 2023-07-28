@@ -112,9 +112,9 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   
 
-  const passwordReset = useCallback(async (resetCode: any, newPassword: any) => {
+  const passwordReset = useCallback(async (resetToken: string, newPassword: string) => {
     try {
-      await api.post('/api/auth/passwordreset/reset', { resetCode, newPassword });
+      await api.post('/api/auth/password/reset', { resetToken, newPassword });
       return true;
     } catch (error) {
       console.error(error);

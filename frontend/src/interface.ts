@@ -69,6 +69,7 @@ export interface Voucher {
   quantity: number;
   start: Date;
   expiry: Date;
+  loyalty_points: number | null;
 }
 
 export interface AddVoucher {
@@ -77,6 +78,13 @@ export interface AddVoucher {
   quantity: number;
   start: string;
   expiry: string;
+}
+
+export interface UpdateLoyaltyPoints {
+  eatery_id: number | null;
+  customer_id: string | undefined;
+  action: string;
+  points: number;
 }
 
 // CONTEXT
@@ -105,8 +113,13 @@ export interface EateryContextProps {
   getAllCuisines: () => Promise<Array<Cuisine> | void>;
   allCuisines: Array<Cuisine>;
   addMenuCuisines: (cuisineIds: Array<number>) => Promise<number | null>;
-  addOpenHours: (formDate: Array<CreateOpeningHours>) => Promise<CreateOpeningHours | void>;
-
+  addOpenHours: (
+    formDate: Array<CreateOpeningHours>
+  ) => Promise<CreateOpeningHours | void>;
+  // Add or Deduct Customer points
+  updateLoyaltyPoints: (
+    formDate: UpdateLoyaltyPoints
+  ) => Promise<UpdateLoyaltyPoints | void>;
 }
 export interface AuthContextType {
   token: string | null;
@@ -201,7 +214,7 @@ export interface TabProps {
 }
 
 export enum UserRole {
-  EATERY = 'eatery',
-  CUSTOMER = 'customer',
+  EATERY = "eatery",
+  CUSTOMER = "customer",
   // add more if you have
 }

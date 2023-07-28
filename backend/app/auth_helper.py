@@ -77,13 +77,12 @@ def auth_passwordreset_request(email, role):
 
     user = User.query.filter_by(email=email).first()
     if user is None:
-        return jsonify({"message": "We are not able to find this email address"}), 400
+        return jsonify({"success": False, "message": "We are not able to find this email address"}), 400
 
-    reset_url = f"http://localhost:5173/auth/passwordreset/reset/{guard.encode_jwt_token(user)}"
-    
-    guard.send_reset_email(email, reset_url=reset_url, subject='Password Reset Request')
-    
-    return jsonify({'message': 'Check your email for the instructions to reset your password'}), 200
+    # Token will be added default in PRAETORIAN_RESET_URI and Subject in added in /extensions.py/init_mail()
+    guard.send_reset_email(email) 
+
+    return jsonify({"success": True, 'message': 'Check your email for the instructions to reset your password'}), 200
 
 
 def validate_google_auth_token_and_send_back_token(code, role):

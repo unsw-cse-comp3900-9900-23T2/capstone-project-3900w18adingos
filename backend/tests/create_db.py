@@ -206,29 +206,15 @@ if __name__ == '__main__':
             Cuisine(cuisine_name="Mediterranean"),
         ]
 
-        cooks_cuisine_arr=[
-            CooksCuisine(
-                        eatery_id = 1,
-                        cuisine_id = 1),
-            CooksCuisine(
-                        eatery_id = 16,
-                        cuisine_id = 2),
-            CooksCuisine(
-                        eatery_id = 17,
-                        cuisine_id = 3),
-            CooksCuisine(
-                        eatery_id = 18,
-                        cuisine_id = 4),
-            CooksCuisine(
-                        eatery_id = 19,
-                        cuisine_id = 5),
-            CooksCuisine(
-                        eatery_id = 20,
-                        cuisine_id = 5),
-            CooksCuisine(
-                        eatery_id = 20,
-                        cuisine_id = 4)
-        ]
+    cuisine_iterator = cycle(cuisine_arr)
+    cooks_cuisine_arr = []
+    for i in range(1, 21):
+        # Create a CooksCuisine instance for the eatery and cuisine
+        cooks_cuisine = CooksCuisine(
+            eatery_id=i,
+            cuisine_id=next(cuisine_iterator).id
+        )
+        cooks_cuisine_arr.append(cooks_cuisine)
 
         customers_arr=[
             Customer(
