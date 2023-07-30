@@ -66,10 +66,14 @@ def get_customer_preferences(customer_id):
 @preferences.get('/get_eatery_preferences')
 @auth_required
 def get_eateries_preference():
+    curr_user = current_user()
+
+    if not isinstance(current_user(), Eatery):
+        return jsonify(success=False), 403
+
     lat = float(request.args.get("lat"))
     lon = float(request.args.get("lon"))
     
-    curr_user = current_user()
     
     review_scores = {}
     
@@ -85,7 +89,6 @@ def get_eateries_preference():
     curr_user_cuisines = { likes_cuisine.cuisine_id for likes_cuisine in curr_user.cuisine_preferences }
     
     for eatery in near_eateries:
-        print(eatery)
         # component: overall eatery score:  range=[0,1]
         review_scores[eatery[0]] = eatery[3] / 5
         
