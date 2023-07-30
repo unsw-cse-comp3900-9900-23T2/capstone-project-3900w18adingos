@@ -71,34 +71,34 @@ def eatery_distance_search(search_term, user_long, user_lat, max_distance, qty=1
     #      Eatery.restaurant_name.ilike(f"%{search_term}%"))
     # ).all()
 
-    results = (
-        joined
-        .filter(
-            and_(Eatery.distance(user_lat, user_long, max_distance),
-                 or_(Cuisine.cuisine_name.ilike(f"%{search_term}%"),
-                 Eatery.restaurant_name.ilike(f"%{search_term}%")))
-        )
-        .all()
-    )
+    # results = (
+    #     joined
+    #     .filter(
+    #         and_(Eatery.distance(user_lat, user_long, max_distance),
+    #              or_(Cuisine.cuisine_name.ilike(f"%{search_term}%"),
+    #              Eatery.restaurant_name.ilike(f"%{search_term}%")))
+    #     )
+    #     .all()
+    # )
 
 
-    return_array = []
-    i = 0
-    for result in results:
-        if i == qty:
-            break
-        eatery_info = {}
-        eatery_info['name'] = result.restaurant_name
-        eatery_info['longitude'] = result.longitude
-        eatery_info['latitude'] = result.latitude
-        eatery_info['location'] = result.location
-        eatery_info['cuisine'] = []
-        for cuisine in result.cuisines:
-            eatery_info['cuisine'].append(cuisine.cuisine.cuisine_name)
-        return_array.append(eatery_info)
-        i = i + 1
+    # return_array = []
+    # i = 0
+    # for result in results:
+    #     if i == qty:
+    #         break
+    #     eatery_info = {}
+    #     eatery_info['name'] = result.restaurant_name
+    #     eatery_info['longitude'] = result.longitude
+    #     eatery_info['latitude'] = result.latitude
+    #     eatery_info['location'] = result.location
+    #     eatery_info['cuisine'] = []
+    #     for cuisine in result.cuisines:
+    #         eatery_info['cuisine'].append(cuisine.cuisine.cuisine_name)
+    #     return_array.append(eatery_info)
+    #     i = i + 1
     
-    return jsonify({'results': return_array}), 200
+    # return jsonify({'results': return_array}), 200
     
     
     
