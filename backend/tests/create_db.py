@@ -10,6 +10,7 @@ from app.models.image import Image
 from app.models.review import Review
 from app.models.cuisine import Cuisine
 from app.models.cooks_cuisine import CooksCuisine
+from app.models.likes_cuisine import LikesCuisine
 from app.models.voucher import Voucher
 from app.models.has_voucher import HasVoucher
 from app.models.eatery import Eatery
@@ -183,6 +184,14 @@ if __name__ == '__main__':
                 latitude=-33.902479,
                 longitude=151.171137
             ),
+            Eatery(
+                email='revs@gmail.com',
+                password='123',
+                restaurant_name="Revolver Upstairs",
+                location="Level 2/229 Chapel St, Prahran VIC 3181",
+                latitude=-37.85048518717178,
+                longitude=144.99334016285275
+            ),
         ]
 
         cuisine_arr=[
@@ -206,15 +215,16 @@ if __name__ == '__main__':
             Cuisine(cuisine_name="Mediterranean"),
         ]
 
-    cuisine_iterator = cycle(cuisine_arr)
-    cooks_cuisine_arr = []
-    for i in range(1, 21):
-        # Create a CooksCuisine instance for the eatery and cuisine
-        cooks_cuisine = CooksCuisine(
-            eatery_id=i,
-            cuisine_id=next(cuisine_iterator).id
-        )
-        cooks_cuisine_arr.append(cooks_cuisine)
+        cooks_cuisine_arr=[
+            CooksCuisine(eatery_id=1, cuisine_id=1),
+            CooksCuisine(eatery_id=1, cuisine_id=2),
+            CooksCuisine(eatery_id=1, cuisine_id=3),
+            CooksCuisine(eatery_id=1, cuisine_id=4),
+            CooksCuisine(eatery_id=4, cuisine_id=4),
+            CooksCuisine(eatery_id=5, cuisine_id=1),
+            CooksCuisine(eatery_id=6, cuisine_id=1),
+            CooksCuisine(eatery_id=19, cuisine_id=5)
+        ]
 
         customers_arr=[
             Customer(
@@ -299,6 +309,15 @@ if __name__ == '__main__':
             
             Review(rating=1, review_text='this restuarant is ass', customer_id=22, eatery_id=20),
             Review(rating=1, review_text='pure ass', customer_id=23, eatery_id=20),
+        ]
+
+        likes_cuisine_arr=[
+            LikesCuisine(customer_id=22, cuisine_id=2, affinity=1.0),
+            LikesCuisine(customer_id=22, cuisine_id=3, affinity=0.75),
+            LikesCuisine(customer_id=23, cuisine_id=1, affinity=1.0),
+            LikesCuisine(customer_id=23, cuisine_id=4, affinity=0.5),
+            LikesCuisine(customer_id=23, cuisine_id=8, affinity=1.0),
+            LikesCuisine(customer_id=24, cuisine_id=1, affinity=1.0),
         ]
 
         voucher_arr=[
@@ -426,16 +445,16 @@ if __name__ == '__main__':
 
         has_voucher_arr=[
             HasVoucher(
-                    customer_id=21,
+                    customer_id=22,
                     voucher_id=1),
             HasVoucher(
-                    customer_id=22,
+                    customer_id=23,
                     voucher_id=2),
             HasVoucher(
-                    customer_id=23,
+                    customer_id=24,
                     voucher_id=3),
             HasVoucher(
-                    customer_id=24,
+                    customer_id=25,
                     voucher_id=4),
         ]
 
@@ -457,27 +476,23 @@ if __name__ == '__main__':
                 eatery_id=1
             )
         ]
+        
         for eatery in eatery_arr:
             db.session.add(eatery)
-            db.session.commit()
         for cuisine in cuisine_arr:
             db.session.add(cuisine)
-            db.session.commit()
         for cooks_cuisine in cooks_cuisine_arr:
             db.session.add(cooks_cuisine)
-            db.session.commit()
         for review in reviews_arr:
             db.session.add(review)
-            db.session.commit()
         for customer in customers_arr:
             db.session.add(customer)
-            db.session.commit()
+        for likes_cuisine in likes_cuisine_arr:
+            db.session.add(likes_cuisine)
         for voucher in voucher_arr:
             db.session.add(voucher)
-            db.session.commit()
         for has_voucher in has_voucher_arr:
             db.session.add(has_voucher)
-            db.session.commit()
         for image in images_arr:
             db.session.add(image)
-            db.session.commit()
+        db.session.commit()
