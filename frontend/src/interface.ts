@@ -150,7 +150,6 @@ export interface VoucherContextProps {
   fetchVouchers: (customerId: string) => Promise<void>;
   claimVoucher: (voucherId: string, customerId: string) => Promise<any>;
   fetchVouchersForEatery: (eateryId: string) => Promise<void>;
-  fetchQRCode: () => Promise<string>; // New addition
   addVoucher: (formDate: AddVoucher) => Promise<AddVoucher | void>;
   deleteVoucher: (voucherId: string) => Promise<boolean | void>;
 }

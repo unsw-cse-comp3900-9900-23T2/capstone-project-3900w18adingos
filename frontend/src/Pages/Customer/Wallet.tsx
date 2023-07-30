@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Wallet.css";
-// import qrCode from "../assets/qr-code.png";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import { useVoucher } from "../../hooks/useVoucher";
 import { useAuth } from "../../hooks/useAuth";
 import { Eatery, Voucher } from "../../interface";
 import { useEateryContext } from "../../hooks/useEateryContext";
+import QRCodeComponent from "../QR/Generator";
 
 type VoucherWithEatery = {
   voucher: Voucher;
@@ -25,9 +25,37 @@ const Wallet: React.FC = () => {
   const { user, fetchUser } = useAuth();
   const { fetchEatery } = useEateryContext();
 
-  const { fetchQRCode } = useVoucher(); // get fetchQRCode from the VoucherContext
-  const [qrCode, setQrCode] = useState("");
   const [vouchersState, setVouchersState] = useState<VoucherWithEatery[]>([]);
+  const [qrData, setQRData] = useState({
+    customerId: "",
+    customerName: "",
+    code: 0,
+  });
+
+  // Function to generate random data for the QR code
+  const generateRandomQRData = () => {
+    const randomCustomerId = Math.floor(Math.random() * 1000);
+    if (user)
+      setQRData({
+        customerId: user.id,
+        customerName: user.name,
+        code: randomCustomerId,
+      });
+  };
+
+  // Effect to generate random data for the QR code on page refresh
+  useEffect(() => {
+    generateRandomQRData();
+  }, [user]);
+
+  // Effect to generate random data for the QR code every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      generateRandomQRData();
+    }, 20000); // 20 seconds in milliseconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     fetchUser();
@@ -38,16 +66,6 @@ const Wallet: React.FC = () => {
       fetchVouchers(user.id);
     }
   }, [fetchVouchers, user]);
-
-  // Fetch the QR code when the component is mounted
-  useEffect(() => {
-    const getQRCode = async () => {
-      const qrCode = await fetchQRCode();
-      setQrCode(qrCode);
-    };
-
-    getQRCode();
-  }, [fetchQRCode]);
 
   useEffect(() => {
     if (user) {
@@ -111,9 +129,9 @@ const Wallet: React.FC = () => {
         <h3>My Wallet</h3>
       </Header>
       <div className="wallet">
-        <div className="qr-code-img">
+        <div className="qr-code-img text-center">
           {/* Display the QR code */}
-          <img src={`data:image/png;base64,${qrCode}`} alt="qr code" />
+          {user && <QRCodeComponent value={JSON.stringify(qrData)} />}
         </div>
         <div className="wallet-accordian">
           {vouchersState.map((eatery, index) => (

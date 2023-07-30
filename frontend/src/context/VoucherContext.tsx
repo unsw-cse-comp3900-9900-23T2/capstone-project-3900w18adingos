@@ -25,18 +25,6 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
     baseURL: "http://127.0.0.1:5000",
   });
 
-  const fetchQRCode = useCallback(async () => {
-    try {
-      const response = await api.get("api/get_short_code", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data.qr_code;
-    } catch (error) {
-      console.error(error);
-    }
-  }, [token]);
 
   const fetchVouchers = useCallback(
     async (customerId: string) => {
@@ -144,7 +132,6 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
         claimVoucher,
         fetchVouchersForEatery,
         eateryVouchers,
-        fetchQRCode, // Newly added
         addVoucher,
         deleteVoucher
       }}
