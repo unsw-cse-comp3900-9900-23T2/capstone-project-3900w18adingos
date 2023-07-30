@@ -8,7 +8,6 @@ class LikesCuisine(db.Model):
     customer_id = db.Column(db.Integer(), db.ForeignKey('customer.id'))
     cuisine_id = db.Column(db.Integer(), db.ForeignKey('cuisine.id'))
     affinity = db.Column(db.Float)
-    specified = db.Column(db.Boolean)
     cuisine = db.relationship('Cuisine')
 
 class LikesCuisineSchema(ma.SQLAlchemySchema):
@@ -19,7 +18,6 @@ class LikesCuisineSchema(ma.SQLAlchemySchema):
     customer_id = ma.auto_field()
     cuisine_id = ma.auto_field()
     affinity = ma.auto_field()
-    specified = ma.auto_field()
     cuisine = fields.Nested(CuisineSchema)
 
 likes_cuisine_schema = LikesCuisineSchema()
