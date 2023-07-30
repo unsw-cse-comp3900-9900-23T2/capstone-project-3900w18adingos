@@ -120,6 +120,7 @@ export interface EateryContextProps {
   updateLoyaltyPoints: (
     formDate: UpdateLoyaltyPoints
   ) => Promise<UpdateLoyaltyPoints | void>;
+  addCustomerToLoyalty: (eateryId: string, customerId: string) => Promise<boolean | void>;
 }
 export interface AuthContextType {
   token: string | null;

@@ -27,9 +27,16 @@ const ScannedVouchers: React.FC = () => {
     (voucher) => voucher.eatery_id == eateryId
   );
 
-  const { updateLoyaltyPoints } = useEateryContext();
+  const { updateLoyaltyPoints, addCustomerToLoyalty } = useEateryContext();
 
   // useEffects
+  // Add Customer to Loyalty program
+  useEffect(() => {
+    if (eateryId && customerId){
+      addCustomerToLoyalty(eateryId, customerId)
+    }
+  }, [eateryId, customerId, addCustomerToLoyalty])
+
   // Initialize loyaltyPoints when component mounts
   useEffect(() => {
     if (vouchers.length > 0) {
