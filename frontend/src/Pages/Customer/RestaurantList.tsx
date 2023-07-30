@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import "../../styles/RestaurantList.css";
 import Footer from "../../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
+import { getCuisines, getRating } from "../../utils/rating";
 
 const RestaurantList = () => {
   const { eateries, fetchEateries } = useEateryContext();
@@ -45,23 +46,13 @@ const RestaurantList = () => {
             <div className="title-rating-container">
               <h3>{eatery.restaurant_name}</h3>
               <div className="rating">
-                {eatery.reviews &&
-                  Math.round(
-                    (eatery.reviews.reduce(
-                      (prev, current) => prev + current.rating,
-                      0
-                    ) /
-                      eatery.reviews.length) *
-                      10
-                  ) / 10}
+                {eatery.reviews && getRating(eatery.reviews)}
               </div>
             </div>
 
             <p>
               Cuisines:{" "}
-              {eatery.cuisines
-                .map((cuisine) => cuisine?.cuisine.cuisine_name)
-                .join(", ")}
+              {getCuisines(eatery)}
             </p>
             <p>Email: {eatery.email}</p>
             {/* <img src={eatery.image} alt={eatery.name}/> */}

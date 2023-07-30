@@ -45,22 +45,22 @@ def passwordreset_request():
     result = auth_helper.auth_passwordreset_request(email, role)
     return result
     
-@auth.post('/auth/passwordreset/reset')
+@auth.post('/auth/password/reset')
 def passwordreset_reset():
     req = request.get_json(force=True)
-    
-    reset_token = req.get("Token")
-    
+    reset_token = req.get("resetToken").strip()
     user = guard.validate_reset_token(reset_token)
+
     if user is None:
-        return jsonify("Invalid token in reset URL. Please renew your password reset request."), 400
-        
-    new_pwd = req.get("new_password", None)
+        return jsonify({"success": False,
+                        "message": "Invalid token in reset URL. Please renew your password reset request."}), 400
+
+    new_pwd = req.get("newPassword", None)
     if new_pwd is None:
-        return jsonify("No password specified"), 400
-    user.password = guard.hash_password(new_pwd)
+        return jsonify({"success": False, "message": "No password specified"}), 400
+    user.password_hash = guard.hash_password(new_pwd)
     db.session.commit()
-    return jsonify("Password reset successful. You may now log in."), 200
+    return jsonify({"success": True, "message": "Password reset successful. You may now log in."}), 200
 
 
 
