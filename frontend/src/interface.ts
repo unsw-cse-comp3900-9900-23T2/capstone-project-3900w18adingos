@@ -87,6 +87,10 @@ export interface UpdateLoyaltyPoints {
   points: number;
 }
 
+export interface UpdatePassword {
+  currentPassword: string;
+  newPassword: string;
+}
 // CONTEXT
 
 export interface EateryContextProps {
@@ -143,6 +147,7 @@ export interface AuthContextType {
   updateProfile: (name: string, email: string) => Promise<User>;
   updateEateryUser: (restaurant_name: string, email: string) => Promise<User>;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  updatePassword: (current_password: string, new_password: string) => Promise<UpdatePassword>;
 }
 export interface VoucherContextProps {
   customerVouchers: Array<Voucher>;
