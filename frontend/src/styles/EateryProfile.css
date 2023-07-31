@@ -52,7 +52,7 @@ h3 {
   background-color: #fec8c9;
   border-radius: 5px;
   font-weight: bold;
-  margin-top: 15px;
+  margin: 0;
 }
 
 .display-reviews {
@@ -110,6 +110,7 @@ h3 {
 .eatery-content {
   padding-left: 20px;
   padding-right: 20px;
+  padding-top: 10px;
 }
 
 .content-button {
@@ -237,3 +238,7 @@ hr {
 }
 
 /* Restaurant Menu page css ends here */
+
+.edit-button { 
+  cursor: pointer;
+}
