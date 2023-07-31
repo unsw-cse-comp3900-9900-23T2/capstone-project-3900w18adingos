@@ -21,7 +21,7 @@ const App: React.FC<ScannerPopupProps> = ({ isOpen, onClose }) => {
 
   const { verifyQRCode } = useVoucher();
 
-  const handleScan = (data: object | null) => {
+  const handleScan = (data: {text?: string} | null) => {
     if (data) {
       try {
         const actualData = data?.text;

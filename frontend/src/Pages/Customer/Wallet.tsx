@@ -11,7 +11,7 @@ import { useEateryContext } from "../../hooks/useEateryContext";
 import QRCodeComponent from "../QR/Generator";
 
 type VoucherWithEatery = {
-  voucher: Voucher;
+  voucher: Voucher[];
   open: boolean;
   eatery: Eatery | null;
   loyaltyPoints: number | null;
@@ -59,9 +59,10 @@ const Wallet: React.FC = () => {
     if (user) {
       fetchVouchers(user.id);
       const vouchersWithEatery = customerVouchers.map((voucher) => ({
-        voucher,
+        voucher: [voucher],
         open: false,
         eatery: null,
+        loyaltyPoints: null,
       }));
       setVouchersState(vouchersWithEatery);
     }
@@ -86,8 +87,7 @@ const Wallet: React.FC = () => {
           } else {
             // If an eatery entry already exists in the map, merge the vouchers
             vouchersMap[voucher.eatery_id].voucher.push(voucher);
-            vouchersMap[voucher.eatery_id].loyaltyPoints =
-              voucher?.loyalty_points;
+            vouchersMap[voucher.eatery_id].loyaltyPoints = voucher?.loyalty_points;
           }
         })
       );
