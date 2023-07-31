@@ -46,6 +46,7 @@ const InfoTab: React.FC<TabProps> = ({eatery, user}) => {
       }
     }
   };
+  console.log(eatery.opening_hours)
 
   return (
     <div className="info">
@@ -78,6 +79,7 @@ const InfoTab: React.FC<TabProps> = ({eatery, user}) => {
       <div 
         className="opening-hours"
         style={hoursEditable ? {"marginLeft": "-7px"} : {}}>
+        
         {hoursEditable ? (
           <OpeningHoursForm
             initialValues={initialOpeningHours}

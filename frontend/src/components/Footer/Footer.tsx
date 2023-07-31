@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ScanQR from "../../Pages/QR/Scanner";
 import "./Footer.css";
 
@@ -12,6 +12,15 @@ const Footer: React.FC = () => {
   const togglePopup = () => {
     setShowScannerPopup((prevState) => !prevState);
   };
+
+  // use the useLocation hook to get the current path
+  const location = useLocation();
+
+  // helper function to determine if the current path matches the given path
+  const isActive = (path: string) => {
+    return location.pathname.includes(path);
+  };
+
   return (
     <div className="footer">
       {userRole === "eatery" ? (
@@ -20,30 +29,30 @@ const Footer: React.FC = () => {
             <i className="glyphicon glyphicon-qrcode" />
             <span>Scan QR</span>
           </button>
-          <Link to={`/restaurant/${userId}`} className="footer-button">
+          <Link to={`/restaurant/${userId}`} className={`footer-button ${isActive(`/restaurant/${userId}`) ? 'active' : ''}`}>
             <i className="glyphicon glyphicon-cutlery" />
             <span>Menu</span>
           </Link>
-          <Link to="/eatery/user/profile" className="footer-button">
+          <Link to="/eatery/user/profile" className={`footer-button ${isActive("/eatery/user/profile") ? 'active' : ''}`}>
             <i className="glyphicon glyphicon-user" />
             <span>Profile</span>
           </Link>
         </>
       ) : (
         <>
-          <Link to="/restaurant/map" className="footer-button">
+          <Link to="/restaurant/map" className={`footer-button ${isActive("/restaurant/map") ? 'active' : ''}`}>
             <i className="glyphicon glyphicon-home" />
             <span>Map</span>
           </Link>
-          <Link to="/restaurants" className="footer-button">
+          <Link to="/restaurants" className={`footer-button ${isActive("/restaurants") ? 'active' : ''}`}>
             <i className="glyphicon glyphicon-list" />
             <span>List</span>
           </Link>
-          <Link to="/customer/wallet" className="footer-button">
+          <Link to="/customer/wallet" className={`footer-button ${isActive("/customer/wallet") ? 'active' : ''}`}>
             <i className="glyphicon glyphicon-usd" />
             <span>Wallet</span>
           </Link>
-          <Link to="/profile" className="footer-button">
+          <Link to="/profile" className={`footer-button ${isActive("/profile") ? 'active' : ''}`}>
             <i className="glyphicon glyphicon-user" />
             <span>Profile</span>
           </Link>

@@ -51,12 +51,11 @@ const RestaurantList = () => {
             </div>
 
             <p>
-              Cuisines:{" "}
-              {getCuisines(eatery)}
+              <strong>Cuisines: </strong> {getCuisines(eatery)}
             </p>
-            <p>Email: {eatery.email}</p>
+            <p><strong>Email: </strong>{eatery.email}</p>
             {/* <img src={eatery.image} alt={eatery.name}/> */}
-            <p>Address: {eatery.location}</p>
+            <p><strong>Address: </strong>{eatery.location}</p>
           </div>
         ))}
       </div>
