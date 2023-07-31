@@ -206,15 +206,74 @@ if __name__ == '__main__':
             Cuisine(cuisine_name="Mediterranean"),
         ]
 
-    cuisine_iterator = cycle(cuisine_arr)
-    cooks_cuisine_arr = []
-    for i in range(1, 21):
-        # Create a CooksCuisine instance for the eatery and cuisine
-        cooks_cuisine = CooksCuisine(
-            eatery_id=i,
-            cuisine_id=next(cuisine_iterator).id
-        )
-        cooks_cuisine_arr.append(cooks_cuisine)
+        cooks_cuisine_arr=[
+            CooksCuisine(
+                        eatery_id = 1,
+                        cuisine_id = 2),
+            CooksCuisine(
+                        eatery_id = 2,
+                        cuisine_id = 2),
+            CooksCuisine(
+                        eatery_id = 3,
+                        cuisine_id = 8),
+            CooksCuisine(
+                        eatery_id = 3,
+                        cuisine_id = 18),
+            CooksCuisine(
+                        eatery_id = 4,
+                        cuisine_id = 15),
+            CooksCuisine(
+                        eatery_id = 5,
+                        cuisine_id = 11),
+            CooksCuisine(
+                        eatery_id = 6,
+                        cuisine_id = 10),
+            CooksCuisine(
+                        eatery_id = 7,
+                        cuisine_id = 9),
+            CooksCuisine(
+                        eatery_id = 8,
+                        cuisine_id = 7),
+            CooksCuisine(
+                        eatery_id = 9,
+                        cuisine_id = 12),
+            CooksCuisine(
+                        eatery_id = 10,
+                        cuisine_id = 13),
+            CooksCuisine(
+                        eatery_id = 11,
+                        cuisine_id = 15),
+            CooksCuisine(
+                        eatery_id = 12,
+                        cuisine_id = 5),
+            CooksCuisine(
+                        eatery_id = 13,
+                        cuisine_id = 17),
+            CooksCuisine(
+                        eatery_id = 14,
+                        cuisine_id = 4),
+            CooksCuisine(
+                        eatery_id = 15,
+                        cuisine_id = 6),
+            CooksCuisine(
+                        eatery_id = 16,
+                        cuisine_id = 2),
+            CooksCuisine(
+                        eatery_id = 17,
+                        cuisine_id = 3),
+            CooksCuisine(
+                        eatery_id = 18,
+                        cuisine_id = 4),
+            CooksCuisine(
+                        eatery_id = 19,
+                        cuisine_id = 5),
+            CooksCuisine(
+                        eatery_id = 20,
+                        cuisine_id = 5),
+            CooksCuisine(
+                        eatery_id = 20,
+                        cuisine_id = 4)
+        ]
 
         customers_arr=[
             Customer(

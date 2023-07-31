@@ -51,3 +51,22 @@ def add_or_deduct_customer_points():
     db.session.commit()
 
     return jsonify({'success': True, 'message': f'Points {action}ed successfully.'}), 200
+
+
+@has_loyalty.route('/loyalty/program/<eatery_id>/<customer_id>', methods=['GET'])
+@auth_required
+def add_customer_to_loyalty_program(eatery_id, customer_id):
+
+    # Get the HasLoyalty record for the specified eatery and customer
+    has_loyalty_record = HasLoyalty.query.filter_by(
+        eatery_id=eatery_id, customer_id=customer_id).first()
+
+    if not has_loyalty_record:
+        # Create a new HasLoyalty record if not found
+        has_loyalty_record = HasLoyalty(
+            eatery_id=eatery_id, customer_id=customer_id, points=0)
+
+    db.session.add(has_loyalty_record)
+    db.session.commit()
+
+    return jsonify({'success': True, 'message': f'Customer added to loyalty program successfully.'}), 200
