@@ -9,10 +9,48 @@ from app.models.voucher import Voucher
 from app.models.has_loyalty import HasLoyalty
 from app.models.has_voucher import HasVoucher, has_voucher_schema_list
 
-from app.wallet_helper import code_dict
+from app.wallet_helper import code_dict, generate_short_code
 
 
 wallet = Blueprint('wallet', __name__)
+
+
+@wallet.get('/get_short_code')
+@auth_required
+def get_short_code():
+    current_user_obj = current_user()
+
+    if not isinstance(current_user_obj, Customer):
+        return jsonify(success=False), 403
+
+    code = generate_short_code()
+    # regenerate if collision
+    while code in code_dict:
+        code = generate_short_code()
+
+    code_dict[code] = current_user_obj.id
+    qr_data = {
+        "customerId": current_user_obj.id,
+        "customerName": current_user_obj.name,
+        "code": code
+    } 
+    return jsonify(qr_data), 200
+
+
+@wallet.get('/verify_qrcode/<customer_id>/<code>')
+@auth_required
+def verify_qrcode(customer_id, code):
+    current_user_obj = current_user()
+
+    if not isinstance(current_user_obj, Eatery):
+        return jsonify(success=False), 403
+
+    mem_customer_id = code_dict.get(code)
+    if str(mem_customer_id) == str(customer_id):
+        return jsonify(success=True), 200
+    
+    return jsonify(success=False), 401
+    
 
 
 @wallet.post('/get_user_vouchers')

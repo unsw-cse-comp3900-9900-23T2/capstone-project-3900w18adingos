@@ -21,38 +21,26 @@ const Wallet: React.FC = () => {
   const navigate = useNavigate();
   const checkToken = localStorage.getItem("token");
 
-  const { customerVouchers, fetchVouchers } = useVoucher();
+  const { customerVouchers, fetchVouchers, fetchQRCode } = useVoucher();
   const { user, fetchUser } = useAuth();
   const { fetchEatery } = useEateryContext();
+  const [qrCode, setQrCode] = useState({});
 
   const [vouchersState, setVouchersState] = useState<VoucherWithEatery[]>([]);
-  const [qrData, setQRData] = useState({
-    customerId: "",
-    customerName: "",
-    code: 0,
-  });
 
-  // Function to generate random data for the QR code
-  const generateRandomQRData = () => {
-    const randomCustomerId = Math.floor(Math.random() * 1000);
-    if (user)
-      setQRData({
-        customerId: user.id,
-        customerName: user.name,
-        code: randomCustomerId,
-      });
+  // Fetch the QR code when the component is mounted
+  const getQRCode = async () => {
+    const response = await fetchQRCode();
+    setQrCode(response);
   };
-
-  // Effect to generate random data for the QR code on page refresh
   useEffect(() => {
-    generateRandomQRData();
-  }, [user]);
-
+    getQRCode();
+  }, []);
   // Effect to generate random data for the QR code every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      generateRandomQRData();
-    }, 20000); // 20 seconds in milliseconds
+      getQRCode();
+    }, 30000); // 30 seconds in milliseconds
 
     return () => clearInterval(interval);
   }, []);
@@ -131,7 +119,7 @@ const Wallet: React.FC = () => {
       <div className="wallet">
         <div className="qr-code-img text-center">
           {/* Display the QR code */}
-          {user && <QRCodeComponent value={JSON.stringify(qrData)} />}
+          {user && <QRCodeComponent value={JSON.stringify(qrCode)} />}
         </div>
         <div className="wallet-accordian">
           {vouchersState.map((eatery, index) => (
