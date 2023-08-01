@@ -60,7 +60,7 @@ const InfoTab: React.FC<TabProps> = ({eatery, user}) => {
         className="show-eatery"
         onClick={() => navigate("/restaurant/map", { state: { eatery } })}
       >
-        Show eatery on map
+        Show Eatery on Map
       </button>
 
       <hr />

@@ -28,7 +28,7 @@ const AuthHome: React.FC = () => {
   return (
     <div className='auth-home'>
       <Header>
-        <h3>Discover places and restaurants</h3>
+        <h3>Discover Restaurants</h3>
       </Header>
       <SearchBar />
       <h3 className='near-you'>Near You</h3>

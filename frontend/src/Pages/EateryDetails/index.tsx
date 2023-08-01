@@ -114,7 +114,7 @@ const EateryDetails: React.FC = () => {
             </p>
           </div>
           <p>
-            Cusinies:{eatery ? getCuisines(eatery): ""}
+            Cuisine(s): {eatery ? getCuisines(eatery): ""}
             
             {user && user.role === UserRole.EATERY && (
               <button 
@@ -127,7 +127,7 @@ const EateryDetails: React.FC = () => {
             )}
             
           </p>
-          <p>price in $$$$</p>
+          {/* <p>price in $$$$</p> */}
           {eatery?.is_open_now ? (
             <p style={{ color: "green" }}>Open now</p>
           ) : (
@@ -140,28 +140,28 @@ const EateryDetails: React.FC = () => {
               onClick={() => setCurrentTab("INFO")}
             >
               <i className="glyphicon glyphicon-info-sign gl" />
-              <p>info</p>
+              <p>Info</p>
             </button>
             <button
               className="content-button"
               onClick={() => setCurrentTab("PHOTOS")}
             >
               <i className="glyphicon glyphicon-picture gl" />
-              <p>photos</p>
+              <p>Photos</p>
             </button>
             <button
               className="content-button"
               onClick={() => setCurrentTab("REVIEWS")}
             >
               <i className="glyphicon glyphicon-comment gl" />
-              <p>reviews</p>
+              <p>Reviews</p>
             </button>
             <button
               className="content-button"
               onClick={() => setCurrentTab("VOUCHERS")}
             >
               <i className="glyphicon glyphicon-credit-card	gl"></i>
-              <p>vouchers</p>
+              <p>Vouchers</p>
             </button>
           </div>
           
