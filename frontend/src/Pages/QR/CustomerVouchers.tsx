@@ -21,7 +21,7 @@ const ScannedVouchers: React.FC = () => {
   const [showDeductPopup, setShowDeductPopup] = useState(false);
   const [deductPoints, setDeductPoints] = useState(1);
 
-  const { customerVouchers, fetchVouchers } = useVoucher();
+  const { customerVouchers, fetchVouchers, deleteCustomerVoucher } = useVoucher();
 
   const vouchers = customerVouchers.filter(
     (voucher) => voucher.eatery_id == eateryId
@@ -32,10 +32,10 @@ const ScannedVouchers: React.FC = () => {
   // useEffects
   // Add Customer to Loyalty program
   useEffect(() => {
-    if (eateryId && customerId){
-      addCustomerToLoyalty(eateryId, customerId)
+    if (eateryId && customerId) {
+      addCustomerToLoyalty(eateryId, customerId);
     }
-  }, [eateryId, customerId, addCustomerToLoyalty])
+  }, [eateryId, customerId, addCustomerToLoyalty]);
 
   // Initialize loyaltyPoints when component mounts
   useEffect(() => {
@@ -108,6 +108,15 @@ const ScannedVouchers: React.FC = () => {
     await handlePointsSubmit("deduct");
   };
 
+  const handleDeleteCustomerVoucher = async (voucherId: string) => {
+    if (customerId && voucherId) {
+      const success = await deleteCustomerVoucher(voucherId, customerId);
+      if (success) {
+        fetchVouchers(customerId.toString());
+      }
+    }
+  };
+
   return (
     <>
       <Header>
@@ -139,6 +148,13 @@ const ScannedVouchers: React.FC = () => {
         <div className="vouchers-container">
           {vouchers.map((voucher, index) => (
             <Card key={index} className="voucher-card">
+              {userRole === "eatery" && (
+                <i
+                  onClick={() => handleDeleteCustomerVoucher(voucher.id)}
+                  className="bi bi-trash gl"
+                  style={{ padding: "2px", marginLeft: "85%" }}
+                ></i>
+              )}
               <Card.Body>
                 <Card.Text>{voucher.description}</Card.Text>
               </Card.Body>

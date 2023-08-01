@@ -7,7 +7,7 @@ from app.extensions import db
 from app.models.voucher import Voucher
 from app.models.has_voucher import HasVoucher
 from app.models.has_loyalty import HasLoyalty
-
+from app.models.eatery import Eatery
 
 voucher = Blueprint('voucher', __name__)
 
@@ -45,6 +45,24 @@ def delete_voucher(voucher_id):
     db.session.delete(voucher)
     db.session.commit()
     return jsonify({'message': f'voucher with id ({voucher_id}) deleted'}), 200
+
+
+@voucher.route('/delete_customer_voucher/<int:voucher_id>/<int:customer_id>', methods=['DELETE'])
+@auth_required
+def delete_customer_voucher(voucher_id, customer_id):
+     
+    if not isinstance(current_user(), Eatery):
+        return jsonify(success=False), 403
+     
+    voucher = HasVoucher.query.filter(
+        HasVoucher.customer_id == customer_id, HasVoucher.voucher_id== voucher_id).first()
+    
+    if voucher == None:
+        return jsonify({'message': f'voucher with id ({voucher_id}) not found'}), 404
+    
+    db.session.delete(voucher)
+    db.session.commit()
+    return jsonify({'message': f'voucher with id ({voucher_id}) deleted for customer id {customer_id}'}), 200
 
 
 @voucher.route('/edit_voucher/<int:voucher_id>', methods=['PUT'])

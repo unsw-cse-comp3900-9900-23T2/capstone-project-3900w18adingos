@@ -168,6 +168,7 @@ export interface VoucherContextProps {
   deleteVoucher: (voucherId: string) => Promise<boolean | void>;
   fetchQRCode: () => Promise<object>;
   verifyQRCode: (customer_id: string, code: string) => Promise<boolean | void>;
+  deleteCustomerVoucher: (voucherId: string, customerId: string) => Promise<boolean | void>;
 }
 
 export interface Props {
@@ -234,5 +235,4 @@ export interface TabProps {
 export enum UserRole {
   EATERY = "eatery",
   CUSTOMER = "customer",
-  // add more if you have
 }

@@ -22,7 +22,7 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
   const { token } = useAuth();
 
   const api = axios.create({
-    baseURL: "http://127.0.0.1:5000",
+    baseURL: "https://2a394953205f.ngrok.app",
   });
 
   const fetchQRCode = useCallback(async () => {
@@ -153,6 +153,22 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
     [token]
   );
 
+  const deleteCustomerVoucher = useCallback(
+    async (voucherId: string, customerId: string) => {
+      try {
+        await api.delete(`/api/delete_customer_voucher/${voucherId}/${customerId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        return true; // return the success status
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [token, api]
+  );
+
   return (
     <VoucherContext.Provider
       value={{
@@ -164,7 +180,8 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
         fetchQRCode,
         addVoucher,
         deleteVoucher,
-        verifyQRCode
+        verifyQRCode,
+        deleteCustomerVoucher
       }}
     >
       {children}
