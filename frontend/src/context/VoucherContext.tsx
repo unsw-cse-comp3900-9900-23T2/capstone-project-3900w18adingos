@@ -22,7 +22,7 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
   const { token } = useAuth();
 
   const api = axios.create({
-    baseURL: "https://2a394953205f.ngrok.app",
+    baseURL: "http://127.0.0.1:5000",
   });
 
   const fetchQRCode = useCallback(async () => {
