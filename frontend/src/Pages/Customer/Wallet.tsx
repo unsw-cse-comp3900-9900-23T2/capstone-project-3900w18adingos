@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Wallet.css";
-// import qrCode from "../assets/qr-code.png";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import { useVoucher } from "../../hooks/useVoucher";
 import { useAuth } from "../../hooks/useAuth";
 import { Eatery, Voucher } from "../../interface";
 import { useEateryContext } from "../../hooks/useEateryContext";
+import QRCodeComponent from "../QR/Generator";
 
 type VoucherWithEatery = {
-  voucher: Voucher;
+  voucher: Voucher[];
   open: boolean;
   eatery: Eatery | null;
   loyaltyPoints: number | null;
@@ -21,13 +21,29 @@ const Wallet: React.FC = () => {
   const navigate = useNavigate();
   const checkToken = localStorage.getItem("token");
 
-  const { customerVouchers, fetchVouchers } = useVoucher();
+  const { customerVouchers, fetchVouchers, fetchQRCode } = useVoucher();
   const { user, fetchUser } = useAuth();
   const { fetchEatery } = useEateryContext();
+  const [qrCode, setQrCode] = useState({});
 
-  const { fetchQRCode } = useVoucher(); // get fetchQRCode from the VoucherContext
-  const [qrCode, setQrCode] = useState("");
   const [vouchersState, setVouchersState] = useState<VoucherWithEatery[]>([]);
+
+  // Fetch the QR code when the component is mounted
+  const getQRCode = async () => {
+    const response = await fetchQRCode();
+    setQrCode(response);
+  };
+  useEffect(() => {
+    getQRCode();
+  }, []);
+  // Effect to generate random data for the QR code every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getQRCode();
+    }, 30000); // 30 seconds in milliseconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     fetchUser();
@@ -39,23 +55,14 @@ const Wallet: React.FC = () => {
     }
   }, [fetchVouchers, user]);
 
-  // Fetch the QR code when the component is mounted
-  useEffect(() => {
-    const getQRCode = async () => {
-      const qrCode = await fetchQRCode();
-      setQrCode(qrCode);
-    };
-
-    getQRCode();
-  }, [fetchQRCode]);
-
   useEffect(() => {
     if (user) {
       fetchVouchers(user.id);
       const vouchersWithEatery = customerVouchers.map((voucher) => ({
-        voucher,
+        voucher: [voucher],
         open: false,
         eatery: null,
+        loyaltyPoints: null,
       }));
       setVouchersState(vouchersWithEatery);
     }
@@ -80,8 +87,7 @@ const Wallet: React.FC = () => {
           } else {
             // If an eatery entry already exists in the map, merge the vouchers
             vouchersMap[voucher.eatery_id].voucher.push(voucher);
-            vouchersMap[voucher.eatery_id].loyaltyPoints =
-              voucher?.loyalty_points;
+            vouchersMap[voucher.eatery_id].loyaltyPoints = voucher?.loyalty_points;
           }
         })
       );
@@ -111,9 +117,9 @@ const Wallet: React.FC = () => {
         <h3>My Wallet</h3>
       </Header>
       <div className="wallet">
-        <div className="qr-code-img">
+        <div className="qr-code-img text-center">
           {/* Display the QR code */}
-          <img src={`data:image/png;base64,${qrCode}`} alt="qr code" />
+          {user && <QRCodeComponent value={JSON.stringify(qrCode)} />}
         </div>
         <div className="wallet-accordian">
           {vouchersState.map((eatery, index) => (
