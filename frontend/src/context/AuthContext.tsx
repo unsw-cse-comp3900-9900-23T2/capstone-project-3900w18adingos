@@ -55,17 +55,30 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
   }, []);
 
   const register = useCallback(
-    async (email: string, password: string, name: string, role: string) => {
+    async (
+      email: string,
+      password: string,
+      name: string,
+      role: string,
+      location?: string,
+      latitude?: number,
+      longitude?: number
+    ) => {
       try {
         const response = await api.post("/api/auth/register", {
           email,
           password,
           name,
           role,
+          location,
+          latitude,
+          longitude
         });
-        const { token } = response.data;
         console.log(response);
+        const { token, role: userRole, id } = response.data;
         localStorage.setItem("token", token);
+        localStorage.setItem("role", userRole);
+        localStorage.setItem("id", id);
         setToken(token);
         return true;
       } catch (error) {

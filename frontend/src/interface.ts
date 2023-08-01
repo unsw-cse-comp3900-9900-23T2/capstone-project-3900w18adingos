@@ -124,7 +124,10 @@ export interface EateryContextProps {
   updateLoyaltyPoints: (
     formDate: UpdateLoyaltyPoints
   ) => Promise<UpdateLoyaltyPoints | void>;
-  addCustomerToLoyalty: (eateryId: string, customerId: string) => Promise<boolean | void>;
+  addCustomerToLoyalty: (
+    eateryId: string,
+    customerId: string
+  ) => Promise<boolean | void>;
 }
 export interface AuthContextType {
   token: string | null;
@@ -136,7 +139,10 @@ export interface AuthContextType {
     email: string,
     password: string,
     name: string,
-    role: string
+    role: string,
+    location?: string,
+    latitude?: number,
+    longitude?: number
   ) => Promise<boolean>;
   passwordResetRequest: (email: string, role: string) => Promise<boolean>;
   passwordReset: (resetCode: any, newPassword: any) => Promise<boolean>;
@@ -147,7 +153,10 @@ export interface AuthContextType {
   updateProfile: (name: string, email: string) => Promise<User>;
   updateEateryUser: (restaurant_name: string, email: string) => Promise<User>;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  updatePassword: (current_password: string, new_password: string) => Promise<UpdatePassword>;
+  updatePassword: (
+    current_password: string,
+    new_password: string
+  ) => Promise<UpdatePassword>;
 }
 export interface VoucherContextProps {
   customerVouchers: Array<Voucher>;
@@ -170,7 +179,9 @@ export interface RegisterFormInputs {
   email: string;
   password: string;
   role: string;
-  address: string;
+  location?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface ResetPassword {

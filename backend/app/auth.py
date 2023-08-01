@@ -20,15 +20,20 @@ def login():
     result = auth_helper.auth_login(email, password, role)
     return result
 
+
 @auth.route('/auth/register', methods=['POST'])
 def register():
     email = request.json.get('email')
     password = request.json.get('password')
     name = request.json.get('name')
     role = request.json.get('role')
-
-    result = auth_helper.auth_register(email, password, name, role)
+    location = request.json.get('location', '')
+    latitude = request.json.get('latitude', '')
+    longitude = request.json.get('longitude', '')
+    result = auth_helper.auth_register(email, password, name, role,
+                                    location=location, latitude=latitude, longitude=longitude)
     return result
+
 
 @auth.route('/auth/logout')
 @auth_required
@@ -43,6 +48,7 @@ def passwordreset_request():
 
     result = auth_helper.auth_passwordreset_request(email, role)
     return result
+
 
 @auth.post('/auth/password/reset')
 def passwordreset_reset():
@@ -71,6 +77,7 @@ def forgotpasswordreset_request():
     result = auth_helper.auth_passwordreset_request(email, role)
     return result
 
+
 @auth.route('/auth/whoami', methods=['GET'])
 @auth_required
 def whoami():
@@ -79,11 +86,13 @@ def whoami():
 
     return customer_schema.dump(current_user()) if isinstance(current_user(), Customer) else eatery_schema.dump(current_user()), 200
 
+
 @auth.route('/auth/validate-google-token', methods=['POST'])
 def validate_google_token():
     code = request.json.get('code')
     role = 'customer'  # Set role as 'customer' by default
     return validate_google_auth_token_and_send_back_token(code, role)
+
 
 @auth.post('/auth/password/update')
 @auth_required
