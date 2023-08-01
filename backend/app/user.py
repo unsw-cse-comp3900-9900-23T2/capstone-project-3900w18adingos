@@ -92,7 +92,6 @@ def get_user(user_id):
 
 @user.route('/delete_user/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
-    print("HIHI")
     user = User.query.get(user_id)
     if user.type == 'customer':
         user_obj = Customer.query.get(user_id)
