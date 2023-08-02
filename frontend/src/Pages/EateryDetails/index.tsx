@@ -139,29 +139,29 @@ const EateryDetails: React.FC = () => {
               className="content-button"
               onClick={() => setCurrentTab("INFO")}
             >
-              <i className="glyphicon glyphicon-info-sign gl" />
-              <p>Info</p>
+              <i className={`glyphicon glyphicon-info-sign gl ${currentTab === "INFO" ? "glyphicon-selected" : ""}`} />
+              <p>info</p>
             </button>
             <button
               className="content-button"
               onClick={() => setCurrentTab("PHOTOS")}
             >
-              <i className="glyphicon glyphicon-picture gl" />
-              <p>Photos</p>
+              <i className={`glyphicon glyphicon-picture gl ${currentTab === "PHOTOS" ? "glyphicon-selected" : ""}`} />
+              <p>photos</p>
             </button>
             <button
               className="content-button"
               onClick={() => setCurrentTab("REVIEWS")}
             >
-              <i className="glyphicon glyphicon-comment gl" />
-              <p>Reviews</p>
+              <i className={`glyphicon glyphicon-comment gl ${currentTab === "REVIEWS" ? "glyphicon-selected" : ""}`} />
+              <p>reviews</p>
             </button>
             <button
               className="content-button"
               onClick={() => setCurrentTab("VOUCHERS")}
             >
-              <i className="glyphicon glyphicon-credit-card	gl"></i>
-              <p>Vouchers</p>
+              <i className={`glyphicon glyphicon-credit-card gl ${currentTab === "VOUCHERS" ? "glyphicon-selected" : ""}`}></i>
+              <p>vouchers</p>
             </button>
           </div>
           

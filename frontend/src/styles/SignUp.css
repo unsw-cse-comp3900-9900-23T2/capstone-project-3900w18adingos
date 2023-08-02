@@ -82,16 +82,16 @@ select:focus {
 }
 
 .user-type-select button {
-  width: 100%;
-  margin-bottom: 5px;
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  outline: none;
-  box-sizing: border-box;
-  cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+    width: 100%; 
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    outline: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .user-type-select button:focus {
@@ -112,6 +112,7 @@ select:focus {
 
 .signup-sub-title {
   display: flex;
+  padding-bottom: 10px;
 }
 
 .forgot-password {

@@ -5,6 +5,7 @@ import "../../styles/RestaurantList.css";
 import Footer from "../../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import { getCuisines, getRating } from "../../utils/rating";
+import { Eatery } from '../../interface';
 
 const RestaurantList = () => {
   const { eateries, fetchEateries } = useEateryContext();
@@ -35,33 +36,46 @@ const RestaurantList = () => {
       </Header>
       <div className="list-container">
         {eateries.map((eatery) => (
-          <div
-            key={eatery.id}
-            className="list-item"
-            onClick={() => {
-              navigate(`/restaurant/${eatery.id}`);
-            }}
-            style={{ cursor: "pointer" }}
-          >
-            <div className="title-rating-container">
-              <h3>{eatery.restaurant_name}</h3>
-              <div className="rating">
-                {eatery.reviews && getRating(eatery.reviews)}
-              </div>
-            </div>
-
-            <p>
-              <strong>Cuisines: </strong> {getCuisines(eatery)}
-            </p>
-            <p><strong>Email: </strong>{eatery.email}</p>
-            {/* <img src={eatery.image} alt={eatery.name}/> */}
-            <p><strong>Address: </strong>{eatery.location}</p>
-          </div>
-        ))}
+            <RestaurantCard eatery={eatery} key={eatery.id}/>
+          ))}
       </div>
       <Footer />
     </>
   );
+}
+
+interface CardProps { 
+  eatery: Eatery
+}
+
+const RestaurantCard: React.FC<CardProps> = ({ eatery }) => {
+  const navigate = useNavigate();
+  
+  return (
+    <div
+      key={eatery.id}
+      className="list-item"
+      onClick={() => {
+        navigate(`/restaurant/${eatery.id}`);
+      }}
+      style={{ cursor: "pointer" }}
+      >
+      <div className="title-rating-container">
+        <h3>{eatery.restaurant_name}</h3>
+        <div className="rating">
+          {eatery.reviews && getRating(eatery.reviews)}
+        </div>
+      </div>
+
+      <p>
+        <strong>Cuisines: </strong> {getCuisines(eatery)}
+      </p>
+      <p><strong>Email: </strong>{eatery.email}</p>
+      {/* <img src={eatery.image} alt={eatery.name}/> */}
+      <p><strong>Address: </strong>{eatery.location}</p>
+    </div>
+  );
 };
+
 
 export default RestaurantList;
