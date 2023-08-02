@@ -61,7 +61,7 @@ const SignIn: React.FC = () => {
                 setRole("eatery")
               }} 
               className={role === "eatery" ? 'selected' : ''}>
-              I'm a Resturant Owner
+              I'm a Restaurant Owner
           </button>
         </div>
 
