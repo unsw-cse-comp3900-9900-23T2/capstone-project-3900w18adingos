@@ -1,14 +1,14 @@
-.list-container { 
+.list-container {
     display: flex;
     flex-direction: column;
     padding: 10px;
-    overflow:scroll;
+    overflow: scroll;
     overflow-x: hidden;
     height: 80%;
-    background-color: #FFF7EC;
+    background-color: #fff7ec;
 }
 
-.list-item { 
+.list-item {
     border: solid 1px;
     border-radius: 10px;
     margin-top: 10px;
@@ -19,5 +19,28 @@
     background-color: white;
 }
 
+/* RestaurantList.css */
 
-html, body {margin: 0; height: inherit; overflow:scroll}
+.tabs-container {
+    display: flex;
+    background: #fff7ed;
+    padding-top: 5px;
+}
+
+.tab {
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.tab.active {
+    background-color: #ffc8ca;
+    color: #000000;
+}
+
+html,
+body {
+    margin: 0;
+    height: inherit;
+    overflow: scroll;
+}

@@ -7,6 +7,7 @@ import math
 from app.extensions import db
 
 from app.models.eatery import Eatery
+from app.models.customer import Customer
 from app.models.cuisine import Cuisine
 from app.models.cooks_cuisine import CooksCuisine
 from app.models.review import Review
@@ -68,7 +69,7 @@ def get_customer_preferences(customer_id):
 def get_eateries_preference():
     curr_user = current_user()
 
-    if not isinstance(current_user(), Eatery):
+    if not isinstance(current_user(), Customer):
         return jsonify(success=False), 403
 
     lat = float(request.args.get("lat"))
