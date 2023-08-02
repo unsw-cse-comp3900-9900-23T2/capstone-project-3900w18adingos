@@ -114,7 +114,7 @@ const EateryDetails: React.FC = () => {
             </p>
           </div>
           <p>
-            Cusinies:{eatery ? getCuisines(eatery): ""}
+            Cuisine(s): {eatery ? getCuisines(eatery): ""}
             
             {user && user.role === UserRole.EATERY && (
               <button 
@@ -127,7 +127,7 @@ const EateryDetails: React.FC = () => {
             )}
             
           </p>
-          <p>price in $$$$</p>
+          {/* <p>price in $$$$</p> */}
           {eatery?.is_open_now ? (
             <p style={{ color: "green" }}>Open now</p>
           ) : (

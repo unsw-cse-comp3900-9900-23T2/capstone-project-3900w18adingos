@@ -12,7 +12,7 @@ interface ErrorResponse {
   response?: {
     data?: {
       vouchers?: string;
-    }
+    };
   };
 }
 
@@ -32,11 +32,25 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      return response.data.qr_code;
+      return response.data;
     } catch (error) {
       console.error(error);
     }
   }, [token]);
+
+  const verifyQRCode = useCallback(async (customerId: string, code:string) => {
+    try {
+      const response = await api.get(`api/verify_qrcode/${customerId}/${code}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data.success;
+    } catch (error) {
+      console.error(error);
+      return false
+    }
+  }, [token, api]);
 
   const fetchVouchers = useCallback(
     async (customerId: string) => {
@@ -77,7 +91,7 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
         fetchVouchers(customerId);
         return response.data;
       } catch (err) {
-        const error = err as ErrorResponse
+        const error = err as ErrorResponse;
         if (error.response && error.response.data) {
           alert(error.response.data.vouchers);
         } else {
@@ -123,18 +137,37 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
     [token]
   );
 
-  const deleteVoucher = useCallback(async (voucherId: string) => {
-    try {
-      await api.delete(`/api/delete_voucher/${voucherId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      });
-      return true; // return the success status
-    } catch (error) {
-      console.error(error + " ASSS");
-    }
-  }, [token]);
+  const deleteVoucher = useCallback(
+    async (voucherId: string) => {
+      try {
+        await api.delete(`/api/delete_voucher/${voucherId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        return true; // return the success status
+      } catch (error) {
+        console.error(error + " ASSS");
+      }
+    },
+    [token]
+  );
+
+  const deleteCustomerVoucher = useCallback(
+    async (voucherId: string, customerId: string) => {
+      try {
+        await api.delete(`/api/delete_customer_voucher/${voucherId}/${customerId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        return true; // return the success status
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [token, api]
+  );
 
   return (
     <VoucherContext.Provider
@@ -144,9 +177,11 @@ export const VoucherProvider: React.FC<Props> = ({ children }) => {
         claimVoucher,
         fetchVouchersForEatery,
         eateryVouchers,
-        fetchQRCode, // Newly added
+        fetchQRCode,
         addVoucher,
-        deleteVoucher
+        deleteVoucher,
+        verifyQRCode,
+        deleteCustomerVoucher
       }}
     >
       {children}

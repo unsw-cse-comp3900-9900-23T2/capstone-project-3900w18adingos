@@ -6,15 +6,6 @@ from app.models.user import User
 from app.models.customer import Customer
 from app.models.eatery import Eatery
 
-# def auth_logout(token):
-#     user_id_or_error = Customer.decode_auth_token(token)
-#     if isinstance(user_id_or_error, str):  # an error message was returned
-#         user_id_or_error = Eatery.decode_auth_token(token)
-#     if isinstance(user_id_or_error, str):  # an error message was returned
-#         return jsonify({"message": user_id_or_error}), 400
-
-#     logout_user()
-#     return jsonify({'message': 'Logged out successfully'}), 200
 
 def check_role(role):
     return role in ['customer', 'eatery']
@@ -37,7 +28,7 @@ def auth_login(email, password, role):
         }
     ), 200
 
-def auth_register(email, password, name, role):
+def auth_register(email, password, name, role, location="", latitude=None, longitude=None):
     
     if not check_role(role):
         return jsonify({"message": "Invalid role"}), 400
@@ -48,12 +39,13 @@ def auth_register(email, password, name, role):
     if role == 'customer':
         user = Customer(email=email, name=name, password=password)
     elif role == 'eatery':
-        user = Eatery(email=email, restaurant_name=name, password=password)
+        user = Eatery(email=email, restaurant_name=name, password=password,
+                    location=location, latitude=latitude, longitude=longitude)
 
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({'token': guard.encode_jwt_token(user), 'user': name, 'role': role}), 200
+    return jsonify({'id': user.id, 'token': guard.encode_jwt_token(user), 'user': name, 'role': role}), 200
 
 # def auth_passwordreset_reset(token, password):
 
