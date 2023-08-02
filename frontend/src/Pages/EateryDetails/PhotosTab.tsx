@@ -104,11 +104,11 @@ const PhotosTab: React.FC<TabProps> = ({ eatery, user }) => {
                 setModalVisible(true);
               }}
               />
-            <i
+            {user.role === UserRole.EATERY && (<i
               className="bi bi-trash gl"
               style={{ padding: "10px" }}
               onClick={() => handleDeleteImage(imgObj.imageId)}
-            ></i>
+            ></i>)}
           </div>
         ))}
       </div>

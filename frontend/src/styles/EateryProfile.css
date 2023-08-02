@@ -47,6 +47,13 @@ h3 {
   margin-bottom: 5px;
 }
 
+.glyphicon-selected { 
+  background-color: #E4D3FF;
+  padding: 13px;
+  border-radius: 20px;
+  margin-bottom: 5px;
+}
+
 .rating {
   padding: 13px;
   background-color: #fec8c9;
