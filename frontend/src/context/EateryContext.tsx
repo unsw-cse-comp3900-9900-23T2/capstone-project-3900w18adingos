@@ -286,6 +286,22 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
     },
     [token]
   );
+
+  const addCustomerToLoyalty = useCallback(async (eateryId: string, customerId: string) => {
+    try {
+      await api.get(`/api/loyalty/program/${eateryId}/${customerId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false
+    }
+  }, [token, api]);
+
   return (
     <EateryContext.Provider
       value={{
@@ -309,7 +325,8 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
         allCuisines,
         addMenuCuisines,
         addOpenHours,
-        updateLoyaltyPoints
+        updateLoyaltyPoints,
+        addCustomerToLoyalty
       }}
     >
       {children}

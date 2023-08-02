@@ -46,6 +46,7 @@ const InfoTab: React.FC<TabProps> = ({eatery, user}) => {
       }
     }
   };
+  console.log(eatery.opening_hours)
 
   return (
     <div className="info">
@@ -59,7 +60,7 @@ const InfoTab: React.FC<TabProps> = ({eatery, user}) => {
         className="show-eatery"
         onClick={() => navigate("/restaurant/map", { state: { eatery } })}
       >
-        Show eatery on map
+        Show Eatery on Map
       </button>
 
       <hr />
@@ -78,6 +79,7 @@ const InfoTab: React.FC<TabProps> = ({eatery, user}) => {
       <div 
         className="opening-hours"
         style={hoursEditable ? {"marginLeft": "-7px"} : {}}>
+        
         {hoursEditable ? (
           <OpeningHoursForm
             initialValues={initialOpeningHours}

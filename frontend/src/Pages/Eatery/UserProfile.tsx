@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
-import "../../styles/Profile.css";
+import React, { useState, useEffect, ChangeEvent } from "react";
+import { useNavigate } from "react-router-dom"; 
 import "@react-google-maps/api";
+import "../../styles/Profile.css";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom"; // Import useHistory
+import { UpdatePassword } from "../../interface";
 
 const EateryUserProfile: React.FC = () => {
   const {
     user,
     logout,
     passwordResetRequest,
-    passwordReset,
+    updatePassword,
     fetchUser,
     updateEateryUser,
   } = useAuth();
@@ -21,6 +22,11 @@ const EateryUserProfile: React.FC = () => {
   const [toggleNameOptions, setToggleNameOptions] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  // Update Password
+  const [password, setPassword] = useState<UpdatePassword>({
+      currentPassword: "",
+      newPassword: "",
+  });
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -94,6 +100,38 @@ const EateryUserProfile: React.FC = () => {
     }
   };
 
+  const handlePwdChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setPassword((prevPassword) => ({
+      ...prevPassword,
+      [name]: value,
+    }));
+  };
+
+  const handleUpdatePassword = async () => {
+    if (!password.currentPassword || !password.newPassword) {
+      setMessage("Both password fields are required");
+      return;
+    }
+    setLoading(true);
+    try {
+      const success = await updatePassword(
+        password.currentPassword,
+        password.newPassword
+      );
+      if (success) {
+        setMessage("Password updated successfully.");
+        setPassword({ currentPassword: "", newPassword: "" });
+      } else {
+        setMessage("Password updated Failed.");
+      }
+    } catch {
+      setMessage("An error occurred.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Header>
@@ -144,8 +182,34 @@ const EateryUserProfile: React.FC = () => {
         )}
 
         <div className="toggle-reset-password-container">
+        <h4>Update Password</h4>
+          <input
+            type="password"
+            value={password.currentPassword}
+            name="currentPassword"
+            onChange={handlePwdChange}
+            className="input-field"
+            placeholder="Enter Current Password"
+          />
+          <input
+            type="password"
+            value={password.newPassword}
+            onChange={handlePwdChange}
+            name="newPassword"
+            className="input-field"
+            placeholder="Enter New Password"
+          />
+          <button
+            onClick={handleUpdatePassword}
+            className="submit-button"
+            disabled={loading}
+          >
+            {loading ? "Updating..." : "Update Password"}{" "}
+          </button>
           {message && <p className="text-center">{message}</p>}
 
+          OR
+          
           <div className="reset-code">
             <button
               onClick={handlePasswordResetRequest}

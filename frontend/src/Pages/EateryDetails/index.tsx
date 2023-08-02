@@ -2,23 +2,35 @@ import Footer from "../../components/Footer/Footer";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEateryContext } from "../../hooks/useEateryContext";
 import { useAuth } from "../../hooks/useAuth";
-import { useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import "../../styles/EateryProfile.css";
-import { getRating } from "../../utils/rating";
+import { getCuisines, getRating } from "../../utils/rating";
 import InfoTab from "./InfoTab";
 import PhotosTab from "./PhotosTab";
 import ReviewsTab from "./ReviewsTab";
 import VouchersTab from "./VouchersTab";
-import { UserRole } from "../../interface";
+import { Eatery, User, UserRole } from "../../interface";
+
+type TabType = 'INFO' | 'PHOTOS' | 'REVIEWS' | 'VOUCHERS';
+
+interface TabComponentProps {
+  user: User;
+  eatery: Eatery;
+}
+
+const TabComponents: Record<TabType, FunctionComponent<TabComponentProps>> = {
+  'INFO': InfoTab,
+  'PHOTOS': PhotosTab,
+  'REVIEWS': ReviewsTab,
+  'VOUCHERS': VouchersTab,
+};
 
 const EateryDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const { fetchEatery, eatery } = useEateryContext();
   const { user, fetchUser } = useAuth();
-  const [currentTab, setCurrentTab] = useState<
-    "INFO" | "PHOTOS" | "REVIEWS" | "VOUCHERS"
-  >("INFO");
+  const [currentTab, setCurrentTab] = useState<"INFO" | "PHOTOS" | "REVIEWS" | "VOUCHERS">("INFO");
   const [coverImage, setcoverImage] = useState<string>("");
   const { getEateryImage } = useEateryContext();
   const navigate = useNavigate();
@@ -63,6 +75,19 @@ const EateryDetails: React.FC = () => {
     );
   };
 
+  // Render one of the four tabs 
+  const CurrentTabComponent = TabComponents[currentTab as TabType];
+  const renderCurrentTabComponent = (
+    CurrentTabComponent: FunctionComponent<TabComponentProps> | undefined,
+    user: User | null,
+    eatery: Eatery | null
+  ) => {
+    if (eatery && user && CurrentTabComponent) {
+      return <CurrentTabComponent user={user} eatery={eatery} />;
+    }
+    return <div>No data available</div>;
+  };
+
   return (
     <>
       <div className="profile-wrapper">
@@ -89,21 +114,20 @@ const EateryDetails: React.FC = () => {
             </p>
           </div>
           <p>
-            Cusinies:{" "}
-            {eatery &&
-              eatery.cuisines
-                .map((cuisine) => cuisine.cuisine?.cuisine_name)
-                .join(", ")}{" "}
+            Cuisine(s): {eatery ? getCuisines(eatery): ""}
+            
             {user && user.role === UserRole.EATERY && (
-              <i
-                className="glyphicon glyphicon-edit"
-                style={{ cursor: "pointer" }}
-                title="Add/Remove Cuisines"
+              <button 
+                className="edit-button" 
+                title="Add/Remove Cuisines" 
                 onClick={openCuisine}
-              />
+              >
+                <i className="glyphicon glyphicon-edit" />
+              </button>
             )}
+            
           </p>
-          <p>price in $$$$</p>
+          {/* <p>price in $$$$</p> */}
           {eatery?.is_open_now ? (
             <p style={{ color: "green" }}>Open now</p>
           ) : (
@@ -116,43 +140,33 @@ const EateryDetails: React.FC = () => {
               onClick={() => setCurrentTab("INFO")}
             >
               <i className="glyphicon glyphicon-info-sign gl" />
-              <p>info</p>
+              <p>Info</p>
             </button>
             <button
               className="content-button"
               onClick={() => setCurrentTab("PHOTOS")}
             >
               <i className="glyphicon glyphicon-picture gl" />
-              <p>photos</p>
+              <p>Photos</p>
             </button>
             <button
               className="content-button"
               onClick={() => setCurrentTab("REVIEWS")}
             >
               <i className="glyphicon glyphicon-comment gl" />
-              <p>reviews</p>
+              <p>Reviews</p>
             </button>
             <button
               className="content-button"
               onClick={() => setCurrentTab("VOUCHERS")}
             >
               <i className="glyphicon glyphicon-credit-card	gl"></i>
-              <p>vouchers</p>
+              <p>Vouchers</p>
             </button>
           </div>
-
-          {currentTab === "INFO" && eatery && user && (
-            <InfoTab user={user} eatery={eatery} />
-          )}
-          {currentTab === "PHOTOS" && eatery && user && (
-            <PhotosTab eatery={eatery} user={user} />
-          )}
-          {currentTab === "REVIEWS" && eatery && user && (
-            <ReviewsTab eatery={eatery} user={user} />
-          )}
-          {currentTab === "VOUCHERS" && eatery && user && (
-            <VouchersTab eatery={eatery} user={user} />
-          )}
+          
+          {renderCurrentTabComponent(CurrentTabComponent, user, eatery)}
+        
         </div>
       </div>
       <Footer />

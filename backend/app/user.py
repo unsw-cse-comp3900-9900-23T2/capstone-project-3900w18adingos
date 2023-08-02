@@ -2,8 +2,15 @@ from flask import Blueprint, request, jsonify
 from flask_praetorian import current_user, auth_required
 
 from app.models.customer import Customer, customer_schema
-from app.models.eatery import Eatery, eatery_schema
+from app.models.eatery import Eatery, eatery_schema, OpeningHours
 from app.models.user import User
+from app.models.cooks_cuisine import CooksCuisine
+from app.models.voucher import Voucher
+from app.models.image import Image
+from app.models.review import Review
+from app.models.likes_cuisine import LikesCuisine
+from app.models.has_loyalty import HasLoyalty
+from app.models.has_voucher import HasVoucher
 from app.extensions import db, guard
 
 user = Blueprint('user', __name__)
@@ -82,3 +89,72 @@ def get_user(user_id):
         "name": user.name,
         # add any other fields you want to return here
     }), 200
+
+@user.route('/delete_user/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if user.type == 'customer':
+        user_obj = Customer.query.get(user_id)
+
+        reviews = Review.query.filter(Review.eatery_id==user_id).all()
+        for review in reviews:
+            db.session.delete(review)
+            db.session.commit()
+    
+        like_cuisines = LikesCuisine.query.filter(LikesCuisine.customer_id==user_id).all()
+        for like_cuisine in like_cuisines:
+            db.session.delete(like_cuisine)
+            db.session.commit()
+        
+        has_loyalties = HasLoyalty.query.filter(HasLoyalty.eatery_id==user_id).all()
+        for has_loyalty in has_loyalties:
+            db.session.delete(has_loyalty)
+            db.session.commit()
+
+        has_vouchers = HasVoucher.query.filter(HasVoucher.customer_id==user_id).all()
+        for has_voucher in has_vouchers:
+            db.session.delete(has_voucher)
+            db.session.commit()
+    else:
+        user_obj = Eatery.query.get(user_id)
+
+        cooks_cuisines = CooksCuisine.query.filter(CooksCuisine.eatery_id==user_id).all()
+        for cooks_cuisine in cooks_cuisines:
+            db.session.delete(cooks_cuisine)
+            db.session.commit()
+
+        vouchers = Voucher.query.filter(Voucher.eatery==user_id).all()
+        for voucher in vouchers:
+            hv = HasVoucher.query.filter(HasVoucher.voucher_id==voucher.id).first()
+            db.session.delete(hv)
+            db.session.delete(voucher)
+            db.session.commit()
+
+        opening_hours = OpeningHours.query.filter(OpeningHours.eatery_id==user_id).all()
+        for oh in opening_hours:
+            db.session.delete(oh)
+            db.session.commit()
+
+        images = Image.query.filter(Image.eatery_id==user_id).all()
+        for image in images:
+            db.session.delete(image)
+            db.session.commit()
+
+        reviews = Review.query.filter(Review.eatery_id==user_id).all()
+        for review in reviews:
+            db.session.delete(review)
+            db.session.commit()
+
+        has_loyalties = HasLoyalty.query.filter(HasLoyalty.eatery_id==user_id).all()
+        for has_loyalty in has_loyalties:
+            db.session.delete(has_loyalty)
+            db.session.commit()
+        
+    
+    db.session.delete(user_obj)
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({"message": f"user {user_id} deleted"}), 200
+
+

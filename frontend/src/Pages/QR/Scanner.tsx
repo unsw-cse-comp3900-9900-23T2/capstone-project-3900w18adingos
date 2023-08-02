@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import QrScanner from "react-qr-scanner";
 import { useNavigate } from "react-router-dom";
 import "../../styles/QR.css";
+import { useVoucher } from "../../hooks/useVoucher";
 
 interface ScannerPopupProps {
   isOpen: boolean;
@@ -11,16 +12,16 @@ interface ScannerPopupProps {
 const App: React.FC<ScannerPopupProps> = ({ isOpen, onClose }) => {
   const { role } = localStorage;
   const userRole = role || "";
-
   const navigate = useNavigate();
-
   const [scanError, setScanError] = useState<string | null>(null);
   const [deviceNotFound, setDeviceNotFound] = useState(false);
   const [cameraPermission, setCameraPermission] = useState<boolean | null>(
     null
   );
 
-  const handleScan = (data: object | null) => {
+  const { verifyQRCode } = useVoucher();
+
+  const handleScan = (data: {text?: string} | null) => {
     if (data) {
       try {
         const actualData = data?.text;
@@ -28,11 +29,28 @@ const App: React.FC<ScannerPopupProps> = ({ isOpen, onClose }) => {
         if (actualData) {
           const jsonData = actualData.replace(/'/g, '"');
           const parsedData = JSON.parse(jsonData);
-          onClose();
-
-          navigate(
-            `/customer/${parsedData.customerId}/scanned/vouchers?cm=${parsedData.customerName}`
-          );
+          const customerId = parsedData.customerId;
+          const customerName = parsedData.customerName;
+          const code = parsedData.code;
+          // Verify QR Code
+          if (customerId && code) {
+            verifyQRCode(customerId, code)
+              .then((isVerified) => {
+                if (isVerified === true) {
+                  onClose();
+                  navigate(
+                    `/customer/${customerId}/scanned/vouchers?cm=${customerName}`
+                  );
+                } else {
+                  setScanError("QR code verification failed.");
+                }
+              })
+              .catch((error) => {
+                setScanError(
+                  "Error in Verify QR CODE-" + JSON.stringify(error)
+                );
+              });
+          }
         } else {
           setScanError(
             "Invalid QR code format. 'text' key not found in the scanned data."
@@ -77,7 +95,6 @@ const App: React.FC<ScannerPopupProps> = ({ isOpen, onClose }) => {
     errorMessage =
       "Camera access denied or an error occurred. Please enable camera access in your browser settings to scan QR codes.";
   }
-
 
   return isOpen ? (
     <div className="scan-qr-popup">
