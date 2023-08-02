@@ -16,6 +16,19 @@ const SignIn: React.FC = () => {
   
   const onSubmit = async (data: SignInFormInputs) => {
     const { email, password } = data;
+    if (!role) { 
+      setMessage("select a role")
+      return
+    }
+    if (!email) { 
+      setMessage("enter an email")
+      return
+    }
+
+    if (!password) { 
+      setMessage("enter a password")
+      return
+    }
     try {
       const success = await login(email, password, role);
       if (success) { 

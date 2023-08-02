@@ -57,9 +57,27 @@ const SignUp: React.FC = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+  const validateForm = (data: RegisterFormInputs) => {
+    const { name, email, password, location, latitude, longitude } = data;
+    if (!name) return "Please enter your name";
+    if (!email) return "Please enter your email";
+    if (!password) return "Please enter your password";
+    if (!role) return "Please select a role";
+    if (!location && role === "eatery") return "Please enter your location";
+    if ((!latitude || !longitude) && role === "eatery") return "Please provide latitude and longitude";
+    return null;
+  };
+
   const onSubmit = async (data: RegisterFormInputs) => {
     // Update this to include userType from state, not from form
     const { name, email, password, location, latitude, longitude } = data;
+
+    const validationError = validateForm(data);
+    if (validationError) {
+      setMessage(validationError);
+      return;
+    }
+
     try {
       const success = await registerUser(
         email,
@@ -70,6 +88,7 @@ const SignUp: React.FC = () => {
         latitude,
         longitude
       );
+
       if (success) {
         setMessage("success");
         const userRole = localStorage.getItem("role");
@@ -80,12 +99,12 @@ const SignUp: React.FC = () => {
           navigate("/auth/cuisine-form");
         }
       } else {
-        setMessage("failure");
+        setMessage("email is already registered");
       }
     } catch {
-      setMessage("failure");
+      setMessage("email is already registered");
     }
-  };
+  };  
 
   return (
     <div className="signup-container">
