@@ -146,7 +146,7 @@ const SignUp: React.FC = () => {
             onClick={() => setRole("eatery")}
             className={role === "eatery" ? "selected" : ""}
           >
-            I'm a Resturant Owner
+            I'm a Restaurant Owner
           </button>
         </div>
         {role === "eatery" && isLoaded && (
