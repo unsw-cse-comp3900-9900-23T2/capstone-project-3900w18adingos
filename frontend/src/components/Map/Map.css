@@ -72,6 +72,6 @@ a[href^="https://maps.google.com/maps"]{display:none !important}
 }
 
 .near-you {
-  padding: 10px;
+  padding: 5px 10px 5px 20px;
   font-size: 24px;
 }
