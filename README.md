@@ -44,9 +44,9 @@ Use this guide to check how the QR scan would work on the phone:
     should now be:
 
     ```javascript
-    const api = axios.create({
-      baseURL: "https://ems.ngrok.app/",
-    });
+      const api = axios.create({
+        baseURL: "https://ems.ngrok.app",
+      });
     ```
 
 5. **Restart Docker**: End the currently running Docker process and re-run Docker. Now you can just use that ngrok link.
