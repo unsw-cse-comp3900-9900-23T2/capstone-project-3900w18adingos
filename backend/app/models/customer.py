@@ -10,7 +10,7 @@ class Customer(User):
     name = db.Column(db.String(50))
     auth_source = db.Column(db.String(20), default='local')
     vouchers = db.relationship('HasVoucher', backref='customer')
-    # cuisine_preferences = db.relationship('LikesCuisine', backref='customer')
+    cuisine_preferences = db.relationship('LikesCuisine', backref='customer')
     # profile_pic = db.Column(db.String(120), default='default.jpg')
     # points = db.Column(db.Integer, default=0)
  

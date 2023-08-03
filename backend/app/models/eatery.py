@@ -88,8 +88,7 @@ class Eatery(User):
         self.location = location
         self.password_hash = guard.hash_password(password)
 
-    @hybrid_method
-    def distance(self, user_lat, user_long, max_distance):
+    def distance(self, user_lat, user_long):
         earth_radius = 6371  # Radius of the Earth in kilometers
 
         print(self.latitude)
@@ -109,31 +108,7 @@ class Eatery(User):
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
         distance = earth_radius * c
 
-        return distance <= max_distance
-
-    @distance.expression
-    def distance(cls, user_lat, user_long, max_distance):
-        earth_radius = 6371  # Radius of the Earth in kilometers
-
-        print(cls.latitude)
-        # Convert latitude and longitude to radians
-        lat1_rad = func.radians(cls.latitude)
-        lon1_rad = func.radians(cls.longitude)
-        lat2_rad = func.radians(user_lat)
-        lon2_rad = func.radians(user_long)
-
-        # Calculate the differences between the latitudes and longitudes
-        delta_lat = lat2_rad - lat1_rad
-        delta_lon = lon2_rad - lon1_rad
-
-        # Calculate the Haversine formula
-        a = func.pow(func.sin(delta_lat / 2), 2) + func.cos(lat1_rad) * \
-            func.cos(lat2_rad) * func.pow(func.sin(delta_lon / 2), 2)
-        c = 2 * func.atan2(func.sqrt(a), func.sqrt(1 - a))
-        distance = earth_radius * c
-
-        return distance <= max_distance
-
+        return distance
 
 class EaterySchema(ma.SQLAlchemySchema):
     class Meta:

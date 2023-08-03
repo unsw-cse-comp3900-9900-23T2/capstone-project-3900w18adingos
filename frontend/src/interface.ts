@@ -78,6 +78,10 @@ export interface AddVoucher {
   quantity: number;
   start: string;
   expiry: string;
+  is_schedule?: boolean,
+  schedule_start_time?: string,
+  schedule_end_time?: string,
+  schedule_week_day?: string
 }
 
 export interface UpdateLoyaltyPoints {
@@ -128,6 +132,8 @@ export interface EateryContextProps {
     eateryId: string,
     customerId: string
   ) => Promise<boolean | void>;
+  recommendedEateries: object | null,
+  fetchRecommendedEateries: (lat: number, lon: number) => Promise<object | null>
 }
 export interface AuthContextType {
   token: string | null;
@@ -235,4 +241,5 @@ export interface TabProps {
 export enum UserRole {
   EATERY = "eatery",
   CUSTOMER = "customer",
+  // add more if you have
 }

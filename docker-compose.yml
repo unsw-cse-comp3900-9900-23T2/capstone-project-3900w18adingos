@@ -25,10 +25,10 @@ services:
       - "5000:5000"
     volumes:
       - images:/app/images
-  ngrok:
-    build:
-      context: ./ngrok
-    depends_on:
-      - proxy
+  # ngrok:
+  #   build:
+  #     context: ./ngrok
+  #   depends_on:
+  #     - proxy
 volumes:
   images:
