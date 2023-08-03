@@ -20,6 +20,7 @@ export const EateryContext = createContext<EateryContextProps | undefined>(
 
 export const EateryProvider: React.FC<Props> = ({ children }) => {
   const [eateries, setEateries] = useState<Array<Eatery>>([]);
+  const [recommendedEateries, setRecEateries] = useState({});
   const [eatery, setEatery] = useState<Eatery | null>(null);
   const [review, setReview] = useState<Review | null>(null);
   const [allReviews, setallReviews] = useState<Array<Review>>([]);
@@ -287,6 +288,7 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
     [token]
   );
 
+  // Add Scaaned Customer to loyalty program
   const addCustomerToLoyalty = useCallback(async (eateryId: string, customerId: string) => {
     try {
       await api.get(`/api/loyalty/program/${eateryId}/${customerId}`, {
@@ -302,6 +304,24 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
     }
   }, [token, api]);
 
+  // Get Recommended Eateries
+  const fetchRecommendedEateries = useCallback(
+    async (lat: number, lon: number) => {
+      try {
+        const response = await api.get(`/api/get_eatery_preferences?lat=${lat}&lon=${lon}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setRecEateries(response.data);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    },
+    [token, api]
+  );
   return (
     <EateryContext.Provider
       value={{
@@ -326,7 +346,9 @@ export const EateryProvider: React.FC<Props> = ({ children }) => {
         addMenuCuisines,
         addOpenHours,
         updateLoyaltyPoints,
-        addCustomerToLoyalty
+        addCustomerToLoyalty,
+        recommendedEateries,
+        fetchRecommendedEateries,
       }}
     >
       {children}
