@@ -23,7 +23,7 @@
 
 Use this guide to check how the QR scan would work on the phone:
 
-1. **Run Docker**: Run Docker as usual.
+1. **Run Docker**: Make Docker is running from the previous section. 
 
 2. **Run ngrok**: In a new terminal run:
 
