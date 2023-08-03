@@ -1,6 +1,5 @@
-# Project Name
+# Eatery Management System
 
-[Provide a brief description of your project here]
 
 ## Installation Guide
 
