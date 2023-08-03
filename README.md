@@ -19,6 +19,41 @@
 
     This will build the Docker image and start up the Docker container, which will run the application. The application is available at [http://localhost:80/](http://localhost:80/)
 
+### Ngrok User Guide 
+
+Use this guide to check how the QR scan would work on the phone:
+
+1. **Run Docker**: Run Docker as usual.
+
+2. **Run ngrok**: In a new terminal run:
+
+    ```bash
+    ngrok http --domain=ems.ngrok.app --region=au  80
+    ```
+
+3. **Copy the Link**: Copy the generated link. It will generate the custom domain for our project, for example: [https://ems.ngrok.app/](https://ems.ngrok.app/).
+
+4. **Update Context Files**: Paste the copied link into `baseurl` in all the context files. This bit of code specifically:
+
+    ```javascript
+    const api = axios.create({
+      baseURL: "http://127.0.0.1:5000",
+    });
+    ```
+
+    should now be:
+
+    ```javascript
+    const api = axios.create({
+      baseURL: "https://ems.ngrok.app/",
+    });
+    ```
+
+5. **Restart Docker**: End the currently running Docker process and re-run Docker. Now you can just use that ngrok link.
+
+
+
+
 ### Run without Docker
 
 1. **Install Python and NodeJS**: Ensure you have the latest versions of Python and NodeJS installed on your machine.
@@ -71,34 +106,4 @@
     ```
 
     The frontend is accessible at [http://localhost:5173/](http://localhost:5173/).
-### Ngrok User Guide 
 
-Use this guide to check how the QR scan would work on the phone:
-
-1. **Run Docker**: Run Docker as usual.
-
-2. **Run ngrok**: In a new terminal run:
-
-    ```bash
-    ngrok http --domain=ems.ngrok.app --region=au  80
-    ```
-
-3. **Copy the Link**: Copy the generated link. It will generate the custom domain for our project, for example: [https://ems.ngrok.app/](https://ems.ngrok.app/).
-
-4. **Update Context Files**: Paste the copied link into `baseurl` in all the context files. This bit of code specifically:
-
-    ```javascript
-    const api = axios.create({
-      baseURL: "http://127.0.0.1:5000",
-    });
-    ```
-
-    should now be:
-
-    ```javascript
-    const api = axios.create({
-      baseURL: "https://ems.ngrok.app/",
-    });
-    ```
-
-5. **Restart Docker**: End the currently running Docker process and re-run Docker. Now you can just use that ngrok link.
