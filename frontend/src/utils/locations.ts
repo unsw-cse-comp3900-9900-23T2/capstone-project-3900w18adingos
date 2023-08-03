@@ -9,11 +9,6 @@ export const setUpLocation: SetUpLocation = (setUserLocation, setLoadingPosition
         };
         setUserLocation(userPosition);
 
-        // For demo
-        const lat = -33.9217416169076
-        const lng = 151.22720259038303
-        setUserLocation({lat: lat, lng: lng})
-
         // Create a marker for the user's location
         const userLocationIcon = {
           url: "/src/assets/player-icon.png",
