@@ -71,7 +71,6 @@
     ```
 
     The frontend is accessible at [http://localhost:5173/](http://localhost:5173/).
-
 ### Ngrok User Guide 
 
 Use this guide to check how the QR scan would work on the phone:
@@ -84,16 +83,22 @@ Use this guide to check how the QR scan would work on the phone:
     ngrok http --domain=ems.ngrok.app --region=au  80
     ```
 
-3. **Copy the Link**: Copy the generated link. It will generate the custom domain for our project, [https://ems.ngrok.app/](https://ems.ngrok.app/).
+3. **Copy the Link**: Copy the generated link. It will generate the custom domain for our project, for example: [https://ems.ngrok.app/](https://ems.ngrok.app/).
 
 4. **Update Context Files**: Paste the copied link into `baseurl` in all the context files. This bit of code specifically:
-  const api = axios.create({
-    baseURL: "http://127.0.0.1:5000",
-  });
 
-should now be:
-  const api = axios.create({
-    baseURL: "[http://127.0.0.1:5000](https://ems.ngrok.app/)",
-  });
+    ```javascript
+    const api = axios.create({
+      baseURL: "http://127.0.0.1:5000",
+    });
+    ```
 
-6. **Restart Docker**: End the currently running Docker process and re-run Docker. Now you can just use that ngrok link.
+    should now be:
+
+    ```javascript
+    const api = axios.create({
+      baseURL: "https://ems.ngrok.app/",
+    });
+    ```
+
+5. **Restart Docker**: End the currently running Docker process and re-run Docker. Now you can just use that ngrok link.
