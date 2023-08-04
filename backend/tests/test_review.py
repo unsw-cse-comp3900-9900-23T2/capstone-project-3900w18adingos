@@ -3,7 +3,7 @@ import sys
 import json
 import unittest
 from app.models.eatery import Eatery
-from app.models.voucher import Voucher
+from app.models.review import Review
 from app.models.customer import Customer
 from app import create_app, db
 from app.extensions import guard
@@ -18,7 +18,7 @@ project_root = os.path.dirname(current_dir)
 sys.path.append(project_root)
 
 
-class VoucherTestCase(unittest.TestCase):
+class ReviewTestCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app(config_name='testing')
         self.client = self.app.test_client()
@@ -68,118 +68,56 @@ class VoucherTestCase(unittest.TestCase):
                 self.eatery_data['email'], self.eatery_data['password'])
             self.eatery_token = guard.encode_jwt_token(self.eatery_user)
 
-    def test_create_voucher(self):
-        headers = {
-            'Authorization': f'Bearer {self.eatery_token}'
-        }
-        req_body = {
-            'description': '50 percent off',
-            'eatery_id': self.eatery_user.id,
-            'quantity': 250,
-            'start': '11:59:00 12/07/2023',
-            'expiry': '12:00:00 14/07/2023'
-        }
-        res = self.client.post('/api/create_voucher',
-                               headers=headers, json=req_body)
-        data = json.loads(res.data.decode())
-        self.assertEqual(res.status_code, 201)
-        self.assertIn("added voucher", data['message'])
-
-    def test_create_schedule_voucher(self):
-        headers = {
-            'Authorization': f'Bearer {self.eatery_token}'
-        }
-        req_body = {
-            'description': '50 percent off',
-            'eatery_id': self.eatery_user.id,
-            'quantity': 250,
-            'start': '11:59:00 12/07/2023',
-            'expiry': '12:00:00 14/07/2023',
-            'is_schedule': True,
-            'schedule_week_day': 'Sunday',
-            'schedule_start_time': '11:00',
-            'schedule_end_time': '12:00'
-        }
-        res = self.client.post('/api/create_voucher',
-                               headers=headers, json=req_body)
-        data = json.loads(res.data.decode())
-        self.assertEqual(res.status_code, 201)
-        self.assertIn("added voucher", data['message'])
-
-    def test_delete_voucher(self):
-        with self.app.app_context():
-            # Create Voucher first
-            self.test_create_voucher()
-
-            # Get Voucher ID to delete
-            voucher = Voucher.query.filter(
-                Voucher.eatery == self.eatery_user.id).first()
-
-            headers = {
-                'Authorization': f'Bearer {self.eatery_token}'
-            }
-
-            res = self.client.delete(
-                f'/api/delete_voucher/{voucher.id}', headers=headers)
-            data = json.loads(res.data.decode())
-
-            self.assertEqual(res.status_code, 200)
-            self.assertIn("deleted", data['message'])
-
-    def test_get_eatery_vouchers(self):
-        # Create a voucher first
-        self.test_create_voucher()
-
-        # Authorization header with the token
+    def test_add_review(self):
         headers = {
             'Authorization': f'Bearer {self.customer_token}'
         }
+        req_body = {
+            'rating': '5',
+            'eatery_id': str(self.eatery_user.id),
+            'review_text': 'Test Comment',
+            'customer_id': self.customer_user.id
+        }
+        res = self.client.post('/api/add_review',
+                               headers=headers, json=req_body)
+        data = json.loads(res.data.decode())
+        self.assertEqual(res.status_code, 201)
+        self.assertEqual(True, data['success'])
 
-        res = self.client.get(
-            f'/api/get_vouchers_eatery/{self.eatery_user.id}', headers=headers)
+    def test_get_all_reviews(self):
+        # Add Review First
+        self.test_add_review()
+
+        headers = {
+            'Authorization': f'Bearer {self.eatery_token}'
+        }
+        req_body = {
+            'eatery_id': str(self.eatery_user.id)
+        }
+        res = self.client.post('/api/get_all_reviews',
+                               headers=headers, json=req_body)
         data = json.loads(res.data.decode())
         self.assertEqual(res.status_code, 200)
-        self.assertIn('vouchers', data)
+        self.assertIn('reviews', data)
 
-    def test_claim_voucher(self):
-
-        customer_id = self.customer_user.id
-        # Create Voucher first
-        self.test_create_voucher()
-
+    def test_delete_review(self):
         with self.app.app_context():
-            # Get Voucher ID to Claim
-            voucher_id = Voucher.query.filter(
-                Voucher.eatery == self.eatery_user.id).first().id
-            # Authorization header with the token
+            # Create Voucher first
+            self.test_add_review()
+
+            # Get Voucher ID to delete
+            review = Review.query.filter().first()
+
             headers = {
                 'Authorization': f'Bearer {self.customer_token}'
             }
-            req_body = {
-                'voucher_id': voucher_id,
-                'customer_id': customer_id
-            }
 
-            res = self.client.post(f'/api/claim_voucher',
-                                   headers=headers, json=req_body)
+            res = self.client.delete(
+                f'/api/delete_review/{review.id}', headers=headers)
             data = json.loads(res.data.decode())
+
             self.assertEqual(res.status_code, 200)
-            self.assertIn("vouchers", data)
-
-    def test_get_customer_claimed_vouchers(self):
-        # Create a voucher first
-        self.test_claim_voucher()
-
-        # Authorization header with the token
-        headers = {
-            'Authorization': f'Bearer {self.customer_token}'
-        }
-
-        res = self.client.get(
-            f'/api/get_vouchers_customer/{self.customer_user.id}', headers=headers)
-        data = json.loads(res.data.decode())
-        self.assertEqual(res.status_code, 200)
-        self.assertIn('vouchers', data)
+            self.assertEqual(True, data['success'])
 
     def tearDown(self):
         with self.app.app_context():

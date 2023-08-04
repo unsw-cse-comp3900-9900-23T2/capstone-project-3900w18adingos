@@ -66,6 +66,7 @@ def add_review():
 
     return jsonify(success=True), 201
 
+@auth_required
 @review.delete('/delete_review/<int:review_id>')
 def delete_review(review_id):
     review = Review.query.get_or_404(review_id)
