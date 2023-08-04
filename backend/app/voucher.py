@@ -41,7 +41,6 @@ def delete_voucher(voucher_id):
     voucher = Voucher.query.filter(Voucher.id == voucher_id).first()
     if voucher == None:
         return jsonify({'message': f'voucher with id ({voucher_id}) not found'}), 404
-    print(voucher.id, voucher.description, voucher.quantity, voucher.start, voucher.expiry)
     db.session.delete(voucher)
     db.session.commit()
     return jsonify({'message': f'voucher with id ({voucher_id}) deleted'}), 200

@@ -191,6 +191,8 @@ class EateryTestCase(unittest.TestCase):
         image_directory = os.path.join(project_root, 'tests/images')
         for filename in os.listdir(image_directory):
             file_path = os.path.join(image_directory, filename)
+            if filename == 'cat.txt': 
+                continue
             try:
                 if os.path.isfile(file_path):
                     os.remove(file_path)

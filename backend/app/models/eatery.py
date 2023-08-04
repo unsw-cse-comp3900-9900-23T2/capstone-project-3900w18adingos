@@ -91,7 +91,6 @@ class Eatery(User):
     def distance(self, user_lat, user_long):
         earth_radius = 6371  # Radius of the Earth in kilometers
 
-        print(self.latitude)
         # Convert latitude and longitude to radians
         lat1_rad = math.radians(self.latitude)
         lon1_rad = math.radians(self.longitude)
