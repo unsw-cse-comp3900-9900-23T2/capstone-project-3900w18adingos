@@ -1,5 +1,10 @@
-import sys
 import os
+import sys
+import json
+import unittest
+from app import create_app, db
+from app.extensions import guard
+
 # Get the current directory of 'test_auth.py'
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -8,16 +13,10 @@ project_root = os.path.dirname(current_dir)
 
 # Add the project root to sys.path
 sys.path.append(project_root)
-import unittest
-import json  # import json module
-from app import create_app, db
-from app.models.customer import Customer
-from app.models.voucher import Voucher
-from app.models.eatery import Eatery
-from werkzeug.security import generate_password_hash
 
 
 class AuthTestCase(unittest.TestCase):
+
     def setUp(self):
         self.app = create_app(config_name='testing')
         self.client = self.app.test_client()
@@ -31,59 +30,113 @@ class AuthTestCase(unittest.TestCase):
             'email': 'testeatery@example.com',
             'password': 'test_password',
             'name': 'Test Eatery',
-            'role': 'eatery'
+            'role': 'eatery',
+            'location': '34 Monash Street Kingsford 2034 NSW',
+            'latitude': -33.902479,
+            'longitude': 151.171137
         }
 
         with self.app.app_context():
             # create all tables
             db.create_all()
-            #Customer.query.delete()
-            #Eatery.query.delete()
-            hashed_password = generate_password_hash(self.customer_data['password'], method='sha256')
 
-            test_customer = Customer(email=self.customer_data['email'], password_hash=hashed_password)
-            test_customer.name = self.customer_data['name']
-            # db.session.add(test_customer)
-
-            hashed_password = generate_password_hash(self.eatery_data['password'], method='sha256')
-
-            test_eatery = Eatery(email=self.eatery_data['email'], password_hash=hashed_password)
-            test_eatery.name = self.eatery_data['name']
-            db.session.add(test_eatery)
-
-            db.session.commit()
-    
-    def test_registration(self):
-        res = self.client.post('/auth/register', json=self.customer_data)
+    def test_customer_registration(self):
+        res = self.client.post('/api/auth/register', json=self.customer_data)
         data = json.loads(res.data.decode())
-        print(data) 
+
         self.assertEqual(res.status_code, 200)
-        self.assertIn('Registration successful', data['message'])
-        print(res.data)
+        self.assertIn('token', data)
+        self.assertIn('id', data)
+        self.assertEqual(data['role'], 'customer')
 
-
-    def test_login(self):
+    def test_customer_login(self):
         # Register the user first
-        res = self.client.post('/auth/register', json=self.customer_data)
-        print(json.loads(res.data.decode()))
+        self.test_customer_registration()
+
         # Login with the registered user's data
-        res = self.client.post('/auth/login', json={'email': self.customer_data['email'], 'password': self.customer_data['password'], 'role': 'customer'})
-        print(res.data) 
+        res = self.client.post(
+            '/api/auth/login', json={'email': self.customer_data['email'],
+                                     'password': self.customer_data['password'],
+                                     'role': 'customer'})
         data = json.loads(res.data.decode())
+
         self.assertEqual(res.status_code, 200)
         self.assertIn('token', data)
 
-    def test_invalid_login(self):
-        res = self.client.post('/auth/login', json={'email': 'invalid@invalid.com', 'password': 'invalidpass', 'role': 'customer'})
+    def test_eatery_registration(self):
+
+        res = self.client.post('/api/auth/register', json=self.eatery_data)
         data = json.loads(res.data.decode())
+
+        self.assertEqual(res.status_code, 200)
+        self.assertIn('token', data)
+        self.assertIn('id', data)
+        self.assertEqual(data['role'], 'eatery')
+
+    def test_eatery_login(self):
+
+        # Register the user first
+        self.test_eatery_registration()
+
+        # Login with the registered user's data
+        res = self.client.post(
+            '/api/auth/login', json={'email': self.eatery_data['email'],
+                                     'password': self.eatery_data['password'],
+                                     'role': 'eatery'})
+        data = json.loads(res.data.decode())
+
+        self.assertEqual(res.status_code, 200)
+        self.assertIn('token', data)
+
+    # invalid Data Test
+    def test_invalid_registration(self):
+        # Invalid Role
+        res = self.client.post('/api/auth/register', json={
+            'email': 'invalid@example.com',
+            'password': 'invalid_password',
+            'name': 'Invalid Customer',
+            'role': 'invalid'
+        })
         self.assertEqual(res.status_code, 400)
-        self.assertIn('Invalid credentials', data['message'])
+
+    def test_invalid_login(self):
+        res = self.client.post(
+            '/api/auth/login', json={'email': 'invalid@invalid.com', 'password': 'invalidpass', 'role': 'customer'})
+        data = json.loads(res.data.decode())
+
+        self.assertEqual(res.status_code, 401)
+        self.assertIn('AuthenticationError', data['error'])
+
+    def test_whoami(self):
+        # Register the user first
+        self.test_customer_registration()
+
+        with self.app.app_context():
+            # Authenticate and get the user
+            user = guard.authenticate(
+                self.customer_data['email'], self.customer_data['password'])
+
+            # Generate the token for the user
+            customer_token = guard.encode_jwt_token(user)
+
+            # Authorization header with the token
+            headers = {
+                'Authorization': f'Bearer {customer_token}'
+            }
+
+            res = self.client.get('/api/auth/whoami', headers=headers)
+            data = json.loads(res.data.decode())
+ 
+            self.assertEqual(res.status_code, 200)
+            self.assertIn('id', data)
+            self.assertIn('email', data)
 
     def tearDown(self):
         with self.app.app_context():
             # Clear database after each test
             db.session.remove()
             db.drop_all()
+
 
 if __name__ == '__main__':
     unittest.main()

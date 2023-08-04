@@ -1,6 +1,7 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
@@ -16,14 +17,24 @@ class Config:
 
     IMAGE_SAVE_DIRECTORY = os.path.join(basedir, 'images')
 
+
 class DevelopmentConfig(Config):
     DEBUG = True
 
+
 class TestingConfig(Config):
     TESTING = True
+    # Set test DB diffrent from main db
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
+        os.path.join(basedir, '../tests',
+                     'test_db.sqlite')  
+    IMAGE_SAVE_DIRECTORY = os.path.join(basedir, '../tests' '/images') #Test Images folder
+    
+
 
 class ProductionConfig(Config):
     pass
+
 
 config = {
     'development': DevelopmentConfig,
