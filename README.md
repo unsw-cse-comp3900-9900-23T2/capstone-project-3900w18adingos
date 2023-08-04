@@ -4,9 +4,9 @@
 
 **Step 1:** Download the latest build of Docker from their website: [https://www.docker.com/](https://www.docker.com/). Once downloaded, follow their instructions to install successfully. Ensure it’s installed properly by running the following command in a terminal:
 
-\`\`\`bash
+\\\bash
 docker -v
-\`\`\`
+\\\
 
 **Step 2:** From the root directory of the project run the following command in a terminal:
 
