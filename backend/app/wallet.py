@@ -76,26 +76,6 @@ def get_user_vouchers():
     
     return has_voucher_schema_list.dump(customer.vouchers), 200
 
-# @wallet.route('/change_points/<int:eatery_id>', methods=['POST'])
-# @auth_required
-# def change_points(eatery_id):
-#     points_change = request.json.get('points')
-
-#     curr_user_obj = current_user()
-#     user_loyalty = HasLoyalty.query.filter(and_(HasLoyalty.customer_id==curr_user_obj.id, HasLoyalty.eatery_id==eatery_id)).first()
-#     prev_points = user_loyalty.points
-#     if points_change < 0:
-#         if user_loyalty.points < points_change:
-#             return jsonify({'message': f'Error: customer {current_user().id} only has {user_loyalty.points} points, but you tried to subtract {points_change}.'}), 400
-#         user_loyalty.points -= points_change
-#     else:
-#         user_loyalty.points += points_change
-#     curr_points = user_loyalty.points
-    
-#     db.session.commit()
-
-#     return jsonify({'message': f'Added/Subtracted {points_change} points to customer {current_user().id}. Prev: {prev_points}, now: {curr_points}'}), 200
-
 
 def get_customer_vouchers_for_eatery(customer_id, eatery_id):
     eatery_vouchers = Voucher.query.filter(Voucher.eatery == eatery_id).all()
@@ -144,11 +124,5 @@ def get_vouchers_customer_wallet():
     eatery_id = request.json.get('eatery_id')
     curr_user_obj = current_user() 
     vouchers = get_customer_vouchers_for_eatery(curr_user_obj.id, eatery_id)
-#     code = request.json.get('code').upper()
-#     eatery_id = request.json.get('eatery_id')
-#     customer_id = code_dict.get(code)
-#     if not customer_id:
-#         return jsonify(success=False), 404
-#     vouchers = get_customer_vouchers_for_eatery(customer_id, eatery_id)
 
     return jsonify({'vouchers': vouchers}), 200

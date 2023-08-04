@@ -36,12 +36,6 @@ def add_preferences():
             db.session.add(likes_cuisine)
         db.session.commit()
 
-    # for cuisine_name in cuisines_picked:
-    #     cuisine = Cuisine.query.filter(Cuisine.cuisine_name.ilike(f"%{cuisine_name}%")).first()
-    #     likes_cuisine = LikesCuisine.query.filter(and_(LikesCuisine.customer_id==customer_id,LikesCuisine.cuisine_id==cuisine.id)).first()
-    #     likes_cuisine.affinity = 0.85
-    #     db.session.commit()
-
     return jsonify({'message': f'preferences for customer ({curr_user_obj.id}) added'}), 200
 
 @preferences.route('/get_preferences/<int:customer_id>', methods=['GET'])
@@ -50,19 +44,6 @@ def get_customer_preferences(customer_id):
     preferences = LikesCuisine.query.filter(LikesCuisine.customer_id==customer_id, LikesCuisine.specified==True).all()
 
     return likes_cuisine_schema_list.dump(preferences), 200
-
-# @preferences.route('/edit_preferences/<int:customer_id>', methods=['PUT'])
-# @auth_required
-# def edit_preferences(customer_id):
-#     cuisines_picked = request.json.get('cuisines')
-
-#     preferences = LikesCuisine.query.filter(LikesCuisine.customer_id==customer_id).all()
-
-#     for cuisine_name in cuisines_picked:
-#         cuisine = Cuisine.query.filter(Cuisine.cuisine_name.ilike(f"%{cuisine_name}%")).first()
-#         likes_cuisine = LikesCuisine.query.filter(and_(LikesCuisine.customer_id==customer_id,LikesCuisine.cuisine_id==preferences.cuisine_id)).first()
-#         likes_cuisine.affinity = 0.85
-#         db.session.commit()
 
 @preferences.get('/get_eatery_preferences')
 @auth_required
